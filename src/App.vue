@@ -1,6 +1,4 @@
-<script setup lang="ts">
-
-</script>
+<script setup lang="ts"></script>
 
 <template>
   <header>
@@ -12,10 +10,8 @@
   </header>
 </template>
 
-<script lang="ts">
-
-</script>
+<script lang="ts"></script>
 
 <style>
-@import "@/assets/base.css";
+@import '@/assets/base.css';
 </style>
