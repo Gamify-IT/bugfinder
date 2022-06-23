@@ -1,13 +1,31 @@
 <template>
-  <br />
-  <span v-for="word in currentCode.words" v-bind:key="word">
-    <br v-if="word.word == newLine" />
-    <button v-if="word.word != tab && word.word != newLine" @click="clickedButton(word.id)">{{ word.word }}</button>
-  </span>
+  <h2>Formatted Code but not clickable</h2>
+  <pre v-highlightjs><code class="java">
+{{currentCodeComplete}}
+  </code></pre>
+
+  <h2>Code in a row (trash)</h2>
+  <pre v-highlightjs>
+    <code class="java">
+<button v-for="word in currentCode.words" :key="word.id" @click="clickedButton(word.id)">{{word.word}}</button>
+    </code>
+  </pre>
+
+  <h2>Code formatted but to much margin</h2>
+  <div class="codebox">
+    <p v-for="line in codeLines" :key="line">
+      <span class="btn-group" v-for="word in lineWords(line)" :key="word" style="position: relative">
+        <button v-if="word.word == tab"></button>
+        <button class="" v-if="word.word != tab && word.word != newLine" @click="clickedButton(word.id)">
+          <pre v-highlightjs><code class="java">{{ word.word }}</code></pre>
+        </button>
+      </span>
+    </p>
+  </div>
 </template>
 
 <script setup lang="ts">
-import { WordType } from '../model/models';
+import { WordType, IWord } from '../model/models';
 import { BugFinderGame, exampleCodes } from '../model/bugfindergame';
 
 const newLine = WordType.NEWLINE;
@@ -16,8 +34,18 @@ const tab = WordType.TAB;
 const bugfinderGame = new BugFinderGame(exampleCodes());
 const currentCode = bugfinderGame.getCurrentCode();
 const currentCodePerLine = bugfinderGame.getCurrentCodePerLine();
+const codeLines = bugfinderGame.getCodeLines();
+const currentCodeComplete = bugfinderGame.getCurrentCodeComplete();
 console.log('Current Code: ' + currentCode);
 console.log('Current Code per Line: ' + currentCodePerLine);
+console.log('Code Lines: ' + codeLines);
+console.log(currentCodePerLine.length);
+
+function lineWords(line: number): Array<IWord> {
+  const words = bugfinderGame.getLineWords(line);
+  console.log(words);
+  return words;
+}
 
 function clickedButton(id: number) {
   const result = bugfinderGame.submitWrongCode(id);
@@ -25,5 +53,12 @@ function clickedButton(id: number) {
 }
 </script>
 
-<style lang="css" scoped></style>
->
+<style lang="css" scoped>
+.codebox {
+  background-color: rgb(241, 241, 203);
+}
+button {
+  background: transparent;
+  border: none !important;
+}
+</style>

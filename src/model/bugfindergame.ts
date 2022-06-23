@@ -6,13 +6,19 @@ export function exampleCodes(): Code[] {
     new Code(1, [
       new Word(1, 'prublic'),
       new Word(2, 'void'),
-      new Word(3, 'sayHello'),
+      new Word(3, 'sayHello()'),
       new Word(4, '{'),
       new Word(5, WordType.NEWLINE),
       new Word(6, WordType.TAB),
-      new Word(7, 'System.out.println("HELLO THERE!");'),
-      new Word(8, WordType.NEWLINE),
-      new Word(9, '}'),
+      new Word(7, 'String'),
+      new Word(8, 'test'),
+      new Word(9, '='),
+      new Word(10, '"HALLO";'),
+      new Word(11, WordType.NEWLINE),
+      new Word(12, WordType.TAB),
+      new Word(13, 'System.out.println("HELLO THERE!");'),
+      new Word(14, WordType.NEWLINE),
+      new Word(15, '}'),
     ]),
     new Code(3, [
       new Word(1, 'public'),
@@ -82,12 +88,72 @@ export class BugFinderGame {
         if (word == WordType.TAB) {
           currentLine += '    ';
         } else {
-          currentLine += ' ' + word;
+          currentLine += word;
         }
       }
     }
     list.push(currentLine);
     return list;
+  }
+
+  /**
+   * Useful to enumerate in vue components
+   *
+   * @returns list of lines
+   */
+  public getCodeLines(): Array<number> {
+    const length = this.currentCode.words.filter((word) => word.word == WordType.NEWLINE).length;
+    const list: Array<number> = [];
+    for (let i = 0; i <= length; i++) {
+      list.push(i);
+    }
+    return list;
+  }
+
+  /**
+   * Helpfull to get all words that are in a specific line
+   *
+   * @param line the id of the line from you want the words
+   * @returns the words that stand in the line
+   */
+  public getLineWords(line: number): Array<IWord> {
+    const list: Array<IWord> = [];
+    let currentLine = 0;
+    for (let i = 0; i < this.currentCode.words.length; i++) {
+      const wordObj: IWord = this.currentCode.words[i];
+      const word = wordObj.word;
+      if (word == WordType.NEWLINE) {
+        currentLine++;
+      } else {
+        if (currentLine == line) {
+          list.push(wordObj);
+        }
+      }
+    }
+    return list;
+  }
+
+  /**
+   * Get the code in right format.
+   *
+   * Not helpfull to display in vue, because there is not chance (yet) to identify single words that will be clicked.
+   *
+   * @returns the full code in right format.
+   */
+  public getCurrentCodeComplete(): string {
+    let currentLine = '';
+    for (let i = 0; i < this.currentCode.words.length; i++) {
+      const wordObj: IWord = this.currentCode.words[i];
+      const word = wordObj.word;
+      if (word == WordType.NEWLINE) {
+        currentLine += '\n';
+      } else if (word == WordType.TAB) {
+        currentLine += '  ';
+      } else {
+        currentLine += (currentLine.length <= 0 || currentLine.endsWith('\n') ? '' : ' ') + word;
+      }
+    }
+    return currentLine;
   }
 
   /**
