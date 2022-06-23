@@ -1,14 +1,17 @@
 <script setup lang="ts">
+import { defineEmits } from 'vue';
 
+const emit = defineEmits<{
+  (e: 'startGame'): void;
+}>();
 </script>
 
 <template>
   <main>
-    <div class="col-4 position-relative">
-      <button class="btn btn-primary position-absolute top-50 start-50 translate-middle">Start</button>
+    <div>
+      <button class="btn btn-primary position-absolute top-50 start-50 translate-middle" @click="emit('startGame')">Start</button>
     </div>
   </main>
 </template>
 
-<style scoped>
-</style>
+<style scoped></style>

@@ -1,4 +1,14 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import HomeView from '@/views/HomeView.vue';
+import GameView from '@/views/GameView.vue';
+
+const views = {
+  home: HomeView,
+  game: GameView,
+};
+//views.home.$on('startGame', () => (actualView = views.game));
+var actualView: any = views.game;
+</script>
 
 <template>
   <header>
@@ -8,6 +18,7 @@
       </div>
     </nav>
   </header>
+  <component :is="actualView" />
 </template>
 
 <script lang="ts"></script>
