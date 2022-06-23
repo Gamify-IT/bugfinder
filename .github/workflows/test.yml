@@ -20,6 +20,6 @@ jobs:
       run: npm run test:unit
 
     - name: Clean up GitHub workspace
-        uses: docker://ubuntu:latest # 👈 Clean-up done in a Docker container 🐳
-        with:
-          args: find /github/workspace/. -name . -o -prune -exec rm -rf -- {} +
+      uses: docker://ubuntu:latest # 👈 Clean-up done in a Docker container 🐳
+      with:
+        args: find /github/workspace/. -name . -o -prune -exec rm -rf -- {} +
