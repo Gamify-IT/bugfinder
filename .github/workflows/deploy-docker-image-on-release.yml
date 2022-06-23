@@ -50,3 +50,8 @@ jobs:
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+          
+      - name: Clean up GitHub workspace
+        uses: docker://ubuntu:latest # 👈 Clean-up done in a Docker container 🐳
+        with:
+          args: find /github/workspace/. -name . -o -prune -exec rm -rf -- {} +
