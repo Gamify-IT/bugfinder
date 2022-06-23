@@ -27,22 +27,22 @@
 <script setup lang="ts">
 import { WordType, IWord } from '../model/models';
 import { BugFinderGame, exampleCodes } from '../model/bugfindergame';
+import { CodeVisualizer } from '../model/code-visualizer';
 
 const newLine = WordType.NEWLINE;
 const tab = WordType.TAB;
 
 const bugfinderGame = new BugFinderGame(exampleCodes());
+const codeVisualizer = new CodeVisualizer(bugfinderGame.getCurrentCode());
+
 const currentCode = bugfinderGame.getCurrentCode();
-const currentCodePerLine = bugfinderGame.getCurrentCodePerLine();
-const codeLines = bugfinderGame.getCodeLines();
-const currentCodeComplete = bugfinderGame.getCurrentCodeComplete();
+const codeLines = codeVisualizer.getCodeLines();
+const currentCodeComplete = codeVisualizer.getInFormat();
 console.log('Current Code: ' + currentCode);
-console.log('Current Code per Line: ' + currentCodePerLine);
 console.log('Code Lines: ' + codeLines);
-console.log(currentCodePerLine.length);
 
 function lineWords(line: number): Array<IWord> {
-  const words = bugfinderGame.getLineWords(line);
+  const words = codeVisualizer.getLineWordsAsList(line);
   console.log(words);
   return words;
 }

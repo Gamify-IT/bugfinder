@@ -1,4 +1,4 @@
-import { WordType, ICode, IWord, Code, Word } from './models';
+import { WordType, ICode, Code, Word } from './models';
 
 // TODO: Definitely make it work without manually specifying id
 export function exampleCodes(): Code[] {
@@ -53,18 +53,6 @@ export class BugFinderGame {
 
   /**
    *
-   * Checks if the submitted bug word is really a bug word or not.
-   *
-   * @param bugWordId the number of the clicked word
-   * @returns true when found right bug word and false when not
-   */
-  public submitWrongCode(bugWordId: number): boolean {
-    this.solved[this.currentCodeNumber] = this.currentCode.bugWordId == bugWordId;
-    return this.solved[this.currentCodeNumber];
-  }
-
-  /**
-   *
    * @returns the current code
    */
   public getCurrentCode(): ICode {
@@ -73,87 +61,14 @@ export class BugFinderGame {
 
   /**
    *
-   * @returns the current codes in a list. Per list entry will be one line.
-   */
-  public getCurrentCodePerLine(): Array<string> {
-    const list: Array<string> = [];
-    let currentLine = '';
-    for (let i = 0; i < this.currentCode.words.length; i++) {
-      const wordObj: IWord = this.currentCode.words[i];
-      const word = wordObj.word;
-      if (word == WordType.NEWLINE) {
-        list.push(currentLine);
-        currentLine = '';
-      } else {
-        if (word == WordType.TAB) {
-          currentLine += '    ';
-        } else {
-          currentLine += word;
-        }
-      }
-    }
-    list.push(currentLine);
-    return list;
-  }
-
-  /**
-   * Useful to enumerate in vue components
+   * Checks if the submitted bug word is really a bug word or not.
    *
-   * @returns list of lines
+   * @param bugWordId the number of the clicked word
+   * @returns true when found right bug word and false when not
    */
-  public getCodeLines(): Array<number> {
-    const length = this.currentCode.words.filter((word) => word.word == WordType.NEWLINE).length;
-    const list: Array<number> = [];
-    for (let i = 0; i <= length; i++) {
-      list.push(i);
-    }
-    return list;
-  }
-
-  /**
-   * Helpfull to get all words that are in a specific line
-   *
-   * @param line the id of the line from you want the words
-   * @returns the words that stand in the line
-   */
-  public getLineWords(line: number): Array<IWord> {
-    const list: Array<IWord> = [];
-    let currentLine = 0;
-    for (let i = 0; i < this.currentCode.words.length; i++) {
-      const wordObj: IWord = this.currentCode.words[i];
-      const word = wordObj.word;
-      if (word == WordType.NEWLINE) {
-        currentLine++;
-      } else {
-        if (currentLine == line) {
-          list.push(wordObj);
-        }
-      }
-    }
-    return list;
-  }
-
-  /**
-   * Get the code in right format.
-   *
-   * Not helpfull to display in vue, because there is not chance (yet) to identify single words that will be clicked.
-   *
-   * @returns the full code in right format.
-   */
-  public getCurrentCodeComplete(): string {
-    let currentLine = '';
-    for (let i = 0; i < this.currentCode.words.length; i++) {
-      const wordObj: IWord = this.currentCode.words[i];
-      const word = wordObj.word;
-      if (word == WordType.NEWLINE) {
-        currentLine += '\n';
-      } else if (word == WordType.TAB) {
-        currentLine += '  ';
-      } else {
-        currentLine += (currentLine.length <= 0 || currentLine.endsWith('\n') ? '' : ' ') + word;
-      }
-    }
-    return currentLine;
+  public submitWrongCode(bugWordId: number): boolean {
+    this.solved[this.currentCodeNumber] = this.currentCode.bugWordId == bugWordId;
+    return this.solved[this.currentCodeNumber];
   }
 
   /**
