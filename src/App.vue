@@ -1,26 +1,28 @@
-<template>
-  <CodeBox />
-</template>
+<script setup lang="ts">
+import HomeView from '@/views/HomeView.vue';
+import GameView from '@/views/GameView.vue';
 
-<script lang="ts">
-import { defineComponent } from 'vue';
-import CodeBox from './components/CodeBox.vue';
-
-export default defineComponent({
-  name: 'App',
-  components: {
-    CodeBox,
-  },
-});
+const views = {
+  home: HomeView,
+  game: GameView,
+};
+//views.home.$on('startGame', () => (actualView = views.game));
+var actualView: any = views.game;
 </script>
 
+<template>
+  <header>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+      <div class="container-fluid">
+        <span class="navbar-brand mb-0 h1">Bugfinder</span>
+      </div>
+    </nav>
+  </header>
+  <component :is="actualView" />
+</template>
+
+<script lang="ts"></script>
+
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
+@import '@/assets/base.css';
 </style>
