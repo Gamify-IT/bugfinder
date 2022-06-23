@@ -4,23 +4,26 @@
 {{currentCodeComplete}}
   </code></pre>
 
-  <h2>Code in a row (trash)</h2>
+  <h2>Code in a row (trash)[Also click does not work because it is in for]</h2>
   <pre v-highlightjs>
     <code class="java">
-<button v-for="word in currentCode.words" :key="word.id" @click="clickedButton(word.id)">{{word.word}}</button>
+<button v-for="word of currentCode.words" :key="word.id" @click="clickedButton(word.id)">
+<div class="code" v-if="word.word != newLine && word.word != tab">{{word.word}} </div>
+<pre v-if="word.word == newLine"></pre>
+</button>
     </code>
   </pre>
 
-  <h2>Code formatted but to much margin</h2>
+  <h2>Code formatted (now best solution)</h2>
   <div class="codebox">
-    <p v-for="line in codeLines" :key="line">
-      <span class="btn-group" v-for="word in lineWords(line)" :key="word" style="position: relative">
-        <button v-if="word.word == tab"></button>
-        <button class="" v-if="word.word != tab && word.word != newLine" @click="clickedButton(word.id)">
+    <div v-for="line in codeLines" :key="line">
+      <div class="btn-group" v-for="word in lineWords(line)" :key="word">
+        <div v-if="word.word == tab" class="tab"></div>
+        <button v-if="word.word != tab && word.word != newLine" @click="clickedButton(word.id)">
           <pre v-highlightjs><code class="java">{{ word.word }}</code></pre>
         </button>
-      </span>
-    </p>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -55,10 +58,15 @@ function clickedButton(id: number) {
 
 <style lang="css" scoped>
 .codebox {
-  background-color: rgb(241, 241, 203);
+  background-color: rgb(236, 236, 206);
 }
 button {
   background: transparent;
   border: none !important;
+  padding: 0;
+  height: 25px;
+}
+.tab {
+  width: 30px;
 }
 </style>
