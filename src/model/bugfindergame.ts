@@ -53,12 +53,8 @@ export class BugFinderGame {
    * @returns true when found right bug word and false when not
    */
   public submitWrongCode(bugWordId: number): boolean {
-    if (this.currentCode.bugWordId == bugWordId) {
-      this.solved[this.currentCodeNumber] = true;
-      return true;
-    }
-    this.solved[this.currentCodeNumber] = false;
-    return false;
+    this.solved[this.currentCodeNumber] = this.currentCode.bugWordId == bugWordId);
+    return this.solved[this.currentCodeNumber];
   }
 
   /**
