@@ -1,7 +1,7 @@
 import { WordType, ICode, IWord, Code, Word } from './models';
 
 // TODO: Definitely make it work without manually specifying id
-function exampleCodes(): Code[] {
+export function exampleCodes(): Code[] {
   const codes: Code[] = [
     new Code(1, [
       new Word(1, 'prublic'),
@@ -28,7 +28,7 @@ function exampleCodes(): Code[] {
 }
 
 export class BugFinderGame {
-  private codes: ICode[] = exampleCodes();
+  private codes: ICode[];
 
   // list whether player successful solved a code or not. Empty on entry if not submitted yet.
   private solved: Array<boolean> = [];
@@ -36,10 +36,11 @@ export class BugFinderGame {
   private currentCodeNumber: number;
   private currentCode: ICode;
 
-  public constructor() {
-    if (this.codes.length == 0) {
+  public constructor(codes: ICode[]) {
+    if (codes.length == 0) {
       throw Error('Codes are empty!');
     }
+    this.codes = codes;
     this.currentCodeNumber = 0;
     this.currentCode = this.codes[0];
   }
@@ -98,7 +99,7 @@ export class BugFinderGame {
    * @returns whether game has at least one more code to play or not
    */
   public hasNextCode(): boolean {
-    return this.currentCodeNumber >= this.codes.length;
+    return this.currentCodeNumber + 1 < this.codes.length;
   }
 
   /**
@@ -112,7 +113,7 @@ export class BugFinderGame {
       throw Error('There are no more codes left!');
     }
     // Did not finish last task
-    if (this.solved[this.currentCodeNumber] == null) {
+    if (this.solved[this.currentCodeNumber] === undefined) {
       throw Error('You did not complete this code!');
     }
     this.currentCodeNumber++;
