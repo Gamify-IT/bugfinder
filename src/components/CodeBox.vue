@@ -23,7 +23,7 @@ const bugfinderGame = new BugFinderGame(exampleCodes());
 const codeVisualizer = new CodeVisualizer(bugfinderGame.getCurrentCode());
 
 const currentCode = bugfinderGame.getCurrentCode();
-const codeLines = codeVisualizer.getCodeLines();
+const codeLines = codeVisualizer.getCodeLineWords();
 const currentCodeComplete = codeVisualizer.getInFormat();
 console.log('Current Code: ' + currentCode);
 console.log('Code Lines: ' + codeLines);
