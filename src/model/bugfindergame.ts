@@ -1,4 +1,4 @@
-import { WordType, ICode, IWord, Code, Word } from './models';
+import { WordType, ICode, Code, Word } from './models';
 
 // TODO: Definitely make it work without manually specifying id
 export function exampleCodes(): Code[] {
@@ -6,13 +6,19 @@ export function exampleCodes(): Code[] {
     new Code(1, [
       new Word(1, 'prublic'),
       new Word(2, 'void'),
-      new Word(3, 'sayHello'),
+      new Word(3, 'sayHello()'),
       new Word(4, '{'),
       new Word(5, WordType.NEWLINE),
       new Word(6, WordType.TAB),
-      new Word(7, 'System.out.println("HELLO THERE!");'),
-      new Word(8, WordType.NEWLINE),
-      new Word(9, '}'),
+      new Word(7, 'String'),
+      new Word(8, 'test'),
+      new Word(9, '='),
+      new Word(10, '"HALLO";'),
+      new Word(11, WordType.NEWLINE),
+      new Word(12, WordType.TAB),
+      new Word(13, 'System.out.println("HELLO THERE!");'),
+      new Word(14, WordType.NEWLINE),
+      new Word(15, '}'),
     ]),
     new Code(3, [
       new Word(1, 'public'),
@@ -47,18 +53,6 @@ export class BugFinderGame {
 
   /**
    *
-   * Checks if the submitted bug word is really a bug word or not.
-   *
-   * @param bugWordId the number of the clicked word
-   * @returns true when found right bug word and false when not
-   */
-  public submitWrongCode(bugWordId: number): boolean {
-    this.solved[this.currentCodeNumber] = this.currentCode.bugWordId == bugWordId;
-    return this.solved[this.currentCodeNumber];
-  }
-
-  /**
-   *
    * @returns the current code
    */
   public getCurrentCode(): ICode {
@@ -67,27 +61,14 @@ export class BugFinderGame {
 
   /**
    *
-   * @returns the current codes in a list. Per list entry will be one line.
+   * Checks if the submitted bug word is really a bug word or not.
+   *
+   * @param bugWordId the number of the clicked word
+   * @returns true when found right bug word and false when not
    */
-  public getCurrentCodePerLine(): Array<string> {
-    const list: Array<string> = [];
-    let currentLine = '';
-    for (let i = 0; i < this.currentCode.words.length; i++) {
-      const wordObj: IWord = this.currentCode.words[i];
-      const word = wordObj.word;
-      if (word == WordType.NEWLINE) {
-        list.push(currentLine);
-        currentLine = '';
-      } else {
-        if (word == WordType.TAB) {
-          currentLine += '    ';
-        } else {
-          currentLine += ' ' + word;
-        }
-      }
-    }
-    list.push(currentLine);
-    return list;
+  public submitWrongCode(bugWordId: number): boolean {
+    this.solved[this.currentCodeNumber] = this.currentCode.bugWordId == bugWordId;
+    return this.solved[this.currentCodeNumber];
   }
 
   /**
