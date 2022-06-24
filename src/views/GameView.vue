@@ -9,6 +9,9 @@ const game = new BugFinderGame(exampleCodes());
 const currentCode = ref(game.getCurrentCode());
 const hasNextCode = ref(game.hasNextCode());
 
+const rightWordId = ref(-1);
+const wrongWordId = ref(-1);
+
 const showNextButton = ref(false);
 
 var chatHistory: chatElement[] = [];
@@ -24,6 +27,7 @@ function nextCode() {
   currentCode.value = game.getCurrentCode();
   showNextButton.value = false;
   hasNextCode.value = game.hasNextCode();
+  rightWordId.value = wrongWordId.value = -1;
 }
 
 function submitSolution(selectedWordId: number) {
@@ -31,8 +35,10 @@ function submitSolution(selectedWordId: number) {
   chatHistory.push({ from: chatParticipants.ME, message: 'I think I found the bug. Is the programm now running?' });
   if (correct) {
     chatHistory.push({ from: chatParticipants.OTHER, message: 'Yes it works! Thank you very much' });
+    rightWordId.value = selectedWordId;
   } else {
     chatHistory.push({ from: chatParticipants.OTHER, message: 'No sadly not.' });
+    wrongWordId.value = selectedWordId;
   }
   if (game.hasNextCode()) {
     chatHistory.push({ from: chatParticipants.OTHER, message: 'Can you help me again with another bug?' });
@@ -49,7 +55,7 @@ function submitSolution(selectedWordId: number) {
   <div class="container">
     <div class="row">
       <div class="col-9">
-        <CodeBox :code="currentCode" @submitSolution="submitSolution" />
+        <CodeBox :rightWordId="rightWordId" :wrongWordId="wrongWordId" :code="currentCode" @submitSolution="submitSolution" />
       </div>
 
       <div class="col-3">

@@ -4,7 +4,9 @@
       <div class="btn-group" v-for="word in line" :key="word">
         <div v-if="word.word == tab" class="tab"></div>
         <button v-if="word.word != tab && word.word != newLine" @click="clickedButton(word.id)">
-          <pre v-highlightjs><code class="java">{{ word.word }}</code></pre>
+          <pre
+            v-highlightjs
+          ><code class="java" :class="{ 'right-code' : rightWordId === word.id, 'wrong-code' : wrongWordId === word.id }">{{ word.word }}</code></pre>
         </button>
       </div>
     </div>
@@ -18,7 +20,10 @@ import { ref, watch } from 'vue';
 
 const props = defineProps<{
   code: ICode;
+  rightWordId: number;
+  wrongWordId: number;
 }>();
+const language = 'java';
 
 const emit = defineEmits<{
   (e: 'submitSolution', selectedWordId: number): void;
@@ -27,11 +32,16 @@ const emit = defineEmits<{
 const newLine = WordType.NEWLINE;
 const tab = WordType.TAB;
 
+let submitted = false;
+
 var codeVisualizer = new CodeVisualizer(props.code);
 const codeLines = ref(codeVisualizer.getCodeLines());
 
 function clickedButton(id: number) {
-  emit('submitSolution', id);
+  if (!submitted) {
+    submitted = true;
+    emit('submitSolution', id);
+  }
 }
 
 watch(
@@ -39,6 +49,7 @@ watch(
   (newCode, oldCode) => {
     codeVisualizer = new CodeVisualizer(newCode);
     codeLines.value = codeVisualizer.getCodeLines();
+    submitted = false;
   },
   { deep: true }
 );
@@ -58,6 +69,15 @@ button {
   border: none !important;
   padding: 0;
   height: 25px;
+}
+code:hover {
+  background-color: #ecddb1;
+}
+code.right-code {
+  background-color: rgb(115, 224, 115);
+}
+code.wrong-code {
+  background-color: rgb(233, 175, 161);
 }
 .tab {
   width: 30px;
