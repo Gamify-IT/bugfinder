@@ -41,7 +41,13 @@ function submitSolution(isCorrect: boolean) {
 
       <div class="col-3">
         <ChatBox :chat-history="chatHistory" />
-        <button v-if="showNextButton" class="btn btn-primary position-absolute top-50 start-50 translate-middle" @click="nextCode()">Start</button>
+        <button
+          v-if="showNextButton"
+          class="btn btn-primary position-absolute top-50 start-50 translate-middle"
+          @click="nextCode()"
+        >
+          Start
+        </button>
       </div>
     </div>
   </div>
