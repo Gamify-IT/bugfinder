@@ -12,9 +12,9 @@
 </template>
 
 <script setup lang="ts">
-import { WordType, ICode } from '../model/models';
+import { WordType, ICode, Code } from '../model/models';
 import { CodeVisualizer } from '../model/code-visualizer';
-import { toRefs, toRef, watch } from 'vue';
+import { ref, watch } from 'vue';
 
 const props = defineProps<{
   code: ICode;
@@ -24,26 +24,24 @@ const emit = defineEmits<{
   (e: 'submitSolution', selectedWordId: number): void;
 }>();
 
-watch(
-  props.code,
-  (oldValue, newValue) => {
-    console.log('NEW CODE');
-    console.log(oldValue);
-    console.log(newValue);
-  },
-  { deep: true }
-);
-
 const newLine = WordType.NEWLINE;
 const tab = WordType.TAB;
 
-const codeVisualizer = new CodeVisualizer(props.code);
-
-const codeLines = codeVisualizer.getCodeLines();
+var codeVisualizer = new CodeVisualizer(props.code);
+const codeLines = ref(codeVisualizer.getCodeLines());
 
 function clickedButton(id: number) {
   emit('submitSolution', id);
 }
+
+watch(
+  () => props.code,
+  (newCode, oldCode) => {
+    codeVisualizer = new CodeVisualizer(newCode);
+    codeLines.value = codeVisualizer.getCodeLines();
+  },
+  { deep: true }
+);
 </script>
 
 <style lang="css" scoped>

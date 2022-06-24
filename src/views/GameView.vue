@@ -3,11 +3,13 @@ import ChatBox from '@/components/ChatBox.vue';
 import CodeBox from '@/components/CodeBox.vue';
 import { BugFinderGame, exampleCodes } from '@/model/bugfindergame';
 import { chatParticipants, chatElement } from '@/model/models';
+import { ref } from 'vue';
 
 const game = new BugFinderGame(exampleCodes());
-var currentCode = game.getCurrentCode();
+const currentCode = ref(game.getCurrentCode());
+const hasNextCode = ref(game.hasNextCode());
 
-var showNextButton = true;
+const showNextButton = ref(false);
 
 var chatHistory: chatElement[] = [];
 chatHistory.push({ from: chatParticipants.OTHER, message: 'Hey' });
@@ -17,24 +19,27 @@ chatHistory.push({
 });
 
 function nextCode() {
-  console.log('nextCode');
   chatHistory.push({ from: chatParticipants.OTHER, message: 'That is very kind of you!' });
   game.nextCode();
-  currentCode = game.getCurrentCode();
+  currentCode.value = game.getCurrentCode();
+  showNextButton.value = false;
+  hasNextCode.value = game.hasNextCode();
 }
 
 function submitSolution(selectedWordId: number) {
   const correct: boolean = game.submitWrongCode(selectedWordId);
-  console.log('SUBMITTED');
   chatHistory.push({ from: chatParticipants.ME, message: 'I think I found the bug. Is the programm now running?' });
   if (correct) {
     chatHistory.push({ from: chatParticipants.OTHER, message: 'Yes it works! Thank you very much' });
   } else {
     chatHistory.push({ from: chatParticipants.OTHER, message: 'No sadly not.' });
   }
-  chatHistory.push({ from: chatParticipants.OTHER, message: 'Can you help me again with another bug?' });
-  showNextButton = true;
-  console.log(showNextButton);
+  if (game.hasNextCode()) {
+    chatHistory.push({ from: chatParticipants.OTHER, message: 'Can you help me again with another bug?' });
+  } else {
+    chatHistory.push({ from: chatParticipants.OTHER, message: 'Thank you a log. You helped me fixing all my codes!' });
+  }
+  showNextButton.value = true;
 }
 </script>
 
@@ -49,12 +54,9 @@ function submitSolution(selectedWordId: number) {
 
       <div class="col-3">
         <ChatBox :chat-history="chatHistory" />
-        <button
-          :disabled="!showNextButton"
-          class="btn btn-primary position-absolute top-50 start-50 translate-middle"
-          @click="nextCode()"
-        >
-          Next Code
+        <button :disabled="!showNextButton" class="btn btn-primary top-50 start-50 translate-middle" @click="nextCode()">
+          <div v-if="hasNextCode">Next Code</div>
+          <div v-else>Finish</div>
         </button>
       </div>
     </div>
