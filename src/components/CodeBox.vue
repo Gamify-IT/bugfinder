@@ -12,25 +12,37 @@
 </template>
 
 <script setup lang="ts">
-import { WordType } from '../model/models';
-import { BugFinderGame, exampleCodes } from '../model/bugfindergame';
+import { WordType, ICode } from '../model/models';
 import { CodeVisualizer } from '../model/code-visualizer';
+import { toRefs, toRef, watch } from 'vue';
+
+const props = defineProps<{
+  code: ICode;
+}>();
+
+const emit = defineEmits<{
+  (e: 'submitSolution', selectedWordId: number): void;
+}>();
+
+watch(
+  props.code,
+  (oldValue, newValue) => {
+    console.log('NEW CODE');
+    console.log(oldValue);
+    console.log(newValue);
+  },
+  { deep: true }
+);
 
 const newLine = WordType.NEWLINE;
 const tab = WordType.TAB;
 
-const bugfinderGame = new BugFinderGame(exampleCodes());
-const codeVisualizer = new CodeVisualizer(bugfinderGame.getCurrentCode());
+const codeVisualizer = new CodeVisualizer(props.code);
 
-const currentCode = bugfinderGame.getCurrentCode();
 const codeLines = codeVisualizer.getCodeLines();
-const currentCodeComplete = codeVisualizer.getInFormat();
-console.log('Current Code: ' + currentCode);
-console.log('Code Lines: ' + codeLines);
 
 function clickedButton(id: number) {
-  const result = bugfinderGame.submitWrongCode(id);
-  console.log(result);
+  emit('submitSolution', id);
 }
 </script>
 

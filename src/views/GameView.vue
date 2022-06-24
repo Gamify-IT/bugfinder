@@ -1,10 +1,13 @@
 <script setup lang="ts">
-import CodeBox from '@/components/CodeBox.vue';
 import ChatBox from '@/components/ChatBox.vue';
-import { BugFinderGame } from '@/model/bugfindergame';
+import CodeBox from '@/components/CodeBox.vue';
+import { BugFinderGame, exampleCodes } from '@/model/bugfindergame';
 import { chatParticipants, chatElement } from '@/model/models';
 
-var showNextButton = false;
+const game = new BugFinderGame(exampleCodes());
+var currentCode = game.getCurrentCode();
+
+var showNextButton = true;
 
 var chatHistory: chatElement[] = [];
 chatHistory.push({ from: chatParticipants.OTHER, message: 'Hey' });
@@ -16,17 +19,22 @@ chatHistory.push({
 function nextCode() {
   console.log('nextCode');
   chatHistory.push({ from: chatParticipants.OTHER, message: 'That is very kind of you!' });
+  game.nextCode();
+  currentCode = game.getCurrentCode();
 }
 
-function submitSolution(isCorrect: boolean) {
+function submitSolution(selectedWordId: number) {
+  const correct: boolean = game.submitWrongCode(selectedWordId);
+  console.log('SUBMITTED');
   chatHistory.push({ from: chatParticipants.ME, message: 'I think I found the bug. Is the programm now running?' });
-  if (isCorrect) {
+  if (correct) {
     chatHistory.push({ from: chatParticipants.OTHER, message: 'Yes it works! Thank you very much' });
   } else {
     chatHistory.push({ from: chatParticipants.OTHER, message: 'No sadly not.' });
   }
   chatHistory.push({ from: chatParticipants.OTHER, message: 'Can you help me again with another bug?' });
   showNextButton = true;
+  console.log(showNextButton);
 }
 </script>
 
@@ -36,17 +44,17 @@ function submitSolution(isCorrect: boolean) {
   <div class="container">
     <div class="row">
       <div class="col-9">
-        <CodeBox />
+        <CodeBox :code="currentCode" @submitSolution="submitSolution" />
       </div>
 
       <div class="col-3">
         <ChatBox :chat-history="chatHistory" />
         <button
-          v-if="showNextButton"
+          :disabled="!showNextButton"
           class="btn btn-primary position-absolute top-50 start-50 translate-middle"
           @click="nextCode()"
         >
-          Start
+          Next Code
         </button>
       </div>
     </div>
