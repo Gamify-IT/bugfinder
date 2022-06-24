@@ -22,6 +22,16 @@ export class Word implements IWord {
   }
 }
 
+export enum chatParticipants {
+  ME,
+  OTHER,
+}
+
+export interface chatElement {
+  from: chatParticipants;
+  message: string;
+}
+
 export class Code implements ICode {
   bugWordId = 0;
   words: IWord[] = [];

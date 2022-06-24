@@ -1,13 +1,18 @@
 <script setup lang="ts">
+import { createApp } from 'vue';
 import HomeView from '@/views/HomeView.vue';
 import GameView from '@/views/GameView.vue';
 
-const views = {
-  home: HomeView,
-  game: GameView,
-};
-//views.home.$on('startGame', () => (actualView = views.game));
-var actualView: any = views.game;
+enum views {
+  home,
+  game,
+}
+var actualView = views.game;
+
+function changeView(newView: views) {
+  actualView = newView;
+  console.log('change view to ' + actualView);
+}
 </script>
 
 <template>
@@ -18,7 +23,8 @@ var actualView: any = views.game;
       </div>
     </nav>
   </header>
-  <component :is="actualView" />
+  <HomeView v-if="actualView == views.home" @start-game="changeView(views.game)" />
+  <GameView v-else-if="actualView == views.game" @start-game="changeView(views.home)" />
 </template>
 
 <script lang="ts"></script>
