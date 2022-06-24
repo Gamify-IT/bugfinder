@@ -15,15 +15,27 @@ export class CodeVisualizer {
   /**
    * Useful to enumerate in vue components
    *
-   * @returns list of lines
+   * @returns list of lines with list of words
    */
-  public getCodeLines(): Array<number> {
-    const length = this.code.words.filter((word) => word.word == WordType.NEWLINE).length;
-    const list: Array<number> = [];
-    for (let i = 0; i <= length; i++) {
-      list.push(i);
+  public getCodeLines(): Array<Array<IWord>> {
+    const lines: Array<Array<IWord>> = [];
+    let currentLineWords: Array<IWord> = [];
+    for (let i = 0; i < this.code.words.length; i++) {
+      const wordObj: IWord = this.code.words[i];
+      const word = wordObj.word;
+      if (word == WordType.NEWLINE) {
+        lines.push(currentLineWords);
+        currentLineWords = [];
+      } else if (word == WordType.TAB) {
+        currentLineWords.push(wordObj);
+      } else {
+        currentLineWords.push(wordObj);
+      }
     }
-    return list;
+    if (currentLineWords.length > 0) {
+      lines.push(currentLineWords);
+    }
+    return lines;
   }
 
   /**

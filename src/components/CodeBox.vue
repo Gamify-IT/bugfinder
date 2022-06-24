@@ -1,7 +1,7 @@
 <template>
   <div class="codebox">
     <div v-for="line in codeLines" :key="line">
-      <div class="btn-group" v-for="word in lineWords(line)" :key="word">
+      <div class="btn-group" v-for="word in line" :key="word">
         <div v-if="word.word == tab" class="tab"></div>
         <button v-if="word.word != tab && word.word != newLine" @click="clickedButton(word.id)">
           <pre v-highlightjs><code class="java">{{ word.word }}</code></pre>
@@ -12,7 +12,7 @@
 </template>
 
 <script setup lang="ts">
-import { WordType, IWord } from '../model/models';
+import { WordType } from '../model/models';
 import { BugFinderGame, exampleCodes } from '../model/bugfindergame';
 import { CodeVisualizer } from '../model/code-visualizer';
 
@@ -27,12 +27,6 @@ const codeLines = codeVisualizer.getCodeLines();
 const currentCodeComplete = codeVisualizer.getInFormat();
 console.log('Current Code: ' + currentCode);
 console.log('Code Lines: ' + codeLines);
-
-function lineWords(line: number): Array<IWord> {
-  const words = codeVisualizer.getLineWordsAsList(line);
-  console.log(words);
-  return words;
-}
 
 function clickedButton(id: number) {
   const result = bugfinderGame.submitWrongCode(id);
