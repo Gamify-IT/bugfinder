@@ -1,20 +1,4 @@
 <template>
-  <h2>Formatted Code but not clickable</h2>
-  <pre v-highlightjs><code class="java">
-{{currentCodeComplete}}
-  </code></pre>
-
-  <h2>Code in a row (trash)[Also click does not work because it is in for]</h2>
-  <pre v-highlightjs>
-    <code class="java">
-<button v-for="word of currentCode.words" :key="word.id" @click="clickedButton(word.id)">
-<div class="code" v-if="word.word != newLine && word.word != tab">{{word.word}} </div>
-<pre v-if="word.word == newLine"></pre>
-</button>
-    </code>
-  </pre>
-
-  <h2>Code formatted (now best solution)</h2>
   <div class="codebox">
     <div v-for="line in codeLines" :key="line">
       <div class="btn-group" v-for="word in lineWords(line)" :key="word">
@@ -58,7 +42,12 @@ function clickedButton(id: number) {
 
 <style lang="css" scoped>
 .codebox {
-  background-color: rgb(236, 236, 206);
+  background-color: #fdf6e3;
+  margin-top: 10px;
+  padding-bottom: 10px;
+  border: 2px solid rgb(167, 158, 101);
+  box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px,
+    rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
 }
 button {
   background: transparent;
