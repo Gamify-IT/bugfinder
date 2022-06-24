@@ -32,9 +32,7 @@ export class CodeVisualizer {
         currentLineWords.push(wordObj);
       }
     }
-    if (currentLineWords.length > 0) {
-      lines.push(currentLineWords);
-    }
+    lines.push(currentLineWords);
     return lines;
   }
 
