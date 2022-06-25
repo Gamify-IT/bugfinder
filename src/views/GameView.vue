@@ -3,7 +3,11 @@ import ChatBox from '@/components/ChatBox.vue';
 import CodeBox from '@/components/CodeBox.vue';
 import { BugFinderGame, exampleCodes } from '@/model/bugfindergame';
 import { chatParticipants, chatElement } from '@/model/models';
-import { ref } from 'vue';
+import { ref, defineEmits } from 'vue';
+
+const emit = defineEmits<{
+  (e: 'endGame'): void;
+}>();
 
 const game = new BugFinderGame(exampleCodes());
 const currentCode = ref(game.getCurrentCode());
@@ -22,12 +26,16 @@ chatHistory.push({
 });
 
 function nextCode() {
-  chatHistory.push({ from: chatParticipants.OTHER, message: 'That is very kind of you!' });
-  game.nextCode();
-  currentCode.value = game.getCurrentCode();
-  showNextButton.value = false;
-  hasNextCode.value = game.hasNextCode();
-  rightWordId.value = wrongWordId.value = -1;
+  if (game.hasNextCode()) {
+    chatHistory.push({ from: chatParticipants.OTHER, message: 'That is very kind of you!' });
+    game.nextCode();
+    currentCode.value = game.getCurrentCode();
+    showNextButton.value = false;
+    hasNextCode.value = game.hasNextCode();
+    rightWordId.value = wrongWordId.value = -1;
+  } else {
+    emit('endGame');
+  }
 }
 
 function submitSolution(selectedWordId: number) {

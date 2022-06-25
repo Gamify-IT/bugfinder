@@ -1,17 +1,19 @@
 <script setup lang="ts">
-import { createApp } from 'vue';
+import { ref } from 'vue';
 import HomeView from '@/views/HomeView.vue';
 import GameView from '@/views/GameView.vue';
+import FinishView from '@/views/FinishView.vue';
 
 enum views {
   home,
   game,
+  finish,
 }
-var actualView = views.game;
+var actualView = ref(views.home);
 
 function changeView(newView: views) {
-  actualView = newView;
-  console.log('change view to ' + actualView);
+  actualView.value = newView;
+  console.log('BLOP ' + newView);
 }
 </script>
 
@@ -24,7 +26,8 @@ function changeView(newView: views) {
     </nav>
   </header>
   <HomeView v-if="actualView == views.home" @start-game="changeView(views.game)" />
-  <GameView v-else-if="actualView == views.game" />
+  <GameView v-else-if="actualView == views.game" @end-game="changeView(views.finish)" />
+  <FinishView v-else-if="actualView == views.finish" />
 </template>
 
 <script lang="ts"></script>
