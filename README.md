@@ -22,6 +22,18 @@ npm install
 npm run serve
 ```
 
+### Test
+
+Run the tests:
+```sh
+npm run test:unit
+```
+
+To also get the test coverage:
+```sh
+npm run test:unit -- --coverage
+```
+
 ### Build
 
 Build the Docker-Container
