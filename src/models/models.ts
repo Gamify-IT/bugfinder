@@ -22,6 +22,20 @@ export class Word implements IWord {
   }
 }
 
+export enum ChatParticipant {
+  ME,
+  OTHER,
+}
+
+export class ChatElement {
+  from: ChatParticipant;
+  message: string;
+  public constructor(from: ChatParticipant, message: string) {
+    this.from = from;
+    this.message = message;
+  }
+}
+
 export class Code implements ICode {
   bugWordId = 0;
   words: IWord[] = [];

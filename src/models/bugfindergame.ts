@@ -64,11 +64,24 @@ export class BugFinderGame {
    * Checks if the submitted bug word is really a bug word or not.
    *
    * @param bugWordId the number of the clicked word
+   *
+   * @throws {Error} when player already submitted bug for this code
+   *
    * @returns true when found right bug word and false when not
    */
   public submitWrongCode(bugWordId: number): boolean {
+    if (this.hasSubmitted()) {
+      throw Error('You already submitted this code.');
+    }
     this.solved[this.currentCodeNumber] = this.currentCode.bugWordId == bugWordId;
     return this.solved[this.currentCodeNumber];
+  }
+  /**
+   *
+   * @returns whether the player submitted a bug for the current code or not
+   */
+  public hasSubmitted(): boolean {
+    return this.solved[this.currentCodeNumber] != undefined;
   }
 
   /**
@@ -90,7 +103,7 @@ export class BugFinderGame {
       throw Error('There are no more codes left!');
     }
     // Did not finish last task
-    if (this.solved[this.currentCodeNumber] === undefined) {
+    if (!this.hasSubmitted()) {
       throw Error('You did not complete this code!');
     }
     this.currentCodeNumber++;

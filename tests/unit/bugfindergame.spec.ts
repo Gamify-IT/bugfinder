@@ -1,5 +1,5 @@
-import { BugFinderGame } from '@/model/bugfindergame';
-import { Word, Code, WordType } from '@/model/models';
+import { BugFinderGame } from '@/models/bugfindergame';
+import { Word, Code, WordType } from '@/models/models';
 
 function exampleCodes(): Code[] {
   const codes: Code[] = [
@@ -49,6 +49,17 @@ describe('bugfindergame.ts', () => {
   it('Succeed to submit wrong bug word', () => {
     const result = bugfindergame.submitWrongCode(4);
     expect(result).toBe(false);
+  });
+  it('Succed to get hasSubmitted false when not submitted', () => {
+    expect(bugfindergame.hasSubmitted()).toBe(false);
+  });
+  it('Succed to get hasSubmitted true when already submitted', () => {
+    bugfindergame.submitWrongCode(1);
+    expect(bugfindergame.hasSubmitted()).toBe(true);
+  });
+  it('Fails when submits twice', () => {
+    bugfindergame.submitWrongCode(1);
+    expect(() => bugfindergame.submitWrongCode(1)).toThrow();
   });
   it('Succeed when want to go to next code and finished current', () => {
     const result = bugfindergame.submitWrongCode(1);

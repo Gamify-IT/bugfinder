@@ -1,38 +1,58 @@
+<script setup lang="ts">
+import { WordType, ICode } from '../models/models';
+import { CodeVisualizer } from '../models/code-visualizer';
+import { ref, watch } from 'vue';
+
+const props = defineProps<{
+  code: ICode;
+  rightWordId: number;
+  wrongWordId: number;
+}>();
+
+const emit = defineEmits<{
+  (e: 'submitSolution', selectedWordId: number): void;
+}>();
+
+const newLine = WordType.NEWLINE;
+const tab = WordType.TAB;
+
+let submitted = false;
+
+var codeVisualizer = new CodeVisualizer(props.code);
+const codeLines = ref(codeVisualizer.getCodeLineWords());
+
+function clickedButton(id: number) {
+  if (!submitted) {
+    submitted = true;
+    emit('submitSolution', id);
+  }
+}
+
+watch(
+  () => props.code,
+  (newCode) => {
+    codeVisualizer = new CodeVisualizer(newCode);
+    codeLines.value = codeVisualizer.getCodeLineWords();
+    submitted = false;
+  },
+  { deep: true }
+);
+</script>
+
 <template>
   <div class="codebox">
     <div v-for="line in codeLines" :key="line">
       <div class="btn-group" v-for="word in line" :key="word">
         <div v-if="word.word == tab" class="tab"></div>
         <button v-if="word.word != tab && word.word != newLine" @click="clickedButton(word.id)">
-          <pre v-highlightjs><code class="java">{{ word.word }}</code></pre>
+          <pre
+            v-highlightjs
+          ><code class="java" :class="{ 'right-code' : rightWordId === word.id, 'wrong-code' : wrongWordId === word.id }">{{ word.word }}</code></pre>
         </button>
       </div>
     </div>
   </div>
 </template>
-
-<script setup lang="ts">
-import { WordType } from '../model/models';
-import { BugFinderGame, exampleCodes } from '../model/bugfindergame';
-import { CodeVisualizer } from '../model/code-visualizer';
-
-const newLine = WordType.NEWLINE;
-const tab = WordType.TAB;
-
-const bugfinderGame = new BugFinderGame(exampleCodes());
-const codeVisualizer = new CodeVisualizer(bugfinderGame.getCurrentCode());
-
-const currentCode = bugfinderGame.getCurrentCode();
-const codeLines = codeVisualizer.getCodeLineWords();
-const currentCodeComplete = codeVisualizer.getInFormat();
-console.log('Current Code: ' + currentCode);
-console.log('Code Lines: ' + codeLines);
-
-function clickedButton(id: number) {
-  const result = bugfinderGame.submitWrongCode(id);
-  console.log(result);
-}
-</script>
 
 <style lang="css" scoped>
 .codebox {
@@ -48,6 +68,15 @@ button {
   border: none !important;
   padding: 0;
   height: 25px;
+}
+code:hover {
+  background-color: #ecddb1;
+}
+code.right-code {
+  background-color: rgb(115, 224, 115);
+}
+code.wrong-code {
+  background-color: rgb(233, 175, 161);
 }
 .tab {
   width: 30px;
