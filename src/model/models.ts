@@ -27,9 +27,13 @@ export enum chatParticipants {
   OTHER,
 }
 
-export interface chatElement {
+export class ChatElement {
   from: chatParticipants;
   message: string;
+  public constructor(from: chatParticipants, message: string) {
+    this.from = from;
+    this.message = message;
+  }
 }
 
 export class Code implements ICode {

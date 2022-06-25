@@ -1,13 +1,25 @@
 <script setup lang="ts">
-import { chatParticipants, chatElement } from '@/model/models';
+import { chatParticipants, ChatElement } from '@/model/models';
+import { watch } from 'vue';
 
 const props = defineProps<{
-  chatHistory: chatElement[];
+  chatHistory: ChatElement[];
 }>();
+
+watch(
+  () => props.chatHistory,
+  () => {
+    const chatBox = document.getElementById('chat-box');
+    if (chatBox) {
+      chatBox.lastElementChild?.scrollIntoView();
+    }
+  },
+  { deep: true }
+);
 </script>
 
 <template>
-  <main>
+  <div id="chat-box" ref="chat-box" class="overflow-auto">
     <div v-for="chatElement in chatHistory" :key="chatElement.message">
       <div v-if="chatElement.from == chatParticipants.ME" class="d-flex flex-row justify-content-start mb-4">
         <img src="../assets/avatar.svg" alt="Me" style="width: 45px; height: 100%" />
@@ -23,7 +35,12 @@ const props = defineProps<{
         <img src="../assets/avatar.svg" alt="Other" style="width: 45px; height: 100%" />
       </div>
     </div>
-  </main>
+  </div>
 </template>
 
-<style scoped></style>
+<style scoped>
+#chat-box {
+  height: 80vh;
+  scroll-behavior: auto;
+}
+</style>
