@@ -17,7 +17,7 @@ export class CodeVisualizer {
    *
    * @returns list of lines with list of words
    */
-  public getCodeLines(): Array<Array<IWord>> {
+  public getCodeLineWords(): Array<Array<IWord>> {
     const lines: Array<Array<IWord>> = [];
     let currentLineWords: Array<IWord> = [];
     for (let i = 0; i < this.code.words.length; i++) {
@@ -32,9 +32,7 @@ export class CodeVisualizer {
         currentLineWords.push(wordObj);
       }
     }
-    if (currentLineWords.length > 0) {
-      lines.push(currentLineWords);
-    }
+    lines.push(currentLineWords);
     return lines;
   }
 

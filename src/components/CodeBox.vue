@@ -34,7 +34,7 @@ const tab = WordType.TAB;
 let submitted = false;
 
 var codeVisualizer = new CodeVisualizer(props.code);
-const codeLines = ref(codeVisualizer.getCodeLines());
+const codeLines = ref(codeVisualizer.getCodeLineWords());
 
 function clickedButton(id: number) {
   if (!submitted) {
@@ -47,7 +47,7 @@ watch(
   () => props.code,
   (newCode) => {
     codeVisualizer = new CodeVisualizer(newCode);
-    codeLines.value = codeVisualizer.getCodeLines();
+    codeLines.value = codeVisualizer.getCodeLineWords();
     submitted = false;
   },
   { deep: true }
