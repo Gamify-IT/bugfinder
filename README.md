@@ -1,24 +1,70 @@
 # bugfinder
 
-## Project setup
+This is a game where you have to find bugs. You have to find click on the position in the code that causes the bug and get chat-like feedback.
+
+## Development
+
+### Getting started
+
+Clone the repository  
+```sh
+git clone https://github.com/Gamify-IT/bugfinder.git
 ```
+
+Install the dependencies  
+```sh
 npm install
 ```
 
-### Compiles and hot-reloads for development
-```
-npm run serve
+### Compile and Hot-Reload for Development
+
+```sh
+npm run dev
 ```
 
-### Compiles and minifies for production
+### Build
+
+Build the Docker-Container
+```sh
+docker build -t bugfinder-dev
 ```
-npm run build
+And run it at port 8000 with
+```sh
+docker run -d -p 8000:80 --name bugfinder-dev bugfinder-dev
 ```
 
-### Lints and fixes files
+To monitor, stop and remove the container you can use the following commands:
+```sh
+docker ps -a -f name=bugfinder-dev
 ```
-npm run lint
+```sh
+docker stop bugfinder-dev
+```
+```sh
+docker rm bugfinder-dev
 ```
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+## User manual
+
+Run the docker container with the following command at port 8000:
+```sh
+docker run -d -p 8000:80 --name bugfinder ghcr.io/gamify-it/bugfinder:latest
+```
+Now you can access it at [http://localhost:8000](http://localhost:8000).  
+To access it externally replace localhost with your IP.  
+
+To monitor the container you can use the following command:
+```sh
+docker ps -a -f name=bugfinder
+```
+To stop the container you can use the following command:
+```sh
+docker stop bugfinder
+```
+To remove the container you can use the following command:
+```sh
+docker rm bugfinder
+```
+
+### Screenshot
+
