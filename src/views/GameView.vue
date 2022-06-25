@@ -3,7 +3,7 @@ import ChatBox from '@/components/ChatBox.vue';
 import CodeBox from '@/components/CodeBox.vue';
 import { BugFinderGame, exampleCodes } from '@/model/bugfindergame';
 import { chatParticipants, ChatElement } from '@/model/models';
-import { ref, defineEmits } from 'vue';
+import { ref } from 'vue';
 
 const emit = defineEmits<{
   (e: 'endGame'): void;

@@ -14,7 +14,7 @@
 </template>
 
 <script setup lang="ts">
-import { WordType, ICode, Code } from '../model/models';
+import { WordType, ICode } from '../model/models';
 import { CodeVisualizer } from '../model/code-visualizer';
 import { ref, watch } from 'vue';
 
@@ -23,7 +23,6 @@ const props = defineProps<{
   rightWordId: number;
   wrongWordId: number;
 }>();
-const language = 'java';
 
 const emit = defineEmits<{
   (e: 'submitSolution', selectedWordId: number): void;
@@ -46,7 +45,7 @@ function clickedButton(id: number) {
 
 watch(
   () => props.code,
-  (newCode, oldCode) => {
+  (newCode) => {
     codeVisualizer = new CodeVisualizer(newCode);
     codeLines.value = codeVisualizer.getCodeLines();
     submitted = false;
