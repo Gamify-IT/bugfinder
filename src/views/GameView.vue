@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import ChatBox from '@/components/ChatBox.vue';
 import CodeBox from '@/components/CodeBox.vue';
-import { BugFinderGame, exampleCodes } from '@/model/bugfindergame';
-import { chatParticipants, ChatElement } from '@/model/models';
+import { BugFinderGame, exampleCodes } from '@/models/bugfindergame';
+import { ChatParticipant, ChatElement } from '@/models/models';
 import { ref } from 'vue';
 
 const emit = defineEmits<{
@@ -19,16 +19,16 @@ const wrongWordId = ref(-1);
 const showNextButton = ref(false);
 
 var chatHistory = ref(Array<ChatElement>());
-chatHistory.value.push({ from: chatParticipants.OTHER, message: 'Hey' });
+chatHistory.value.push({ from: ChatParticipant.OTHER, message: 'Hey' });
 chatHistory.value.push({
-  from: chatParticipants.OTHER,
+  from: ChatParticipant.OTHER,
   message: "I'm having big trouble with this code. Can you help me finding the bug?",
 });
 
 function nextCode() {
   if (game.hasNextCode()) {
-    chatHistory.value.push({ from: chatParticipants.ME, message: "Yes, I'm happy to help you" });
-    chatHistory.value.push({ from: chatParticipants.OTHER, message: 'That is very kind of you!' });
+    chatHistory.value.push({ from: ChatParticipant.ME, message: "Yes, I'm happy to help you" });
+    chatHistory.value.push({ from: ChatParticipant.OTHER, message: 'That is very kind of you!' });
     game.nextCode();
     currentCode.value = game.getCurrentCode();
     showNextButton.value = false;
@@ -41,25 +41,25 @@ function nextCode() {
 
 function submitSolution(selectedWordId: number) {
   const correct: boolean = game.submitWrongCode(selectedWordId);
-  chatHistory.value.push({ from: chatParticipants.ME, message: 'I think I found the bug. Is the programm now running?' });
-  chatHistory.value.push({ from: chatParticipants.OTHER, message: '...' });
+  chatHistory.value.push({ from: ChatParticipant.ME, message: 'I think I found the bug. Is the programm now running?' });
+  chatHistory.value.push({ from: ChatParticipant.OTHER, message: '...' });
   setTimeout(() => {
     chatHistory.value.pop();
     if (correct) {
-      chatHistory.value.push({ from: chatParticipants.OTHER, message: 'Yes it works! Thank you very much' });
+      chatHistory.value.push({ from: ChatParticipant.OTHER, message: 'Yes it works! Thank you very much' });
       rightWordId.value = selectedWordId;
     } else {
-      chatHistory.value.push({ from: chatParticipants.OTHER, message: 'No sadly not.' });
+      chatHistory.value.push({ from: ChatParticipant.OTHER, message: 'No sadly not.' });
       wrongWordId.value = selectedWordId;
     }
-    chatHistory.value.push({ from: chatParticipants.OTHER, message: '...' });
+    chatHistory.value.push({ from: ChatParticipant.OTHER, message: '...' });
   }, 1000);
   setTimeout(() => {
     chatHistory.value.pop();
     if (game.hasNextCode()) {
-      chatHistory.value.push({ from: chatParticipants.OTHER, message: 'Can you help me again with another bug?' });
+      chatHistory.value.push({ from: ChatParticipant.OTHER, message: 'Can you help me again with another bug?' });
     } else {
-      chatHistory.value.push({ from: chatParticipants.OTHER, message: 'Thank you a lot. You helped me fixing all my codes!' });
+      chatHistory.value.push({ from: ChatParticipant.OTHER, message: 'Thank you a lot. You helped me fixing all my codes!' });
     }
     showNextButton.value = true;
   }, 2000);

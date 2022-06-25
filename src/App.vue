@@ -13,7 +13,6 @@ var actualView = ref(views.home);
 
 function changeView(newView: views) {
   actualView.value = newView;
-  console.log('BLOP ' + newView);
 }
 </script>
 

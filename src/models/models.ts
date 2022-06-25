@@ -22,15 +22,15 @@ export class Word implements IWord {
   }
 }
 
-export enum chatParticipants {
+export enum ChatParticipant {
   ME,
   OTHER,
 }
 
 export class ChatElement {
-  from: chatParticipants;
+  from: ChatParticipant;
   message: string;
-  public constructor(from: chatParticipants, message: string) {
+  public constructor(from: ChatParticipant, message: string) {
     this.from = from;
     this.message = message;
   }

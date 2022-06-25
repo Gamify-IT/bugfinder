@@ -1,5 +1,5 @@
-import { BugFinderGame } from '@/model/bugfindergame';
-import { Word, Code, WordType } from '@/model/models';
+import { BugFinderGame } from '@/models/bugfindergame';
+import { Word, Code, WordType } from '@/models/models';
 
 function exampleCodes(): Code[] {
   const codes: Code[] = [

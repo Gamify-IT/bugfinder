@@ -14,8 +14,8 @@
 </template>
 
 <script setup lang="ts">
-import { WordType, ICode } from '../model/models';
-import { CodeVisualizer } from '../model/code-visualizer';
+import { WordType, ICode } from '../models/models';
+import { CodeVisualizer } from '../models/code-visualizer';
 import { ref, watch } from 'vue';
 
 const props = defineProps<{
