@@ -1,18 +1,3 @@
-<template>
-  <div class="codebox">
-    <div v-for="line in codeLines" :key="line">
-      <div class="btn-group" v-for="word in line" :key="word">
-        <div v-if="word.word == tab" class="tab"></div>
-        <button v-if="word.word != tab && word.word != newLine" @click="clickedButton(word.id)">
-          <pre
-            v-highlightjs
-          ><code class="java" :class="{ 'right-code' : rightWordId === word.id, 'wrong-code' : wrongWordId === word.id }">{{ word.word }}</code></pre>
-        </button>
-      </div>
-    </div>
-  </div>
-</template>
-
 <script setup lang="ts">
 import { WordType, ICode } from '../models/models';
 import { CodeVisualizer } from '../models/code-visualizer';
@@ -53,6 +38,21 @@ watch(
   { deep: true }
 );
 </script>
+
+<template>
+  <div class="codebox">
+    <div v-for="line in codeLines" :key="line">
+      <div class="btn-group" v-for="word in line" :key="word">
+        <div v-if="word.word == tab" class="tab"></div>
+        <button v-if="word.word != tab && word.word != newLine" @click="clickedButton(word.id)">
+          <pre
+            v-highlightjs
+          ><code class="java" :class="{ 'right-code' : rightWordId === word.id, 'wrong-code' : wrongWordId === word.id }">{{ word.word }}</code></pre>
+        </button>
+      </div>
+    </div>
+  </div>
+</template>
 
 <style lang="css" scoped>
 .codebox {
