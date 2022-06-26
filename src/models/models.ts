@@ -9,6 +9,7 @@ export interface ICode {
 }
 
 export interface IWord {
+  id: number;
   word: string | WordType;
 }
 
@@ -30,6 +31,7 @@ export enum ChatParticipant {
 export class ChatElement {
   from: ChatParticipant;
   message: string;
+
   public constructor(from: ChatParticipant, message: string) {
     this.from = from;
     this.message = message;
