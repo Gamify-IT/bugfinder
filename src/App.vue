@@ -31,6 +31,4 @@ function changeView(newView: views) {
 
 <script lang="ts"></script>
 
-<style>
-@import '@/assets/base.css';
-</style>
+<style></style>
