@@ -38,7 +38,7 @@ npm run test:unit -- --coverage
 
 Build the Docker-Container
 ```sh
-docker build -t bugfinder-dev
+docker build -t bugfinder-dev .
 ```
 And run it at port 8000 with
 ```sh
