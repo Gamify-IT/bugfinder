@@ -1,20 +1,19 @@
 <script setup lang="ts">
 import ChatBox from '@/components/ChatBox.vue';
 import CodeBox from '@/components/CodeBox.vue';
-import { BugFinderGame, exampleCodes } from '@/models/bugfindergame';
-import { ChatParticipant, ChatElement } from '@/models/models';
+import { BugFinderGame } from '@/models/bugfindergame';
+import { ChatParticipant, ChatElement, ISolution } from '@/models/models';
 import { ref } from 'vue';
 
 const emit = defineEmits<{
   (e: 'endGame'): void;
 }>();
 
-const game = new BugFinderGame(exampleCodes());
+const game = new BugFinderGame();
 const currentCode = ref(game.getCurrentCode());
 const hasNextCode = ref(game.hasNextCode());
 
-const rightWordId = ref(-1);
-const wrongWordId = ref(-1);
+const feedbackSolution = ref(Array<boolean>());
 
 const showNextButton = ref(false);
 
@@ -33,25 +32,25 @@ function nextCode() {
     currentCode.value = game.getCurrentCode();
     showNextButton.value = false;
     hasNextCode.value = game.hasNextCode();
-    rightWordId.value = wrongWordId.value = -1;
+    feedbackSolution.value = [];
   } else {
     emit('endGame');
   }
 }
 
-function submitSolution(selectedWordId: number) {
-  const correct: boolean = game.submitWrongCode(selectedWordId);
+function submitSolution(selectedBugs: ISolution) {
+  const feedback: Array<boolean> = game.submitWrongCode(selectedBugs);
   chatHistory.value.push({ from: ChatParticipant.ME, message: 'I think I found the bug. Is the programm now running?' });
   chatHistory.value.push({ from: ChatParticipant.OTHER, message: '...' });
   setTimeout(() => {
     chatHistory.value.pop();
-    if (correct) {
+    if (feedback.find((bool) => bool == false) == null) {
       chatHistory.value.push({ from: ChatParticipant.OTHER, message: 'Yes it works! Thank you very much' });
-      rightWordId.value = selectedWordId;
     } else {
       chatHistory.value.push({ from: ChatParticipant.OTHER, message: 'No sadly not.' });
-      wrongWordId.value = selectedWordId;
     }
+    feedbackSolution.value = feedback;
+
     chatHistory.value.push({ from: ChatParticipant.OTHER, message: '...' });
   }, 1000);
   setTimeout(() => {
@@ -72,8 +71,8 @@ function submitSolution(selectedWordId: number) {
   <div class="container">
     <div class="row">
       <div class="col-9">
-        <CodeBox :rightWordId="rightWordId" :wrongWordId="wrongWordId" :code="currentCode" @submitSolution="submitSolution" />
-        <button :disabled="!showNextButton" class="btn btn-primary float-end mx-3 my-4" @click="nextCode()">
+        <CodeBox :feedbackSolution="feedbackSolution" :code="currentCode" @submitSolution="submitSolution" />
+        <button v-if="showNextButton" class="btn btn-primary float-end mx-3 my-4" @click="nextCode()">
           <div v-if="hasNextCode">Next Code</div>
           <div v-else>Finish</div>
         </button>
