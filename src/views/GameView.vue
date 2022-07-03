@@ -17,7 +17,7 @@ const feedbackSolution = ref(Array<boolean>());
 
 const showNextButton = ref(false);
 
-var chatHistory = ref(Array<ChatElement>());
+const chatHistory = ref(Array<ChatElement>());
 chatHistory.value.push({ from: ChatParticipant.OTHER, message: 'Hey' });
 chatHistory.value.push({
   from: ChatParticipant.OTHER,
@@ -84,5 +84,3 @@ function submitSolution(selectedBugs: ISolution) {
     </div>
   </div>
 </template>
-
-<style scoped></style>

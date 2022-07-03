@@ -15,10 +15,10 @@ const emit = defineEmits<{
 const newLine = WordType.NEWLINE;
 const tab = WordType.TAB;
 
-var submitted = ref(false);
-var selectedBugs = ref(Array<IBug>());
+let submitted = ref(false);
+let selectedBugs = ref(Array<IBug>());
 
-var codeVisualizer = new CodeVisualizer(props.code);
+let codeVisualizer = new CodeVisualizer(props.code);
 const codeLines = ref(codeVisualizer.getCodeLineWords());
 
 function submit() {

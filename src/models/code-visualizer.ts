@@ -1,4 +1,4 @@
-import { WordType, ICode, IWord } from './models';
+import { WordType, ICode, IWord, Code } from './models';
 
 export class CodeVisualizer {
   private code: ICode;
@@ -20,8 +20,7 @@ export class CodeVisualizer {
   public getCodeLineWords(): Array<Array<IWord>> {
     const lines: Array<Array<IWord>> = [];
     let currentLineWords: Array<IWord> = [];
-    for (let i = 0; i < this.code.words.length; i++) {
-      const wordObj: IWord = this.code.words[i];
+    for (const wordObj of this.code.words) {
       const word = wordObj.word;
       if (word == WordType.NEWLINE) {
         lines.push(currentLineWords);
@@ -45,8 +44,7 @@ export class CodeVisualizer {
   public getLineWordsAsList(line: number): Array<IWord> {
     const list: Array<IWord> = [];
     let currentLine = 0;
-    for (let i = 0; i < this.code.words.length; i++) {
-      const wordObj: IWord = this.code.words[i];
+    for (const wordObj of this.code.words) {
       const word = wordObj.word;
       if (word == WordType.NEWLINE) {
         currentLine++;
@@ -68,8 +66,7 @@ export class CodeVisualizer {
    */
   public getInFormat(): string {
     let currentLine = '';
-    for (let i = 0; i < this.code.words.length; i++) {
-      const wordObj: IWord = this.code.words[i];
+    for (const wordObj of this.code.words) {
       const word = wordObj.word;
       if (word == WordType.NEWLINE) {
         currentLine += '\n';

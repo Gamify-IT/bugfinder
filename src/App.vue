@@ -9,7 +9,7 @@ enum views {
   game,
   finish,
 }
-var actualView = ref(views.home);
+const actualView = ref(views.home);
 
 function changeView(newView: views) {
   actualView.value = newView;
@@ -30,5 +30,3 @@ function changeView(newView: views) {
 </template>
 
 <script lang="ts"></script>
-
-<style></style>
