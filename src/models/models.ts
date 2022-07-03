@@ -23,7 +23,7 @@ export enum ErrorType {
   SYNTAX = 'SYNTAX',
   DYNAMIC_SEMANTIC = 'DYNAMIC_SEMANTIC',
   LEXICAL = 'LEXICAL',
-  PRACMATIC = 'PRACMATIC',
+  PRAGMATIC = 'PRAGMATIC',
 }
 
 export interface IBug {

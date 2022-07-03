@@ -28,7 +28,7 @@ export class BugFinderGame {
    *
    * Checks if the submitted bug word is really a bug word or not.
    *
-   * @param bugWordId the number of the clicked word
+   * @param submittedSolution list of bugs
    *
    * @throws {Error} when player already submitted bug for this code
    *
@@ -56,9 +56,7 @@ export class BugFinderGame {
       }
     });
 
-    const falseSubmittedBugs = playerBugs.filter((playerBug) => {
-      return bugs.filter((bug) => bug.wordId != playerBug.wordId).length > bugs.length - 1;
-    });
+    const falseSubmittedBugs = playerBugs.filter((playerBug) => bugs.filter((bug) => bug.wordId == playerBug.wordId).length == 0);
 
     falseSubmittedBugs.forEach((falseBug) => {
       solutionFeedback[falseBug.wordId] = false;
@@ -67,6 +65,15 @@ export class BugFinderGame {
 
     return solutionFeedback;
   }
+
+  /**
+   *
+   * @returns wether the player passed the current code or not
+   */
+  public passedCurrentCode(): boolean {
+    return this.solved[this.currentCodeNumber];
+  }
+
   /**
    *
    * @returns whether the player submitted a bug for the current code or not

@@ -44,7 +44,7 @@ function submitSolution(selectedBugs: ISolution) {
   chatHistory.value.push({ from: ChatParticipant.OTHER, message: '...' });
   setTimeout(() => {
     chatHistory.value.pop();
-    if (feedback.find((bool) => bool == false) == null) {
+    if (game.passedCurrentCode()) {
       chatHistory.value.push({ from: ChatParticipant.OTHER, message: 'Yes it works! Thank you very much' });
     } else {
       chatHistory.value.push({ from: ChatParticipant.OTHER, message: 'No sadly not.' });
