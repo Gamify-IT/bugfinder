@@ -1,0 +1,47 @@
+[
+    {
+        "id": 1,
+        "bugs": [
+            {
+                "id": 1,
+                "wordId": 1,
+                "errorType": "LEXICAL"
+            },
+            {
+                "id": 2,
+                "wordId": 10,
+                "errorType": "LEXICAL"
+            }
+        ]
+    },
+    {
+        "id": 2,
+        "bugs": [
+            {
+                "id": 1,
+                "wordId": 1,
+                "errorType": "LEXICAL"
+            },
+            {
+                "id": 2,
+                "wordId": 10,
+                "errorType": "LEXICAL"
+            }
+        ]
+    },
+    {
+        "id": 3,
+        "bugs": [
+            {
+                "id": 1,
+                "wordId": 1,
+                "errorType": "LEXICAL"
+            },
+            {
+                "id": 2,
+                "wordId": 10,
+                "errorType": "LEXICAL"
+            }
+        ]
+    }
+]
