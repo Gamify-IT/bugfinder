@@ -2,6 +2,7 @@
 import { WordType, ICode, ISolution, Solution, IBug, Bug, ErrorType } from '../models/models';
 import { CodeVisualizer } from '../models/code-visualizer';
 import { ref, watch } from 'vue';
+import { remove } from '@vue/shared';
 
 const props = defineProps<{
   code: ICode;
@@ -21,6 +22,9 @@ let selectedBugs = ref(Array<IBug>());
 let codeVisualizer = new CodeVisualizer(props.code);
 const codeLines = ref(codeVisualizer.getCodeLineWords());
 
+const currentEditingBug = ref(new Bug(0, ErrorType.DYNAMIC_SEMANTIC));
+const showModal = ref(false);
+
 function submit() {
   if (!submitted.value) {
     submitted.value = true;
@@ -30,14 +34,29 @@ function submit() {
 }
 
 function clickedButton(wordId: number) {
-  if (!submitted.value) {
-    const isInList = selectedBugs.value.find((bug) => bug.wordId == wordId);
-    if (!isInList) {
-      selectedBugs.value.push(new Bug(wordId, ErrorType.LEXICAL));
-    } else {
-      selectedBugs.value = selectedBugs.value.filter((bug) => bug.wordId != wordId);
-    }
+  if (submitted.value) {
+    return;
   }
+  if (selectedBugs.value.find((bug) => bug.wordId == wordId) == null) {
+    currentEditingBug.value = new Bug(wordId, ErrorType.DYNAMIC_SEMANTIC);
+    showModal.value = true;
+    console.log('Opened modal');
+    console.log(currentEditingBug.value);
+  } else {
+    removeBugCode(wordId);
+  }
+}
+
+function submitBug() {
+  selectedBugs.value.push(currentEditingBug.value);
+}
+
+function hiddenModal() {
+  console.log('HIDE MODAL');
+}
+
+function removeBugCode(wordId: number) {
+  selectedBugs.value = selectedBugs.value.filter((bug) => bug.wordId != wordId);
 }
 
 watch(
@@ -65,6 +84,14 @@ watch(
     </div>
   </div>
   <button v-if="!submitted" class="btn btn-success float-end mx-3 my-4" @click="submit()">Submit</button>
+
+  <b-modal title="Edit bug" v-model="showModal" @show="hiddenModal" @hidden="hiddenModal" @ok="submitBug">
+    <form ref="form" v-if="currentEditingBug != undefined">
+      <b-form-group label="Select ErrorType" label-for="error-type">
+        <b-form-select id="error-type" v-model="currentEditingBug.errorType" :options="ErrorType"></b-form-select>
+      </b-form-group>
+    </form>
+  </b-modal>
 </template>
 
 <style lang="css" scoped>
