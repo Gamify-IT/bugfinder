@@ -51,6 +51,8 @@ export class BugFinderGame {
         solutionFeedback[bug.wordId] = false;
       } else if (playerSpecificBug.errorType != bug.errorType) {
         solutionFeedback[bug.wordId] = false;
+      } else if (playerSpecificBug.correctValue != bug.correctValue) {
+        solutionFeedback[bug.wordId] = false;
       } else {
         solutionFeedback[bug.wordId] = true;
       }

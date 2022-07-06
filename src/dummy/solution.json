@@ -5,12 +5,14 @@
             {
                 "id": 1,
                 "wordId": 1,
-                "errorType": "LEXICAL"
+                "errorType": "LEXICAL",
+                "correctValue": "public"
             },
             {
                 "id": 2,
                 "wordId": 10,
-                "errorType": "LEXICAL"
+                "errorType": "LEXICAL",
+                "correctValue": "\"HALLO\";"
             }
         ]
     },
@@ -20,12 +22,14 @@
             {
                 "id": 1,
                 "wordId": 1,
-                "errorType": "LEXICAL"
+                "errorType": "LEXICAL",
+                "correctValue": "private"
             },
             {
                 "id": 2,
                 "wordId": 10,
-                "errorType": "LEXICAL"
+                "errorType": "LEXICAL",
+                "correctValue": "\"HALLO\";"
             }
         ]
     },
@@ -35,12 +39,14 @@
             {
                 "id": 1,
                 "wordId": 1,
-                "errorType": "LEXICAL"
+                "errorType": "LEXICAL",
+                "correctValue": "public"
             },
             {
                 "id": 2,
                 "wordId": 10,
-                "errorType": "LEXICAL"
+                "errorType": "LEXICAL",
+                "correctValue": "\"HALLO\";"
             }
         ]
     }
