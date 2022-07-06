@@ -1,8 +1,7 @@
 <script setup lang="ts">
-import { WordType, ICode, ISolution, Solution, IBug, Bug, ErrorType } from '../models/models';
+import { WordType, ICode, IWord, ISolution, Solution, IBug, Bug, ErrorType } from '../models/models';
 import { CodeVisualizer } from '../models/code-visualizer';
 import { ref, watch } from 'vue';
-import { remove } from '@vue/shared';
 
 const props = defineProps<{
   code: ICode;
@@ -32,20 +31,15 @@ function submit() {
   }
 }
 
-function clickedButton(wordId: number) {
+function clickedButton(word: IWord) {
   if (submitted.value) {
     return;
   }
-  const clickedWord = props.code.words.find((word) => word.id == wordId);
-  if (clickedWord == null) {
-    console.log('Could not find clicked word!');
-    return;
-  }
-  if (selectedBugs.value.find((bug) => bug.wordId == wordId) == null) {
-    currentEditingBug.value = new Bug(wordId, ErrorType.DYNAMIC_SEMANTIC, clickedWord.word);
+  if (selectedBugs.value.find((bug) => bug.wordId == word.id) == null) {
+    currentEditingBug.value = new Bug(word.id, ErrorType.DYNAMIC_SEMANTIC, word.word);
     showModal.value = true;
   } else {
-    removeBugCode(wordId);
+    removeBugCode(word.id);
   }
 }
 
@@ -61,7 +55,7 @@ function removeBugCode(wordId: number) {
   selectedBugs.value = selectedBugs.value.filter((bug) => bug.wordId != wordId);
 }
 
-function wordIsSelectedBug(wordId: number) {
+function isWordSelectedBug(wordId: number) {
   return selectedBugs.value.find((bug) => bug.wordId == wordId) != null;
 }
 
@@ -89,10 +83,10 @@ watch(
     <div v-for="line in codeLines" :key="line">
       <div class="btn-group" v-for="word in line" :key="word">
         <div v-if="word.word == tab" class="tab"></div>
-        <button v-if="word.word != tab && word.word != newLine" @click="clickedButton(word.id)" class="code-word">
+        <button v-if="word.word != tab && word.word != newLine" @click="clickedButton(word)" class="code-word">
           <pre
             v-highlightjs
-          ><code v-if="!wordIsSelectedBug(word.id)" class="java" :class="{ 'right-code' : feedbackSolution[word.id] === true, 'wrong-code' : feedbackSolution[word.id]  === false }">{{ word.word }}</code><code v-else :class="{'selected-code' : !submitted, 'right-code' : feedbackSolution[word.id] === true, 'wrong-code' : feedbackSolution[word.id]  === false }">{{ getCorrectedWordValue(word.id) }}</code></pre>
+          ><code v-if="!isWordSelectedBug(word.id)" class="java" :class="{ 'right-code' : feedbackSolution[word.id] === true, 'wrong-code' : feedbackSolution[word.id]  === false }">{{ word.word }}</code><code v-else :class="{'selected-code' : !submitted, 'right-code' : feedbackSolution[word.id] === true, 'wrong-code' : feedbackSolution[word.id]  === false }">{{ getCorrectedWordValue(word.id) }}</code></pre>
         </button>
       </div>
     </div>
