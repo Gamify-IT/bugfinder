@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "bootstrap": "^5.1.3",
+    "bootstrap-vue-3": "^0.1.13",
     "vue": "^3.2.37",
     "vue3-highlightjs": "^1.0.5",
     "vuex": "^4.0.0"

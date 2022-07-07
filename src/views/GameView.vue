@@ -3,6 +3,7 @@ import ChatBox from '@/components/ChatBox.vue';
 import CodeBox from '@/components/CodeBox.vue';
 import { BugFinderGame } from '@/models/bugfindergame';
 import { ChatParticipant, ChatElement, ISolution } from '@/models/models';
+import { CodeFeedback } from '@/models/code-feedback';
 import { ref } from 'vue';
 
 const emit = defineEmits<{
@@ -13,7 +14,7 @@ const game = new BugFinderGame();
 const currentCode = ref(game.getCurrentCode());
 const hasNextCode = ref(game.hasNextCode());
 
-const feedbackSolution = ref(Array<boolean>());
+const codeFeedback = ref(new CodeFeedback([]));
 
 const showNextButton = ref(false);
 
@@ -32,14 +33,14 @@ function nextCode() {
     currentCode.value = game.getCurrentCode();
     showNextButton.value = false;
     hasNextCode.value = game.hasNextCode();
-    feedbackSolution.value = [];
+    codeFeedback.value = new CodeFeedback([]);
   } else {
     emit('endGame');
   }
 }
 
 function submitSolution(selectedBugs: ISolution) {
-  const feedback: Array<boolean> = game.submitWrongCode(selectedBugs);
+  const feedback: CodeFeedback = game.submitWrongCode(selectedBugs);
   chatHistory.value.push({ from: ChatParticipant.ME, message: 'I think I found the bug. Is the programm now running?' });
   chatHistory.value.push({ from: ChatParticipant.OTHER, message: '...' });
   setTimeout(() => {
@@ -49,7 +50,7 @@ function submitSolution(selectedBugs: ISolution) {
     } else {
       chatHistory.value.push({ from: ChatParticipant.OTHER, message: 'No sadly not.' });
     }
-    feedbackSolution.value = feedback;
+    codeFeedback.value = feedback;
 
     chatHistory.value.push({ from: ChatParticipant.OTHER, message: '...' });
   }, 1000);
@@ -71,7 +72,7 @@ function submitSolution(selectedBugs: ISolution) {
   <div class="container">
     <div class="row">
       <div class="col-9">
-        <CodeBox :feedbackSolution="feedbackSolution" :code="currentCode" @submitSolution="submitSolution" />
+        <CodeBox :codeFeedback="codeFeedback" :code="currentCode" @submitSolution="submitSolution" />
         <button v-if="showNextButton" class="btn btn-primary float-end mx-3 my-4" @click="nextCode()">
           <div v-if="hasNextCode">Next Code</div>
           <div v-else>Finish</div>

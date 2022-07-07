@@ -22,7 +22,7 @@
     {
         "id": 2,
         "words": [
-            {"id": 1, "word": "prublic"},
+            {"id": 1, "word": "prvte"},
             {"id": 2, "word": "void" },
             {"id": 3, "word": "sayHello()"},
             {"id": 4, "word": "{"},

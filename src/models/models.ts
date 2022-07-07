@@ -29,6 +29,7 @@ export enum ErrorType {
 export interface IBug {
   wordId: number;
   errorType: string;
+  correctValue: string;
 }
 
 export class Word implements IWord {
@@ -79,9 +80,11 @@ export class Solution implements ISolution {
 export class Bug implements IBug {
   wordId: number;
   errorType: ErrorType;
+  correctValue: string;
 
-  public constructor(wordId: number, errorType: ErrorType) {
+  public constructor(wordId: number, errorType: ErrorType, correctValue: string) {
     this.wordId = wordId;
     this.errorType = errorType;
+    this.correctValue = correctValue;
   }
 }
