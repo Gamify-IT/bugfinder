@@ -1,11 +1,12 @@
 <script setup lang="ts">
 import { WordType, ICode, IWord, ISolution, Solution, IBug, Bug, ErrorType } from '../models/models';
+import { CodeFeedback, WordFeedback } from '@/models/code-feedback';
 import { CodeVisualizer } from '../models/code-visualizer';
 import { ref, watch } from 'vue';
 
 const props = defineProps<{
   code: ICode;
-  feedbackSolution: Array<boolean>;
+  codeFeedback: CodeFeedback;
 }>();
 
 const emit = defineEmits<{
@@ -66,6 +67,7 @@ function getCorrectedWordValue(wordId: number): string | null {
   }
   return bug.correctValue;
 }
+
 watch(
   () => props.code,
   (newCode) => {
@@ -83,11 +85,31 @@ watch(
     <div v-for="line in codeLines" :key="line">
       <div class="btn-group" v-for="word in line" :key="word">
         <div v-if="word.word == tab" class="tab"></div>
-        <button v-if="word.word != tab && word.word != newLine" @click="clickedButton(word)" class="code-word">
+        <button
+          :id="'word-' + word.id"
+          v-if="word.word != tab && word.word != newLine"
+          @click="clickedButton(word)"
+          class="code-word"
+        >
           <pre
             v-highlightjs
-          ><code v-if="!isWordSelectedBug(word.id)" class="java" :class="{ 'right-code' : feedbackSolution[word.id] === true, 'wrong-code' : feedbackSolution[word.id]  === false }">{{ word.word }}</code><code v-else :class="{'selected-code' : !submitted, 'right-code' : feedbackSolution[word.id] === true, 'wrong-code' : feedbackSolution[word.id]  === false }">{{ getCorrectedWordValue(word.id) }}</code></pre>
+          ><code v-if="!isWordSelectedBug(word.id)" class="java" :class="{ 'right-code' : codeFeedback.hasFeedback(word.id) && codeFeedback.getFeedback(word.id).success, 'wrong-code' : codeFeedback.hasFeedback(word.id) && !codeFeedback.getFeedback(word.id).success }">{{ word.word }}</code><code v-else :class="{'selected-code' : !submitted, 'right-code' : codeFeedback.hasFeedback(word.id) && codeFeedback.getFeedback(word.id).success, 'wrong-code' : codeFeedback.hasFeedback(word.id) && !codeFeedback.getFeedback(word.id).success }">{{ getCorrectedWordValue(word.id) }}</code></pre>
         </button>
+        <b-popover
+          v-if="codeFeedback.hasFeedback(word.id)"
+          :target="'word-' + word.id"
+          triggers="hover"
+          placement="top"
+          variant="danger"
+        >
+          <template #title>Code Feedback</template>
+          Selected right: <a v-if="codeFeedback.getFeedback(word.id).codeSelectedSuccessful" class="text-success">Successful</a>
+          <a v-else class="text-danger">Failed</a><br />
+          Error Type: <a v-if="codeFeedback.getFeedback(word.id).codeErrorTypeSuccessful" class="text-success">Successful</a>
+          <a v-else class="text-danger">Failed</a><br />
+          Code Fixed: <a v-if="codeFeedback.getFeedback(word.id).codeFixedSuccessful" class="text-success">Successful</a>
+          <a v-else class="text-danger">Failed</a><br />
+        </b-popover>
       </div>
     </div>
   </div>

@@ -1,4 +1,5 @@
 import { ICode, ISolution, IBug } from './models';
+import { CodeFeedback, WordFeedback } from './code-feedback';
 import codesJson from '@/dummy/codes.json';
 import solutionJson from '@/dummy/solution.json';
 const codes: ICode[] = codesJson;
@@ -32,9 +33,9 @@ export class BugFinderGame {
    *
    * @throws {Error} when player already submitted bug for this code
    *
-   * @returns a list with mistakes in the code
+   * @returns a list with feedback which contains detailed information what the player did wrong in the code
    */
-  public submitWrongCode(submittedSolution: ISolution): Array<boolean> {
+  public submitWrongCode(submittedSolution: ISolution): CodeFeedback {
     if (this.hasSubmitted()) {
       throw Error('You already submitted this code.');
     }
@@ -42,30 +43,39 @@ export class BugFinderGame {
     const realSolution: ISolution = solutions[this.currentCodeNumber];
     const bugs: IBug[] = realSolution.bugs;
 
-    const solutionFeedback: Array<boolean> = [];
+    const wordFeedbacks: WordFeedback[] = [];
 
     bugs.forEach((bug) => {
       const playerSpecificBug = playerBugs.find((playerBug) => playerBug.wordId == bug.wordId);
+      const feedback = new WordFeedback(bug, true, true, true, true);
 
       if (playerSpecificBug == null) {
-        solutionFeedback[bug.wordId] = false;
-      } else if (playerSpecificBug.errorType != bug.errorType) {
-        solutionFeedback[bug.wordId] = false;
-      } else if (playerSpecificBug.correctValue != bug.correctValue) {
-        solutionFeedback[bug.wordId] = false;
+        feedback.success = false;
+        feedback.codeSelectedSuccessful = false;
+        feedback.codeErrorTypeSuccessful = false;
+        feedback.codeFixedSuccessful = false;
       } else {
-        solutionFeedback[bug.wordId] = true;
+        if (playerSpecificBug.errorType != bug.errorType) {
+          feedback.success = false;
+          feedback.codeErrorTypeSuccessful = false;
+        }
+        if (playerSpecificBug.correctValue != bug.correctValue) {
+          feedback.success = false;
+          feedback.codeFixedSuccessful = false;
+        }
       }
+      wordFeedbacks.push(feedback);
     });
 
     const falseSubmittedBugs = playerBugs.filter((playerBug) => bugs.filter((bug) => bug.wordId == playerBug.wordId).length == 0);
 
     falseSubmittedBugs.forEach((falseBug) => {
-      solutionFeedback[falseBug.wordId] = false;
+      const feedback = new WordFeedback(falseBug, false, false, false, false);
+      wordFeedbacks.push(feedback);
     });
-    this.solved[this.currentCodeNumber] = solutionFeedback.find((bool) => bool == false) == null;
+    this.solved[this.currentCodeNumber] = wordFeedbacks.find((feedback) => !feedback.success) == null;
 
-    return solutionFeedback;
+    return new CodeFeedback(wordFeedbacks);
   }
 
   /**
