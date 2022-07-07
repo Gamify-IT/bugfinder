@@ -2,9 +2,7 @@ import { CodeFeedback, WordFeedback } from '@/models/code-feedback';
 import { Bug, ErrorType } from '@/models/models';
 
 function exampleCodeFeedback(): CodeFeedback {
-  return new CodeFeedback([
-    new WordFeedback(new Bug(1, ErrorType.LEXICAL, "public"), false, false, false, false),
-  ]);
+  return new CodeFeedback([new WordFeedback(new Bug(1, ErrorType.LEXICAL, 'public'), false, false, false, false)]);
 }
 
 describe('code-feedback.ts', () => {
