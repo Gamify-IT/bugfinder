@@ -3,7 +3,7 @@ import ChatBox from '@/components/ChatBox.vue';
 import CodeBox from '@/components/CodeBox.vue';
 import { BugFinderGame } from '@/models/bugfindergame';
 import { ChatParticipant, ChatElement, ISolution } from '@/models/models';
-import { CodeFeedback, WordFeedback } from '@/models/code-feedback';
+import { CodeFeedback } from '@/models/code-feedback';
 import { ref } from 'vue';
 
 const emit = defineEmits<{

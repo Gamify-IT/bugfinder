@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { WordType, ICode, IWord, ISolution, Solution, IBug, Bug, ErrorType } from '../models/models';
-import { CodeFeedback, WordFeedback } from '@/models/code-feedback';
+import { CodeFeedback } from '@/models/code-feedback';
 import { CodeVisualizer } from '../models/code-visualizer';
 import { ref, watch } from 'vue';
 
