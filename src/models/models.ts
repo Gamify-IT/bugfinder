@@ -1,5 +1,6 @@
 export enum WordType {
-  TAB = ' ',
+  TAB = '<tab>',
+  SPACE = ' ',
   NEWLINE = '\n',
 }
 
@@ -19,6 +20,7 @@ export interface ISolution {
 }
 
 export enum ErrorType {
+  UNDEFINED = 'UNDEFINED',
   STATIC_SEMANTIC = 'STATIC_SEMANTIC',
   SYNTAX = 'SYNTAX',
   DYNAMIC_SEMANTIC = 'DYNAMIC_SEMANTIC',

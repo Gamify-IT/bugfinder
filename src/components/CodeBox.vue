@@ -3,6 +3,7 @@ import { WordType, ICode, IWord, ISolution, Solution, IBug, Bug, ErrorType } fro
 import { CodeFeedback } from '@/models/code-feedback';
 import { CodeVisualizer } from '../models/code-visualizer';
 import { ref, watch } from 'vue';
+import { assertRecordExpression } from '@babel/types';
 
 const props = defineProps<{
   code: ICode;
@@ -15,6 +16,7 @@ const emit = defineEmits<{
 
 const newLine = WordType.NEWLINE;
 const tab = WordType.TAB;
+const space = WordType.SPACE;
 
 let submitted = ref(false);
 let selectedBugs = ref(Array<IBug>());
@@ -37,7 +39,11 @@ function clickedButton(word: IWord) {
     return;
   }
   if (selectedBugs.value.find((bug) => bug.wordId == word.id) == null) {
-    currentEditingBug.value = new Bug(word.id, ErrorType.DYNAMIC_SEMANTIC, word.word);
+    let wordString = word.word;
+    if (wordString == space) {
+      wordString = '';
+    }
+    currentEditingBug.value = new Bug(word.id, ErrorType.UNDEFINED, wordString);
     showModal.value = true;
   } else {
     removeBugCode(word.id);
@@ -60,12 +66,24 @@ function isWordSelectedBug(wordId: number) {
   return selectedBugs.value.find((bug) => bug.wordId == wordId) != null;
 }
 
+function isWordSpace(wordId: number): boolean {
+  const word = getWordById(wordId);
+  if (word == null) {
+    return false;
+  }
+  return word.word == space;
+}
+
 function getCorrectedWordValue(wordId: number): string | null {
   const bug = selectedBugs.value.find((bug) => bug.wordId == wordId);
   if (bug == null) {
     return null;
   }
   return bug.correctValue;
+}
+
+function getWordById(wordId: number): IWord | undefined {
+  return props.code.words.find((word) => word.id == wordId);
 }
 
 watch(
@@ -90,6 +108,7 @@ watch(
           v-if="word.word != tab && word.word != newLine"
           @click="clickedButton(word)"
           class="code-word"
+          :class="{ 'code-space': word.word == space && !isWordSelectedBug(word.id) }"
         >
           <pre
             v-highlightjs
@@ -121,7 +140,7 @@ watch(
         <b-form-input id="error-fix" v-model="currentEditingBug.correctValue"></b-form-input>
       </b-form-group>
 
-      <b-form-group label="Select ErrorType" label-for="error-type">
+      <b-form-group label="Select ErrorType" label-for="error-type" v-if="!isWordSpace(currentEditingBug.wordId)">
         <b-form-select id="error-type" v-model="currentEditingBug.errorType" :options="ErrorType"></b-form-select>
       </b-form-group>
     </form>
@@ -143,9 +162,14 @@ button.code-word {
   padding: 0;
   height: 25px;
 }
+button.code-space {
+  width: 4px;
+}
+
 code:hover {
   background-color: #ecddb1;
 }
+
 code.right-code {
   background-color: rgb(115, 224, 115);
 }
