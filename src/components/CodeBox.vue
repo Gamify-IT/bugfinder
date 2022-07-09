@@ -116,7 +116,9 @@ watch(
             'selected-code': !submitted && isWordSelectedBug(word.id),
           }"
         >
+          <b-badge v-if="word.word == space && !isWordSelectedBug(word.id)" variant="success" class="code-space-badge">+</b-badge>
           <pre
+            v-else
             v-highlightjs
           ><code v-if="!isWordSelectedBug(word.id)" class="java">{{ word.word }}</code><code v-else>{{ getCorrectedWordValue(word.id) }}</code></pre>
         </button>
@@ -179,7 +181,15 @@ pre {
 }
 
 button.code-space {
-  width: 4px;
+  min-width: 5px;
+}
+
+.code-space-badge {
+  display: none;
+}
+
+button.code-space:hover .code-space-badge {
+  display: inherit;
 }
 button.code-space-selected {
   margin-left: 4px;
