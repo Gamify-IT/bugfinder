@@ -108,11 +108,17 @@ watch(
           v-if="word.word != tab && word.word != newLine"
           @click="clickedButton(word)"
           class="code-word"
-          :class="{ 'code-space': word.word == space && !isWordSelectedBug(word.id) }"
+          :class="{
+            'code-space': word.word == space && !isWordSelectedBug(word.id),
+            'code-space-selected': word.word == space && isWordSelectedBug(word.id),
+            'right-code': codeFeedback.hasFeedback(word.id) && codeFeedback.getFeedback(word.id).success,
+            'wrong-code': codeFeedback.hasFeedback(word.id) && !codeFeedback.getFeedback(word.id).success,
+            'selected-code': !submitted && isWordSelectedBug(word.id),
+          }"
         >
           <pre
             v-highlightjs
-          ><code v-if="!isWordSelectedBug(word.id)" class="java" :class="{ 'right-code' : codeFeedback.hasFeedback(word.id) && codeFeedback.getFeedback(word.id).success, 'wrong-code' : codeFeedback.hasFeedback(word.id) && !codeFeedback.getFeedback(word.id).success }">{{ word.word }}</code><code v-else :class="{'selected-code' : !submitted, 'right-code' : codeFeedback.hasFeedback(word.id) && codeFeedback.getFeedback(word.id).success, 'wrong-code' : codeFeedback.hasFeedback(word.id) && !codeFeedback.getFeedback(word.id).success }">{{ getCorrectedWordValue(word.id) }}</code></pre>
+          ><code v-if="!isWordSelectedBug(word.id)" class="java">{{ word.word }}</code><code v-else>{{ getCorrectedWordValue(word.id) }}</code></pre>
         </button>
         <b-popover
           v-if="codeFeedback.hasFeedback(word.id)"
@@ -159,24 +165,38 @@ watch(
 button.code-word {
   background: transparent;
   border: none !important;
-  padding: 0;
-  height: 25px;
+  padding: 2px;
 }
+code {
+  background: transparent;
+  margin: 0;
+  padding: 0;
+}
+
+pre {
+  margin: 0;
+  padding: 0;
+}
+
 button.code-space {
   width: 4px;
 }
+button.code-space-selected {
+  margin-left: 4px;
+  margin-right: 4px;
+}
 
-code:hover {
+button:hover {
   background-color: #ecddb1;
 }
 
-code.right-code {
+button.right-code {
   background-color: rgb(115, 224, 115);
 }
-code.wrong-code {
+button.wrong-code {
   background-color: rgb(233, 175, 161);
 }
-code.selected-code {
+button.selected-code {
   background-color: rgb(214, 207, 141);
 }
 .tab {
