@@ -169,25 +169,12 @@ button.code-word {
   border: none !important;
   padding: 2px;
 }
-code {
-  background: transparent;
-  margin: 0;
-  padding: 0;
-}
-
-pre {
-  margin: 0;
-  padding: 0;
-}
-
 button.code-space {
   min-width: 5px;
 }
-
 .code-space-badge {
   display: none;
 }
-
 button.code-space:hover .code-space-badge {
   display: inherit;
 }
@@ -195,11 +182,9 @@ button.code-space-selected {
   margin-left: 4px;
   margin-right: 4px;
 }
-
-button:hover {
+button.code-word:hover {
   background-color: #ecddb1;
 }
-
 button.right-code {
   background-color: rgb(115, 224, 115);
 }
@@ -211,5 +196,15 @@ button.selected-code {
 }
 .tab {
   width: 30px;
+}
+
+code {
+  background: transparent;
+  margin: 0;
+  padding: 0;
+}
+pre {
+  margin: 0;
+  padding: 0;
 }
 </style>
