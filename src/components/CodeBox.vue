@@ -3,7 +3,6 @@ import { WordType, ICode, IWord, ISolution, Solution, IBug, Bug, ErrorType } fro
 import { CodeFeedback } from '@/models/code-feedback';
 import { CodeVisualizer } from '../models/code-visualizer';
 import { ref, watch } from 'vue';
-import { assertRecordExpression } from '@babel/types';
 
 const props = defineProps<{
   code: ICode;
@@ -72,7 +71,7 @@ function isWordSpace(wordId: number): boolean {
 }
 
 function getCorrectedWordValue(wordId: number): string | null {
-  const bug = selectedBugs.value.find((bug) => bug.wordId == wordId);
+  const bug = selectedBugs.value.find((searchedBug) => searchedBug.wordId == wordId);
   if (bug == null) {
     return null;
   }
