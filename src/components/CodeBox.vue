@@ -68,10 +68,7 @@ function isWordSelectedBug(wordId: number) {
 
 function isWordSpace(wordId: number): boolean {
   const word = getWordById(wordId);
-  if (word == null) {
-    return false;
-  }
-  return word.word == space;
+  return word != null && word.word == space;
 }
 
 function getCorrectedWordValue(wordId: number): string | null {
