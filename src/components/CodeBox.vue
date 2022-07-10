@@ -3,6 +3,7 @@ import { WordType, ICode, IWord, ISolution, Solution, IBug, Bug, ErrorType } fro
 import { CodeFeedback } from '@/models/code-feedback';
 import { CodeVisualizer } from '../models/code-visualizer';
 import { ref, watch } from 'vue';
+import { assertRecordExpression } from '@babel/types';
 
 const props = defineProps<{
   code: ICode;
@@ -15,6 +16,7 @@ const emit = defineEmits<{
 
 const newLine = WordType.NEWLINE;
 const tab = WordType.TAB;
+const space = WordType.SPACE;
 
 let submitted = ref(false);
 let selectedBugs = ref(Array<IBug>());
@@ -37,7 +39,11 @@ function clickedButton(word: IWord) {
     return;
   }
   if (selectedBugs.value.find((bug) => bug.wordId == word.id) == null) {
-    currentEditingBug.value = new Bug(word.id, ErrorType.DYNAMIC_SEMANTIC, word.word);
+    let wordString = word.word;
+    if (wordString == space) {
+      wordString = '';
+    }
+    currentEditingBug.value = new Bug(word.id, ErrorType.UNDEFINED, wordString);
     showModal.value = true;
   } else {
     removeBugCode(word.id);
@@ -60,12 +66,21 @@ function isWordSelectedBug(wordId: number) {
   return selectedBugs.value.find((bug) => bug.wordId == wordId) != null;
 }
 
+function isWordSpace(wordId: number): boolean {
+  const word = getWordById(wordId);
+  return word != null && word.word == space;
+}
+
 function getCorrectedWordValue(wordId: number): string | null {
   const bug = selectedBugs.value.find((bug) => bug.wordId == wordId);
   if (bug == null) {
     return null;
   }
   return bug.correctValue;
+}
+
+function getWordById(wordId: number): IWord | undefined {
+  return props.code.words.find((word) => word.id == wordId);
 }
 
 watch(
@@ -90,10 +105,19 @@ watch(
           v-if="word.word != tab && word.word != newLine"
           @click="clickedButton(word)"
           class="code-word"
+          :class="{
+            'code-space': word.word == space && !isWordSelectedBug(word.id),
+            'code-space-selected': word.word == space && isWordSelectedBug(word.id),
+            'right-code': codeFeedback.hasFeedback(word.id) && codeFeedback.getFeedback(word.id).success,
+            'wrong-code': codeFeedback.hasFeedback(word.id) && !codeFeedback.getFeedback(word.id).success,
+            'selected-code': !submitted && isWordSelectedBug(word.id),
+          }"
         >
+          <b-badge v-if="word.word == space && !isWordSelectedBug(word.id)" variant="success" class="code-space-badge">+</b-badge>
           <pre
+            v-else
             v-highlightjs
-          ><code v-if="!isWordSelectedBug(word.id)" class="java" :class="{ 'right-code' : codeFeedback.hasFeedback(word.id) && codeFeedback.getFeedback(word.id).success, 'wrong-code' : codeFeedback.hasFeedback(word.id) && !codeFeedback.getFeedback(word.id).success }">{{ word.word }}</code><code v-else :class="{'selected-code' : !submitted, 'right-code' : codeFeedback.hasFeedback(word.id) && codeFeedback.getFeedback(word.id).success, 'wrong-code' : codeFeedback.hasFeedback(word.id) && !codeFeedback.getFeedback(word.id).success }">{{ getCorrectedWordValue(word.id) }}</code></pre>
+          ><code v-if="!isWordSelectedBug(word.id)" class="java">{{ word.word }}</code><code v-else>{{ getCorrectedWordValue(word.id) }}</code></pre>
         </button>
         <b-popover
           v-if="codeFeedback.hasFeedback(word.id)"
@@ -121,7 +145,7 @@ watch(
         <b-form-input id="error-fix" v-model="currentEditingBug.correctValue"></b-form-input>
       </b-form-group>
 
-      <b-form-group label="Select ErrorType" label-for="error-type">
+      <b-form-group label="Select ErrorType" label-for="error-type" v-if="!isWordSpace(currentEditingBug.wordId)">
         <b-form-select id="error-type" v-model="currentEditingBug.errorType" :options="ErrorType"></b-form-select>
       </b-form-group>
     </form>
@@ -140,22 +164,44 @@ watch(
 button.code-word {
   background: transparent;
   border: none !important;
-  padding: 0;
-  height: 25px;
+  padding: 2px;
 }
-code:hover {
+button.code-space {
+  min-width: 5px;
+}
+.code-space-badge {
+  display: none;
+}
+button.code-space:hover .code-space-badge {
+  display: inherit;
+}
+button.code-space-selected {
+  margin-left: 4px;
+  margin-right: 4px;
+}
+button.code-word:hover {
   background-color: #ecddb1;
 }
-code.right-code {
+button.right-code {
   background-color: rgb(115, 224, 115);
 }
-code.wrong-code {
+button.wrong-code {
   background-color: rgb(233, 175, 161);
 }
-code.selected-code {
+button.selected-code {
   background-color: rgb(214, 207, 141);
 }
 .tab {
   width: 30px;
+}
+
+code {
+  background: transparent;
+  margin: 0;
+  padding: 0;
+}
+pre {
+  margin: 0;
+  padding: 0;
 }
 </style>

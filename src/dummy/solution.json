@@ -4,13 +4,19 @@
         "bugs": [
             {
                 "id": 1,
-                "wordId": 1,
+                "wordId": 2,
                 "errorType": "LEXICAL",
                 "correctValue": "public"
             },
             {
                 "id": 2,
-                "wordId": 10,
+                "wordId": 11,
+                "errorType": "UNDEFINED",
+                "correctValue": "final"
+            },
+            {
+                "id": 3,
+                "wordId": 18,
                 "errorType": "LEXICAL",
                 "correctValue": "\"HALLO\";"
             }
