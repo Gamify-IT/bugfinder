@@ -90,7 +90,7 @@ describe('CodeBox.vue', () => {
     const spaces = wrapper.findAll('.code-space');
     expect(spaces.length).toBe(newCode.words.filter((word) => word.word == WordType.SPACE).length);
   });
-  test('CodeBox shows no feedback when there is none feedback provided', () => {
+  test('CodeBox shows no feedback when there is no feedback provided', () => {
     const rightCodes = wrapper.findAll('.right-code');
     expect(rightCodes.length).toBe(0);
 
@@ -139,7 +139,7 @@ describe('CodeBox.vue', () => {
 
     const modal = wrapper.getComponent(BModal);
     const buttons = modal.findAllComponents(BButton);
-    const submitButton = buttons.find((button) => button.text() == "Ok");
+    const submitButton = buttons.find((button) => button.attributes().class.includes("btn-primary"));
     expect(submitButton != null).toBe(true);
 
     if (submitButton == null) {
