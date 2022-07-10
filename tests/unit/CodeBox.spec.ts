@@ -1,9 +1,9 @@
 import { mount, shallowMount, VueWrapper } from '@vue/test-utils';
 import CodeBox from '@/components/CodeBox.vue';
-import BootstrapVue3 from 'bootstrap-vue-3';
+import BootstrapVue3, { BBadge, BButton, BCardBody, BFormInput, BModal } from 'bootstrap-vue-3';
 import VueHighlightJS from 'vue3-highlightjs';
 import WrapperLike from '@vue/test-utils/dist/interfaces/wrapperLike';
-import { ICode, Code, Word, WordType, Bug, ErrorType } from '@/models/models';
+import { ICode, Code, Word, WordType, Bug, ErrorType, Solution } from '@/models/models';
 import { CodeFeedback, WordFeedback } from '@/models/code-feedback';
 
 function exampleCode(): Code {
@@ -81,14 +81,42 @@ describe('CodeBox.vue', () => {
     expect(wrongCodes.length).toBe(1);
     expect(wrongCodes[0].element.id).toBe('word-12');
   });
+  test('Submit solution', async () => {
+    const submitButton = wrapper.find('.btn-success');
+    expect(submitButton.text()).toBe("Submit");
+    expect(submitButton.exists()).toBe(true);
+    
+    submitButton.trigger('click');
+    expect(wrapper.emitted().submitSolution[0]).toEqual([new Solution(1, [])]);
+
+    await wrapper.vm.$nextTick();
+
+    expect(wrapper.find('.btn-success').exists()).toBe(false);
+  })
   test('Select code word', async () => {
     const selectedWord = 2;
     const targetWordButton = wrapper.find('#word-' + selectedWord);
     expect(targetWordButton.exists()).toBe(true);
 
     targetWordButton.trigger('click');
+    await wrapper.vm.$nextTick();
 
-    // I suck accessing the modal
-    // TODO: make modal accessible in testing
+    const modal = wrapper.getComponent(BModal);
+    const buttons = modal.findAllComponents(BButton);
+    const submitButton = buttons.find((button) => button.text() == "Ok");
+    expect(submitButton != null).toBe(true);
+
+    if (submitButton == null) {
+      return;
+    }
+
+    submitButton.trigger('click');
+
+    await wrapper.vm.$nextTick();
+
+    const selectedCodes = wrapper.findAll('.selected-code');
+    expect(selectedCodes.length).toBe(1);
+    expect(selectedCodes[0].element.id).toBe('word-' + selectedWord);
+
   });
 });
