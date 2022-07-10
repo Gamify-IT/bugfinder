@@ -97,7 +97,7 @@ watch(
 
 <template>
   <div class="codebox">
-    <div v-for="line in codeLines" :key="line">
+    <div class="code-line" v-for="line in codeLines" :key="line">
       <div class="btn-group" v-for="word in line" :key="word">
         <div v-if="word.word == tab" class="tab"></div>
         <button
@@ -139,7 +139,7 @@ watch(
   </div>
   <button v-if="!submitted" class="btn btn-success float-end mx-3 my-4" @click="submit()">Submit</button>
 
-  <b-modal title="Edit bug" v-model="showModal" @show="hiddenModal" @hidden="hiddenModal" @ok="submitBug">
+  <b-modal title="Edit bug" id="edit-bug-modal" v-model="showModal" @show="hiddenModal" @hidden="hiddenModal" @ok="submitBug">
     <form ref="form" v-if="currentEditingBug != undefined" @submit.stop.prevent="submitBug">
       <b-form-group label="Fix error (if possible)" label-for="error-fix">
         <b-form-input id="error-fix" v-model="currentEditingBug.correctValue"></b-form-input>
