@@ -4,21 +4,15 @@
         "bugs": [
             {
                 "id": 1,
-                "wordId": 2,
-                "errorType": "LEXICAL",
-                "correctValue": "public"
+                "wordId": 6,
+                "errorType": "UNDEFINED",
+                "correctValue": "moveAndPickupGrain(final Hamster paule)"
             },
             {
                 "id": 2,
-                "wordId": 11,
-                "errorType": "UNDEFINED",
-                "correctValue": "final"
-            },
-            {
-                "id": 3,
-                "wordId": 18,
-                "errorType": "LEXICAL",
-                "correctValue": "\"HALLO\";"
+                "wordId": 16,
+                "errorType": "DYNAMIC_SEMANTIC",
+                "correctValue": "paule.pickupGrain();"
             }
         ]
     },
@@ -27,32 +21,9 @@
         "bugs": [
             {
                 "id": 1,
-                "wordId": 1,
-                "errorType": "LEXICAL",
-                "correctValue": "private"
-            },
-            {
-                "id": 2,
-                "wordId": 10,
-                "errorType": "LEXICAL",
-                "correctValue": "\"HALLO\";"
-            }
-        ]
-    },
-    {
-        "id": 3,
-        "bugs": [
-            {
-                "id": 1,
-                "wordId": 1,
-                "errorType": "LEXICAL",
-                "correctValue": "public"
-            },
-            {
-                "id": 2,
-                "wordId": 10,
-                "errorType": "LEXICAL",
-                "correctValue": "\"HALLO\";"
+                "wordId": 11,
+                "errorType": "SYNTAX",
+                "correctValue": "System.out.println(\"Have you found it?\");"
             }
         ]
     }
