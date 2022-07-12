@@ -11,7 +11,7 @@
             {
                 "id": 2,
                 "wordId": 16,
-                "errorType": "DYNAMIC_SEMANTIC",
+                "errorType": "PRAGMATIC",
                 "correctValue": "paule.pickupGrain();"
             }
         ]
@@ -24,6 +24,51 @@
                 "wordId": 11,
                 "errorType": "SYNTAX",
                 "correctValue": "System.out.println(\"Have you found it?\");"
+            }
+        ]
+    },
+    {
+        "id": 3,
+        "bugs": [
+            {
+                "id": 1,
+                "wordId": 5,
+                "errorType": "LEXICAL",
+                "correctValue": "ForYou"
+            }
+        ]
+    },
+    {
+        "id": 4,
+        "bugs": [
+            {
+                "id": 1,
+                "wordId": 14,
+                "errorType": "STATIC_SEMANTIC",
+                "correctValue": "int"
+            }
+        ]
+    },
+    {
+        "id": 5,
+        "bugs": [
+            {
+                "id": 1,
+                "wordId": 10,
+                "errorType": "UNDEFINED",
+                "correctValue": "final"
+            },
+            {
+                "id": 2,
+                "wordId": 16,
+                "errorType": "UNDEFINED",
+                "correctValue": "final"
+            },
+            {
+                "id": 3,
+                "wordId": 26,
+                "errorType": "UNDEFINED",
+                "correctValue": "BigError(final String name, final Date birthDate)"
             }
         ]
     }
