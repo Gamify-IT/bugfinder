@@ -32,9 +32,9 @@
         "bugs": [
             {
                 "id": 1,
-                "wordId": 5,
+                "wordId": 6,
                 "errorType": "LEXICAL",
-                "correctValue": "ForYou"
+                "correctValue": "forYou()"
             }
         ]
     },
