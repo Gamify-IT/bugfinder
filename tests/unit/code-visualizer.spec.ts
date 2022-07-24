@@ -39,4 +39,18 @@ describe('code-visualizer.ts', () => {
     }
     expect(firstLineString).toBe('prublic void sayHello() {');
   });
+  it('Success when returns words as list of code', () => {
+    const codeWords: Array<IWord> = codeVisualizer.getLineWordsAsList(1);
+    expect(codeWords.length).toBe(2);
+
+    const firstWord = codeWords[0];
+    const secondWord = codeWords[1];
+
+    expect(firstWord.word).toEqual('<tab>');
+    expect(secondWord.word).toEqual('System.out.println("HELLO THERE!");');
+  });
+  it('Success when returns get in format of code', () => {
+    const code: string = codeVisualizer.getInFormat();
+    expect(code).toEqual('prublic void sayHello() {\n   System.out.println("HELLO THERE!");\n}');
+  });
 });
