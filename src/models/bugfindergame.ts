@@ -9,13 +9,8 @@ export class BugFinderGame {
   // list whether player successful solved a code or not. Empty on entry if not submitted yet.
   private solved: Array<boolean> = [];
 
-  private currentCodeNumber: number;
-  private currentCode: ICode;
-
-  public constructor() {
-    this.currentCode = codes[0];
-    this.currentCodeNumber = 0;
-  }
+  private currentCodeNumber = 0;
+  private currentCode = codes[0];
 
   /**
    *

@@ -107,7 +107,7 @@ describe('CodeBox.vue', () => {
       false
     );
     const newCodeFeedback = new CodeFeedback([successWordFeedback, failedWordBeedback]);
-    await wrapper.setProps({ codeFeedback: newCodeFeedback })
+    await wrapper.setProps({ codeFeedback: newCodeFeedback });
 
     const rightCodes = wrapper.findAll('.right-code');
     expect(rightCodes.length).toBe(1);
@@ -119,16 +119,16 @@ describe('CodeBox.vue', () => {
   });
   test('Submit solution', async () => {
     const submitButton = wrapper.find('.btn-success');
-    expect(submitButton.text()).toBe("Submit");
+    expect(submitButton.text()).toBe('Submit');
     expect(submitButton.exists()).toBe(true);
-    
+
     submitButton.trigger('click');
     expect(wrapper.emitted().submitSolution[0]).toEqual([new Solution(1, [])]);
 
     await wrapper.vm.$nextTick();
 
     expect(wrapper.find('.btn-success').exists()).toBe(false);
-  })
+  });
   test('Select and remove code word', async () => {
     const selectedWord = 2;
     const targetWordButton = wrapper.find('#word-' + selectedWord);
@@ -139,7 +139,7 @@ describe('CodeBox.vue', () => {
 
     const modal = wrapper.getComponent(BModal);
     const buttons = modal.findAllComponents(BButton);
-    const submitButton = buttons.find((button) => button.attributes().class.includes("btn-primary"));
+    const submitButton = buttons.find((button) => button.attributes().class.includes('btn-primary'));
     expect(submitButton != null).toBe(true);
 
     if (submitButton == null) {
@@ -159,6 +159,5 @@ describe('CodeBox.vue', () => {
 
     selectedCodes = wrapper.findAll('.selected-code');
     expect(selectedCodes.length).toBe(0);
-
   });
 });

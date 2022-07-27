@@ -26,6 +26,8 @@ const codeLines = ref(codeVisualizer.getCodeLineWords());
 const currentEditingBug = ref();
 const showModal = ref(false);
 
+const errorTypes = Object.values(ErrorType);
+
 function submit() {
   if (!submitted.value) {
     submitted.value = true;
@@ -33,7 +35,7 @@ function submit() {
   }
 }
 
-function clickedButton(word: IWord) {
+function selectBugWord(word: IWord) {
   if (submitted.value) {
     return;
   }
@@ -45,32 +47,28 @@ function clickedButton(word: IWord) {
     currentEditingBug.value = new Bug(word.id, ErrorType.UNDEFINED, wordString);
     showModal.value = true;
   } else {
-    removeBugCode(word.id);
+    removeBugWord(word.id);
   }
 }
 
-function submitBug() {
+function submitBugWord() {
   selectedBugs.value.push(currentEditingBug.value);
 }
 
-function hiddenModal() {
-  console.log('HIDE MODAL');
-}
-
-function removeBugCode(wordId: number) {
+function removeBugWord(wordId: number) {
   selectedBugs.value = selectedBugs.value.filter((bug) => bug.wordId != wordId);
 }
 
-function isWordSelectedBug(wordId: number) {
+function isSelectedBugWord(wordId: number) {
   return selectedBugs.value.find((bug) => bug.wordId == wordId) != null;
 }
 
-function isWordSpace(wordId: number): boolean {
+function isSpaceWord(wordId: number): boolean {
   const word = getWordById(wordId);
   return word != null && word.word == space;
 }
 
-function getCorrectedWordValue(wordId: number): string | null {
+function getCorrectedBugWordValue(wordId: number): string | null {
   const bug = selectedBugs.value.find((searchedBug) => searchedBug.wordId == wordId);
   if (bug == null) {
     return null;
@@ -102,21 +100,21 @@ watch(
         <button
           :id="'word-' + word.id"
           v-if="word.word != tab && word.word != newLine"
-          @click="clickedButton(word)"
+          @click="selectBugWord(word)"
           class="code-word"
           :class="{
-            'code-space': word.word == space && !isWordSelectedBug(word.id),
-            'code-space-selected': word.word == space && isWordSelectedBug(word.id),
+            'code-space': word.word == space && !isSelectedBugWord(word.id),
+            'code-space-selected': word.word == space && isSelectedBugWord(word.id),
             'right-code': codeFeedback.hasFeedback(word.id) && codeFeedback.getFeedback(word.id).success,
             'wrong-code': codeFeedback.hasFeedback(word.id) && !codeFeedback.getFeedback(word.id).success,
-            'selected-code': !submitted && isWordSelectedBug(word.id),
+            'selected-code': !submitted && isSelectedBugWord(word.id),
           }"
         >
-          <b-badge v-if="word.word == space && !isWordSelectedBug(word.id)" variant="success" class="code-space-badge">+</b-badge>
+          <b-badge v-if="word.word == space && !isSelectedBugWord(word.id)" variant="success" class="code-space-badge">+</b-badge>
           <pre
             v-else
             v-highlightjs
-          ><code v-if="!isWordSelectedBug(word.id)" class="java">{{ word.word }}</code><code v-else>{{ getCorrectedWordValue(word.id) }}</code></pre>
+          ><code v-if="!isSelectedBugWord(word.id)" class="java">{{ word.word }}</code><code v-else>{{ getCorrectedBugWordValue(word.id) }}</code></pre>
         </button>
         <b-popover
           v-if="codeFeedback.hasFeedback(word.id)"
@@ -138,14 +136,14 @@ watch(
   </div>
   <button v-if="!submitted" class="btn btn-success float-end mx-3 my-4" @click="submit()">Submit</button>
 
-  <b-modal title="Edit bug" id="edit-bug-modal" v-model="showModal" @show="hiddenModal" @hidden="hiddenModal" @ok="submitBug">
-    <form ref="form" v-if="currentEditingBug != undefined" @submit.stop.prevent="submitBug">
+  <b-modal title="Edit bug" id="edit-bug-modal" v-model="showModal" @ok="submitBugWord">
+    <form ref="form" v-if="currentEditingBug != undefined" @submit.stop.prevent="submitBugWord">
       <b-form-group label="Fix error (if possible)" label-for="error-fix">
         <b-form-input id="error-fix" v-model="currentEditingBug.correctValue"></b-form-input>
       </b-form-group>
 
-      <b-form-group label="Select ErrorType" label-for="error-type" v-if="!isWordSpace(currentEditingBug.wordId)">
-        <b-form-select id="error-type" v-model="currentEditingBug.errorType" :options="ErrorType"></b-form-select>
+      <b-form-group label="Select ErrorType" label-for="error-type" v-if="!isSpaceWord(currentEditingBug.wordId)">
+        <b-form-select id="error-type" v-model="currentEditingBug.errorType" :options="errorTypes"></b-form-select>
       </b-form-group>
     </form>
   </b-modal>
