@@ -2,8 +2,8 @@ import { mount, VueWrapper } from '@vue/test-utils';
 import CodeBox from '@/components/CodeBox.vue';
 import BootstrapVue3, { BButton, BModal } from 'bootstrap-vue-3';
 import VueHighlightJS from 'vue3-highlightjs';
-import { ICode, Code, Word, WordType, Bug, ErrorType, Solution } from '@/models/models';
-import { CodeFeedback, WordFeedback } from '@/models/code-feedback';
+import { ICode, Code, Word, WordType, Bug, ErrorType, Solution } from '@/models/code';
+import { CodeFeedback, WordFeedback } from '@/services/code-feedback';
 
 function exampleCode(): Code {
   return new Code(1, [

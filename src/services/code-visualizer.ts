@@ -1,4 +1,4 @@
-import { WordType, ICode, IWord } from './models';
+import { WordType, ICode, IWord } from '../models/code';
 
 export class CodeVisualizer {
   private code: ICode;

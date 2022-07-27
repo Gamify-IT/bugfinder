@@ -1,7 +1,9 @@
 <script setup lang="ts">
-import { WordType, ICode, IWord, ISolution, Solution, IBug, Bug, ErrorType } from '../models/models';
-import { CodeFeedback } from '@/models/code-feedback';
-import { CodeVisualizer } from '../models/code-visualizer';
+import { WordType, ICode, IWord, ISolution, Solution, IBug, Bug, ErrorType } from '@/models/code';
+import { CodeFeedback } from '@/services/code-feedback';
+import { CodeVisualizer } from '@/services/code-visualizer';
+import WordBox from '@/components/WordBox.vue';
+import SelectBugModal from '@/components/SelectBugModal.vue';
 import { ref, watch } from 'vue';
 
 const props = defineProps<{
@@ -13,8 +15,6 @@ const emit = defineEmits<{
   (e: 'submitSolution', selectedBugs: ISolution): void;
 }>();
 
-const newLine = WordType.NEWLINE;
-const tab = WordType.TAB;
 const space = WordType.SPACE;
 
 let submitted = ref(false);
@@ -23,10 +23,9 @@ let selectedBugs = ref(Array<IBug>());
 let codeVisualizer = new CodeVisualizer(props.code);
 const codeLines = ref(codeVisualizer.getCodeLineWords());
 
-const currentEditingBug = ref();
+const emptyBug = new Bug(-1, ErrorType.UNDEFINED, '');
+const currentEditingBug = ref(emptyBug);
 const showModal = ref(false);
-
-const errorTypes = Object.values(ErrorType);
 
 function submit() {
   if (!submitted.value) {
@@ -51,8 +50,8 @@ function selectBugWord(word: IWord) {
   }
 }
 
-function submitBugWord() {
-  selectedBugs.value.push(currentEditingBug.value);
+function submitBug(bug: IBug) {
+  selectedBugs.value.push(bug);
 }
 
 function removeBugWord(wordId: number) {
@@ -96,60 +95,28 @@ watch(
   <div class="codebox">
     <div class="code-line" v-for="line in codeLines" :key="line">
       <div class="btn-group" v-for="word in line" :key="word">
-        <div v-if="word.word == tab" class="tab"></div>
-        <button
-          :id="'word-' + word.id"
-          v-if="word.word != tab && word.word != newLine"
-          @click="selectBugWord(word)"
-          class="code-word"
-          :class="{
-            'code-space': word.word == space && !isSelectedBugWord(word.id),
-            'code-space-selected': word.word == space && isSelectedBugWord(word.id),
-            'right-code': codeFeedback.hasFeedback(word.id) && codeFeedback.getFeedback(word.id).success,
-            'wrong-code': codeFeedback.hasFeedback(word.id) && !codeFeedback.getFeedback(word.id).success,
-            'selected-code': !submitted && isSelectedBugWord(word.id),
-          }"
-        >
-          <b-badge v-if="word.word == space && !isSelectedBugWord(word.id)" variant="success" class="code-space-badge">+</b-badge>
-          <pre
-            v-else
-            v-highlightjs
-          ><code v-if="!isSelectedBugWord(word.id)" class="java">{{ word.word }}</code><code v-else>{{ getCorrectedBugWordValue(word.id) }}</code></pre>
-        </button>
-        <b-popover
-          v-if="codeFeedback.hasFeedback(word.id)"
-          :target="'word-' + word.id"
-          triggers="hover"
-          placement="top"
-          variant="danger"
-        >
-          <template #title>Code Feedback</template>
-          Selected right: <a v-if="codeFeedback.getFeedback(word.id).codeSelectedSuccessful" class="text-success">Successful</a>
-          <a v-else class="text-danger">Failed</a><br />
-          Error Type: <a v-if="codeFeedback.getFeedback(word.id).codeErrorTypeSuccessful" class="text-success">Successful</a>
-          <a v-else class="text-danger">Failed</a><br />
-          Code Fixed: <a v-if="codeFeedback.getFeedback(word.id).codeFixedSuccessful" class="text-success">Successful</a>
-          <a v-else class="text-danger">Failed</a><br />
-        </b-popover>
+        <WordBox
+          :word="word"
+          :codeFeedback="codeFeedback"
+          :selectBugWord="selectBugWord"
+          :selected="isSelectedBugWord(word.id)"
+          :correctedBugWordValue="getCorrectedBugWordValue(word.id)"
+          :submitted="submitted"
+        />
       </div>
     </div>
   </div>
   <button v-if="!submitted" class="btn btn-success float-end mx-3 my-4" @click="submit()">Submit</button>
 
-  <b-modal title="Edit bug" id="edit-bug-modal" v-model="showModal" @ok="submitBugWord">
-    <form ref="form" v-if="currentEditingBug != undefined" @submit.stop.prevent="submitBugWord">
-      <b-form-group label="Fix error (if possible)" label-for="error-fix">
-        <b-form-input id="error-fix" v-model="currentEditingBug.correctValue"></b-form-input>
-      </b-form-group>
-
-      <b-form-group label="Select ErrorType" label-for="error-type" v-if="!isSpaceWord(currentEditingBug.wordId)">
-        <b-form-select id="error-type" v-model="currentEditingBug.errorType" :options="errorTypes"></b-form-select>
-      </b-form-group>
-    </form>
-  </b-modal>
+  <SelectBugModal
+    v-model="showModal"
+    :bug="currentEditingBug"
+    :submitBug="submitBug"
+    :showErrorTypeSelection="!isSpaceWord(currentEditingBug.wordId)"
+  />
 </template>
 
-<style lang="css" scoped>
+<style scoped>
 .codebox {
   background-color: #fdf6e3;
   margin-top: 10px;
@@ -157,48 +124,5 @@ watch(
   border: 2px solid rgb(167, 158, 101);
   box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px,
     rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
-}
-button.code-word {
-  background: transparent;
-  border: none !important;
-  padding: 2px;
-}
-button.code-space {
-  min-width: 5px;
-}
-.code-space-badge {
-  display: none;
-}
-button.code-space:hover .code-space-badge {
-  display: inherit;
-}
-button.code-space-selected {
-  margin-left: 4px;
-  margin-right: 4px;
-}
-button.code-word:hover {
-  background-color: #ecddb1;
-}
-button.right-code {
-  background-color: rgb(115, 224, 115);
-}
-button.wrong-code {
-  background-color: rgb(233, 175, 161);
-}
-button.selected-code {
-  background-color: rgb(214, 207, 141);
-}
-.tab {
-  width: 30px;
-}
-
-code {
-  background: transparent;
-  margin: 0;
-  padding: 0;
-}
-pre {
-  margin: 0;
-  padding: 0;
 }
 </style>

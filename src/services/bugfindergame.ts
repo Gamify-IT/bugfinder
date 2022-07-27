@@ -1,5 +1,5 @@
-import { ICode, ISolution, IBug } from './models';
-import { CodeFeedback, WordFeedback } from './code-feedback';
+import { ICode, ISolution, IBug } from '@/models/code';
+import { CodeFeedback, WordFeedback } from '@/services/code-feedback';
 import codesJson from '@/dummy/codes.json';
 import solutionJson from '@/dummy/solution.json';
 const codes: ICode[] = codesJson;
