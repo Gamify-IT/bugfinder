@@ -10,7 +10,8 @@ const props = defineProps<{
   showErrorTypeSelection: boolean;
 }>();
 
-let editBug = ref(props.bug);
+const editBug = ref(props.bug);
+
 watch(
   () => props.bug,
   (newBug) => {

@@ -8,7 +8,7 @@ export function sendStartMessgae() {
   chatHistory.value.push({ from: ChatParticipant.OTHER, message: 'Hey', color: ChatColor.LIGHT });
   chatHistory.value.push({
     from: ChatParticipant.OTHER,
-    message: "I'm having big trouble with this code. Can you help me finding the bug?",
+    message: "I'm having big trouble with this code. Can you help me finding all bugs?",
     color: ChatColor.LIGHT,
   });
 }
@@ -16,7 +16,7 @@ export function sendStartMessgae() {
 export async function sendSubmitMessage(success: boolean, gameFinished: boolean) {
   sendMessage({
     from: ChatParticipant.ME,
-    message: 'I think I found the bug. Is the programm now running?',
+    message: 'I think I found the bug. Is the program now running?',
     color: ChatColor.INFO,
   });
   if (success) {
@@ -41,7 +41,7 @@ export async function sendSubmitMessage(success: boolean, gameFinished: boolean)
   } else {
     await sendDelayedMessage({
       from: ChatParticipant.OTHER,
-      message: 'Thank you a lot. You helped me fixing all my codes!',
+      message: 'Thank you a lot. You helped me fixing my code!',
       color: ChatColor.PRIMARY,
     });
   }

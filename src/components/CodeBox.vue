@@ -17,8 +17,8 @@ const emit = defineEmits<{
 
 const space = WordType.SPACE;
 
-let submitted = ref(false);
-let selectedBugs = ref(Array<IBug>());
+const submitted = ref(false);
+const selectedBugs = ref(Array<IBug>());
 
 let codeVisualizer = new CodeVisualizer(props.code);
 const codeLines = ref(codeVisualizer.getCodeLineWords());
@@ -34,7 +34,7 @@ function submit() {
   }
 }
 
-function selectBugWord(word: IWord) {
+function selectBug(word: IWord) {
   if (submitted.value) {
     return;
   }
@@ -46,7 +46,7 @@ function selectBugWord(word: IWord) {
     currentEditingBug.value = new Bug(word.id, ErrorType.UNDEFINED, wordString);
     showModal.value = true;
   } else {
-    removeBugWord(word.id);
+    removeBug(word.id);
   }
 }
 
@@ -54,20 +54,20 @@ function submitBug(bug: IBug) {
   selectedBugs.value.push(bug);
 }
 
-function removeBugWord(wordId: number) {
+function removeBug(wordId: number) {
   selectedBugs.value = selectedBugs.value.filter((bug) => bug.wordId != wordId);
 }
 
-function isSelectedBugWord(wordId: number) {
+function isSelectedBug(wordId: number) {
   return selectedBugs.value.find((bug) => bug.wordId == wordId) != null;
 }
 
-function isSpaceWord(wordId: number): boolean {
+function isWordSpace(wordId: number): boolean {
   const word = getWordById(wordId);
   return word != null && word.word == space;
 }
 
-function getCorrectedBugWordValue(wordId: number): string | null {
+function getCorrectedBugValue(wordId: number): string | null {
   const bug = selectedBugs.value.find((searchedBug) => searchedBug.wordId == wordId);
   if (bug == null) {
     return null;
@@ -98,9 +98,9 @@ watch(
         <WordBox
           :word="word"
           :codeFeedback="codeFeedback"
-          :selectBugWord="selectBugWord"
-          :selected="isSelectedBugWord(word.id)"
-          :correctedBugWordValue="getCorrectedBugWordValue(word.id)"
+          :selectBug="selectBug"
+          :selected="isSelectedBug(word.id)"
+          :correctedBugValue="getCorrectedBugValue(word.id)"
           :submitted="submitted"
         />
       </div>
@@ -112,7 +112,7 @@ watch(
     v-model="showModal"
     :bug="currentEditingBug"
     :submitBug="submitBug"
-    :showErrorTypeSelection="!isSpaceWord(currentEditingBug.wordId)"
+    :showErrorTypeSelection="!isWordSpace(currentEditingBug.wordId)"
   />
 </template>
 

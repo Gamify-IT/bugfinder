@@ -5,9 +5,9 @@ import { CodeFeedback } from '@/services/code-feedback';
 defineProps<{
   word: IWord;
   codeFeedback: CodeFeedback;
-  selectBugWord: (word: IWord) => void;
+  selectBug: (word: IWord) => void;
   selected: boolean;
-  correctedBugWordValue: string | null;
+  correctedBugValue: string | null;
   submitted: boolean;
 }>();
 
@@ -21,7 +21,7 @@ const space = WordType.SPACE;
   <button
     :id="'word-' + word.id"
     v-if="word.word != tab && word.word != newLine"
-    @click="selectBugWord(word)"
+    @click="selectBug(word)"
     class="code-word"
     :class="{
       'code-space': word.word == space && !selected,
@@ -35,7 +35,7 @@ const space = WordType.SPACE;
     <pre
       v-else
       v-highlightjs
-    ><code v-if="!selected" class="java">{{ word.word }}</code><code v-else>{{ correctedBugWordValue }}</code></pre>
+    ><code v-if="!selected" class="java">{{ word.word }}</code><code v-else>{{ correctedBugValue }}</code></pre>
   </button>
   <b-popover
     v-if="codeFeedback.hasFeedback(word.id)"
