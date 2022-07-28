@@ -1,5 +1,5 @@
-import { ICode, ISolution, IBug } from './models';
-import { CodeFeedback, WordFeedback } from './code-feedback';
+import { ICode, ISolution, IBug } from '@/models/code';
+import { CodeFeedback, WordFeedback } from '@/services/code-feedback';
 import codesJson from '@/dummy/codes.json';
 import solutionJson from '@/dummy/solution.json';
 const codes: ICode[] = codesJson;
@@ -9,13 +9,8 @@ export class BugFinderGame {
   // list whether player successful solved a code or not. Empty on entry if not submitted yet.
   private solved: Array<boolean> = [];
 
-  private currentCodeNumber: number;
-  private currentCode: ICode;
-
-  public constructor() {
-    this.currentCode = codes[0];
-    this.currentCodeNumber = 0;
-  }
+  private currentCodeNumber = 0;
+  private currentCode = codes[0];
 
   /**
    *

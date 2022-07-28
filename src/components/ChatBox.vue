@@ -1,13 +1,10 @@
 <script setup lang="ts">
-import { ChatParticipant, ChatElement } from '@/models/chat';
+import { ChatParticipant } from '@/models/chat';
 import { watch } from 'vue';
-
-const props = defineProps<{
-  chatHistory: ChatElement[];
-}>();
+import { chatHistory } from '@/services/chat';
 
 watch(
-  () => props.chatHistory,
+  () => chatHistory,
   () => {
     const chatBox = document.getElementById('chat-box');
     if (chatBox) {

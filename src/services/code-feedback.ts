@@ -1,4 +1,4 @@
-import { IBug } from './models';
+import { IBug } from '@/models/code';
 
 export class CodeFeedback {
   wordFeedbacks: WordFeedback[];

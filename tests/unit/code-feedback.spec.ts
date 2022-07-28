@@ -1,5 +1,5 @@
-import { CodeFeedback, WordFeedback } from '@/models/code-feedback';
-import { Bug, ErrorType } from '@/models/models';
+import { CodeFeedback, WordFeedback } from '@/services/code-feedback';
+import { Bug, ErrorType } from '@/models/code';
 
 function exampleCodeFeedback(): CodeFeedback {
   return new CodeFeedback([new WordFeedback(new Bug(1, ErrorType.LEXICAL, 'public'), false, false, false, false)]);

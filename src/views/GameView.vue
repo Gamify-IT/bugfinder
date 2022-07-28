@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import ChatBox from '@/components/ChatBox.vue';
 import CodeBox from '@/components/CodeBox.vue';
-import { BugFinderGame } from '@/models/bugfindergame';
-import { ISolution } from '@/models/models';
-import { ChatParticipant, ChatElement, ChatColor } from '@/models/chat';
-import { CodeFeedback } from '@/models/code-feedback';
+import { BugFinderGame } from '@/services/bugfindergame';
+import { ISolution } from '@/models/code';
+import * as chat from '@/services/chat';
+import { CodeFeedback } from '@/services/code-feedback';
 import { ref } from 'vue';
 
 const emit = defineEmits<{
@@ -14,23 +14,14 @@ const emit = defineEmits<{
 const game = new BugFinderGame();
 const currentCode = ref(game.getCurrentCode());
 const hasNextCode = ref(game.hasNextCode());
-
 const codeFeedback = ref(new CodeFeedback([]));
-
 const showNextButton = ref(false);
 
-const chatHistory = ref(Array<ChatElement>());
-chatHistory.value.push({ from: ChatParticipant.OTHER, message: 'Hey', color: ChatColor.LIGHT });
-chatHistory.value.push({
-  from: ChatParticipant.OTHER,
-  message: "I'm having big trouble with this code. Can you help me finding the bug?",
-  color: ChatColor.LIGHT,
-});
+chat.sendStartMessgae();
 
 function nextCode() {
   if (game.hasNextCode()) {
-    chatHistory.value.push({ from: ChatParticipant.ME, message: "Yes, I'm happy to help you", color: ChatColor.INFO });
-    chatHistory.value.push({ from: ChatParticipant.OTHER, message: 'That is very kind of you!', color: ChatColor.LIGHT });
+    chat.sendNextCode();
     game.nextCode();
     currentCode.value = game.getCurrentCode();
     showNextButton.value = false;
@@ -43,42 +34,9 @@ function nextCode() {
 
 function submitSolution(selectedBugs: ISolution) {
   const feedback: CodeFeedback = game.submitWrongCode(selectedBugs);
-  chatHistory.value.push({
-    from: ChatParticipant.ME,
-    message: 'I think I found the bug. Is the programm now running?',
-    color: ChatColor.INFO,
-  });
-  chatHistory.value.push({ from: ChatParticipant.OTHER, message: '...', color: ChatColor.LIGHT });
+  chat.sendSubmitMessage(game.passedCurrentCode(), !game.hasNextCode());
+  codeFeedback.value = feedback;
   setTimeout(() => {
-    chatHistory.value.pop();
-    if (game.passedCurrentCode()) {
-      chatHistory.value.push({
-        from: ChatParticipant.OTHER,
-        message: 'Yes it works! Thank you very much',
-        color: ChatColor.SUCCESS,
-      });
-    } else {
-      chatHistory.value.push({ from: ChatParticipant.OTHER, message: 'No sadly not.', color: ChatColor.WARNING });
-    }
-    codeFeedback.value = feedback;
-
-    chatHistory.value.push({ from: ChatParticipant.OTHER, message: '...', color: ChatColor.LIGHT });
-  }, 1000);
-  setTimeout(() => {
-    chatHistory.value.pop();
-    if (game.hasNextCode()) {
-      chatHistory.value.push({
-        from: ChatParticipant.OTHER,
-        message: 'Can you help me again with another bug?',
-        color: ChatColor.LIGHT,
-      });
-    } else {
-      chatHistory.value.push({
-        from: ChatParticipant.OTHER,
-        message: 'Thank you a lot. You helped me fixing all my codes!',
-        color: ChatColor.PRIMARY,
-      });
-    }
     showNextButton.value = true;
   }, 2000);
 }
@@ -98,7 +56,7 @@ function submitSolution(selectedBugs: ISolution) {
       </div>
 
       <div class="col-3">
-        <ChatBox :chat-history="chatHistory" />
+        <ChatBox />
       </div>
     </div>
   </div>

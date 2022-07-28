@@ -1,5 +1,5 @@
-import { CodeVisualizer } from '@/models/code-visualizer';
-import { IWord, Word, Code, WordType } from '@/models/models';
+import { CodeVisualizer } from '@/services/code-visualizer';
+import { IWord, Word, Code, WordType } from '@/models/code';
 
 function exampleCode(): Code {
   return new Code(1, [
