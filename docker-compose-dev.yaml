@@ -34,17 +34,17 @@ services:
   #     - POSTGRES_PASSWORD=postgres
 
   #backends
-  login-backend:
-    container_name: login-backend
-    image: ghcr.io/gamify-it/login-backend:main
-    restart: always
-    pull_policy: always
-    expose:
-      - "80"
-    environment:
-      - JWT_KEY=SecretKEY
-      - JWT_VALIDITY_DURATION=720h
-      - POSTGRES_URL=postgresql://postgres:postgres@login-db:5432/
+  #  login-backend:
+  #    container_name: login-backend
+  #    image: ghcr.io/gamify-it/login-backend:main
+  #    restart: always
+  #    pull_policy: always
+  #    expose:
+  #      - "80"
+  #    environment:
+  #      - JWT_KEY=SecretKEY
+  #      - JWT_VALIDITY_DURATION=720h
+  #      - POSTGRES_URL=postgresql://postgres:postgres@login-db:5432/
 
   #  overworld-backend:
   #    container_name:   overworld-backend
