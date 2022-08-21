@@ -24,9 +24,9 @@ function changeView(newView: views) {
       </div>
     </nav>
   </header>
-  <HomeView v-if="actualView == views.home" @start-game="changeView(views.game)" />
-  <GameView v-else-if="actualView == views.game" @end-game="changeView(views.finish)" />
-  <FinishView v-else-if="actualView == views.finish" />
+  <HomeView v-if="actualView === views.home" @start-game="changeView(views.game)" />
+  <GameView v-else-if="actualView === views.game" @end-game="changeView(views.finish)" />
+  <FinishView v-else-if="actualView === views.finish" />
 </template>
 
 <script lang="ts"></script>

@@ -1,15 +1,15 @@
 [
     {
-        "id": 1,
+        "id": "e109a547-87b4-4e3c-a091-4c049d51e730",
         "bugs": [
             {
-                "id": 1,
+                "id": "6a97b308-4ef2-4a61-88b8-008ac78d48f9",
                 "wordId": 6,
                 "errorType": "UNDEFINED",
                 "correctValue": "moveAndPickupGrain(final Hamster paule)"
             },
             {
-                "id": 2,
+                "id": "f4a242c6-8ed6-4894-aa3a-ed086cc3798f",
                 "wordId": 16,
                 "errorType": "PRAGMATIC",
                 "correctValue": "paule.pickupGrain();"
@@ -17,10 +17,10 @@
         ]
     },
     {
-        "id": 2,
+        "id": "4ec16ba7-7db0-403c-b270-4073e7b89c10",
         "bugs": [
             {
-                "id": 1,
+                "id": "2bc34678-6bcf-4f29-acc6-565d2b2c25b2",
                 "wordId": 11,
                 "errorType": "SYNTAX",
                 "correctValue": "System.out.println(\"Have you found it?\");"
@@ -28,10 +28,10 @@
         ]
     },
     {
-        "id": 3,
+        "id": "9bf0a31c-404f-46ba-a7d6-58252b77e31d",
         "bugs": [
             {
-                "id": 1,
+                "id": "a51c7723-4aa2-4e2f-868d-dce33639732c",
                 "wordId": 6,
                 "errorType": "LEXICAL",
                 "correctValue": "forYou()"
@@ -39,10 +39,10 @@
         ]
     },
     {
-        "id": 4,
+        "id": "5a247e00-1b46-40b0-8cbf-21d50e4f8a60",
         "bugs": [
             {
-                "id": 1,
+                "id": "6373ee45-cde0-4e1f-8e94-a5388989ddc4",
                 "wordId": 14,
                 "errorType": "STATIC_SEMANTIC",
                 "correctValue": "int"
@@ -50,22 +50,22 @@
         ]
     },
     {
-        "id": 5,
+        "id": "56cfe691-8074-477d-abc4-027c196c834f",
         "bugs": [
             {
-                "id": 1,
+                "id": "52e10c7c-cb8d-42ef-b002-db4ad13631a2",
                 "wordId": 10,
                 "errorType": "UNDEFINED",
                 "correctValue": "final"
             },
             {
-                "id": 2,
+                "id": "a7056ee4-5f29-485e-aebb-47129d5138a8",
                 "wordId": 16,
                 "errorType": "UNDEFINED",
                 "correctValue": "final"
             },
             {
-                "id": 3,
+                "id": "66b4e716-5000-4ea6-9d0a-aa43897c4b3b",
                 "wordId": 26,
                 "errorType": "UNDEFINED",
                 "correctValue": "BigError(final String name, final Date birthDate)"

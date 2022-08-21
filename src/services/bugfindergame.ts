@@ -2,6 +2,7 @@ import { ICode, ISolution, IBug } from '@/models/code';
 import { CodeFeedback, WordFeedback } from '@/services/code-feedback';
 import codesJson from '@/dummy/codes.json';
 import solutionJson from '@/dummy/solution.json';
+import { BASE_URL } from '@/app';
 const codes: ICode[] = codesJson;
 const solutions: ISolution[] = solutionJson;
 
@@ -9,14 +10,21 @@ export class BugFinderGame {
   // list whether player successful solved a code or not. Empty on entry if not submitted yet.
   private solved: Array<boolean> = [];
 
-  private currentCodeNumber = 0;
-  private currentCode = codes[0];
+  private currentCodeNumber: number;
+  private currentCode?: ICode;
+
+  public constructor() {
+    this.currentCodeNumber = 0;
+  }
 
   /**
    *
    * @returns the current code
    */
-  public getCurrentCode(): ICode {
+  public async getCurrentCode(): Promise<ICode> {
+    if (this.currentCode === undefined) {
+      return await this.fetchCurrentCode();
+    }
     return this.currentCode;
   }
 
@@ -113,5 +121,19 @@ export class BugFinderGame {
     }
     this.currentCodeNumber++;
     this.currentCode = codes[this.currentCodeNumber];
+  }
+
+  /**
+   * fetches the current code from the server and sets it as currentCode
+   */
+  private async fetchCurrentCode() {
+    const configuration = window.location.pathname.split('/').pop();
+    if (configuration == null) {
+      throw Error('No configuration selected!');
+    }
+    const res = await fetch(`${BASE_URL}/configuration/${configuration}/codes`);
+    const json = (await res.json()) as ICode[];
+    this.currentCode = json[this.currentCodeNumber];
+    return this.currentCode;
   }
 }

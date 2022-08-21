@@ -5,17 +5,17 @@ export enum WordType {
 }
 
 export interface ICode {
-  id: number;
+  id: string | number;
   words: IWord[];
 }
 
 export interface IWord {
-  id: number;
+  id: string | number;
   word: string | WordType;
 }
 
 export interface ISolution {
-  id: number;
+  id: string | number;
   bugs: IBug[];
 }
 

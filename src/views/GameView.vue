@@ -48,11 +48,13 @@ function submitSolution(selectedBugs: ISolution) {
   <div class="container">
     <div class="row">
       <div class="col-9">
-        <CodeBox :codeFeedback="codeFeedback" :code="currentCode" @submitSolution="submitSolution" />
-        <button v-if="showNextButton" class="btn btn-primary float-end mx-3 my-4" @click="nextCode()">
-          <div v-if="hasNextCode">Next Code</div>
-          <div v-else>Finish</div>
-        </button>
+        <div v-if="currentCode != null">
+          <CodeBox :codeFeedback="codeFeedback" :code="currentCode" @submitSolution="submitSolution" />
+          <button v-if="showNextButton" class="btn btn-primary float-end mx-3 my-4" @click="nextCode()">
+            <span v-if="hasNextCode">Next Code</span>
+            <span v-else>Finish</span>
+          </button>
+        </div>
       </div>
 
       <div class="col-3">
