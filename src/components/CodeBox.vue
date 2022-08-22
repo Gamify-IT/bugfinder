@@ -20,6 +20,7 @@ const space = WordType.SPACE;
 const submitted = ref(false);
 const selectedBugs = ref(Array<IBug>());
 
+console.log('============', props, props.code);
 let codeVisualizer = new CodeVisualizer(props.code);
 const codeLines = ref(codeVisualizer.getCodeLineWords());
 
@@ -54,7 +55,7 @@ function submitBug(bug: IBug) {
   selectedBugs.value.push(bug);
 }
 
-function removeBug(wordId: number) {
+function removeBug(wordId: number | string) {
   selectedBugs.value = selectedBugs.value.filter((bug) => bug.wordId != wordId);
 }
 

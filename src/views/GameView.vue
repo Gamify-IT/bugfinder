@@ -2,28 +2,31 @@
 import ChatBox from '@/components/ChatBox.vue';
 import CodeBox from '@/components/CodeBox.vue';
 import { BugFinderGame } from '@/services/bugfindergame';
-import { ISolution } from '@/models/code';
+import { ICode, ISolution } from '@/models/code';
 import * as chat from '@/services/chat';
 import { CodeFeedback } from '@/services/code-feedback';
-import { ref } from 'vue';
+import { Ref, ref } from 'vue';
 
 const emit = defineEmits<{
   (e: 'endGame'): void;
 }>();
 
 const game = new BugFinderGame();
-const currentCode = ref(game.getCurrentCode());
+let currentCode = ref(null) as Ref<ICode | null>;
+game.getCurrentCode().then((res) => {
+  currentCode.value = res;
+});
 const hasNextCode = ref(game.hasNextCode());
 const codeFeedback = ref(new CodeFeedback([]));
 const showNextButton = ref(false);
 
 chat.sendStartMessgae();
 
-function nextCode() {
+async function nextCode() {
   if (game.hasNextCode()) {
     chat.sendNextCode();
     game.nextCode();
-    currentCode.value = game.getCurrentCode();
+    currentCode.value = await game.getCurrentCode();
     showNextButton.value = false;
     hasNextCode.value = game.hasNextCode();
     codeFeedback.value = new CodeFeedback([]);

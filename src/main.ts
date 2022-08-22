@@ -66,4 +66,4 @@ async function setupData() {
     })
   );
 }
-setupData();
+// setupData();

@@ -18,7 +18,6 @@ export class BugFinderGame {
   }
 
   /**
-   *
    * @returns the current code
    */
   public async getCurrentCode(): Promise<ICode> {
