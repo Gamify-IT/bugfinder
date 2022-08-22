@@ -21,28 +21,48 @@ app.use(store).mount('#app');
 
 async function setupData() {
   const headers = new Headers({ 'content-type': 'application/json' });
-  const configurationId = '35179eca-2149-11ed-861d-0242ac120002';
-  await fetch(`${BASE_URL}/configuration`, {
-    method: 'POST',
-    body: JSON.stringify({ id: configurationId, codes: [] }),
-    headers,
-  });
+  let configurationId = '';
+  configurationId = (
+    await (
+      await fetch(`${BASE_URL}/configuration`, {
+        method: 'POST',
+        body: JSON.stringify({ id: configurationId, codes: [] }),
+        headers,
+      })
+    ).json()
+  ).id;
+  const idMap = {};
   await Promise.all(
     codesJson.map(async (code) => {
-      await fetch(`${BASE_URL}/configuration/${configurationId}/code`, {
-        method: 'POST',
-        body: JSON.stringify(code),
-        headers,
+      const initialWordIds = code.words.map((word) => word.id);
+      code = await (
+        await fetch(`${BASE_URL}/configuration/${configurationId}/code`, {
+          method: 'POST',
+          body: JSON.stringify(code),
+          headers,
+        })
+      ).json();
+      initialWordIds.forEach((wordId, i) => {
+        idMap[wordId] = code.words[i].id;
       });
     })
   );
+  console.log(idMap);
   await Promise.all(
     solutionJson.map(async (solution) => {
-      await fetch(`${BASE_URL}/solution`, {
-        method: 'POST',
-        body: JSON.stringify(solution),
-        headers,
+      solution.bugs = solution.bugs.map((bug) => ({ ...bug, wordId: idMap[bug.wordId] }));
+      solution.bugs.forEach((bug) => {
+        console.log(bug.id, idMap[bug.id], bug);
       });
+      solution.id = (
+        await (
+          await fetch(`${BASE_URL}/solution`, {
+            method: 'POST',
+            body: JSON.stringify(solution),
+            headers,
+          })
+        ).json()
+      ).id;
     })
   );
 }
