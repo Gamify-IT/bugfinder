@@ -12,7 +12,7 @@ export class CodeFeedback {
    * @param wordId id of the word searching for
    * @returns whether word with wordId has a feedback in list or not
    */
-  public hasFeedback(wordId: number): boolean {
+  public hasFeedback(wordId: number | string): boolean {
     return this.wordFeedbacks.find((feedback) => feedback.bug.wordId == wordId) != null;
   }
 
@@ -22,7 +22,7 @@ export class CodeFeedback {
    * @throws {Error} when word with wordId has no feedback
    * @returns the feedback of the word with id wordId
    */
-  public getFeedback(wordId: number): WordFeedback {
+  public getFeedback(wordId: number | string): WordFeedback {
     const wordFeedback = this.wordFeedbacks.find((feedback) => feedback.bug.wordId == wordId);
     if (wordFeedback == null) {
       throw Error('Word with id ' + wordId + ' has no feedback.');

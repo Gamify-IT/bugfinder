@@ -1,16 +1,17 @@
 [
   {
     "id": 1,
+    "codeId": 1,
     "bugs": [
       {
         "id": 1,
-        "wordId": 6,
+        "wordId": 106,
         "errorType": "UNDEFINED",
         "correctValue": "moveAndPickupGrain(final Hamster paule)"
       },
       {
         "id": 2,
-        "wordId": 16,
+        "wordId": 1016,
         "errorType": "PRAGMATIC",
         "correctValue": "paule.pickupGrain();"
       }
@@ -18,10 +19,11 @@
   },
   {
     "id": 2,
+    "codeId": 2,
     "bugs": [
       {
         "id": 1,
-        "wordId": 11,
+        "wordId": 2011,
         "errorType": "SYNTAX",
         "correctValue": "System.out.println(\"Have you found it?\");"
       }
@@ -29,10 +31,11 @@
   },
   {
     "id": 3,
+    "codeId": 3,
     "bugs": [
       {
         "id": 1,
-        "wordId": 6,
+        "wordId": 306,
         "errorType": "LEXICAL",
         "correctValue": "forYou()"
       }
@@ -40,10 +43,11 @@
   },
   {
     "id": 4,
+    "codeId": 4,
     "bugs": [
       {
         "id": 1,
-        "wordId": 14,
+        "wordId": 4014,
         "errorType": "STATIC_SEMANTIC",
         "correctValue": "int"
       }
@@ -51,22 +55,23 @@
   },
   {
     "id": 5,
+    "codeId": 5,
     "bugs": [
       {
         "id": 1,
-        "wordId": 10,
+        "wordId": 5010,
         "errorType": "UNDEFINED",
         "correctValue": "final"
       },
       {
         "id": 2,
-        "wordId": 16,
+        "wordId": 5016,
         "errorType": "UNDEFINED",
         "correctValue": "final"
       },
       {
         "id": 3,
-        "wordId": 26,
+        "wordId": 5026,
         "errorType": "UNDEFINED",
         "correctValue": "BigError(final String name, final Date birthDate)"
       }

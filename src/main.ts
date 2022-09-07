@@ -31,10 +31,12 @@ async function setupData() {
       })
     ).json()
   ).id;
-  const idMap = {};
+  const codeIdMap = {};
+  const wordIdMap = {};
   await Promise.all(
     codesJson.map(async (code) => {
       const initialWordIds = code.words.map((word) => word.id);
+      const initialCodeId = code.id;
       code = await (
         await fetch(`${BASE_URL}/configuration/${configurationId}/code`, {
           method: 'POST',
@@ -42,18 +44,21 @@ async function setupData() {
           headers,
         })
       ).json();
+      codeIdMap[initialCodeId] = code;
       initialWordIds.forEach((wordId, i) => {
-        idMap[wordId] = code.words[i].id;
+        wordIdMap[wordId] = code.words[i].id;
       });
     })
   );
-  console.log(idMap);
+  console.log(codeIdMap);
   await Promise.all(
-    solutionJson.map(async (solution) => {
-      solution.bugs = solution.bugs.map((bug) => ({ ...bug, wordId: idMap[bug.wordId] }));
+    solutionJson.map(async (solution: any) => {
+      solution.bugs = solution.bugs.map((bug) => ({ ...bug, wordId: wordIdMap[bug.wordId] }));
       solution.bugs.forEach((bug) => {
-        console.log(bug.id, idMap[bug.id], bug);
+        console.log(bug.id, wordIdMap[bug.id], bug);
       });
+      solution.code = codeIdMap[solution.codeId];
+      delete solution.codeId;
       solution.id = (
         await (
           await fetch(`${BASE_URL}/solution`, {

@@ -20,7 +20,6 @@ const space = WordType.SPACE;
 const submitted = ref(false);
 const selectedBugs = ref(Array<IBug>());
 
-console.log('============', props, props.code);
 let codeVisualizer = new CodeVisualizer(props.code);
 const codeLines = ref(codeVisualizer.getCodeLineWords());
 
@@ -59,16 +58,16 @@ function removeBug(wordId: number | string) {
   selectedBugs.value = selectedBugs.value.filter((bug) => bug.wordId != wordId);
 }
 
-function isSelectedBug(wordId: number) {
+function isSelectedBug(wordId: number | string) {
   return selectedBugs.value.find((bug) => bug.wordId == wordId) != null;
 }
 
-function isWordSpace(wordId: number): boolean {
+function isWordSpace(wordId: number | string): boolean {
   const word = getWordById(wordId);
   return word != null && word.word == space;
 }
 
-function getCorrectedBugValue(wordId: number): string | null {
+function getCorrectedBugValue(wordId: number | string): string | null {
   const bug = selectedBugs.value.find((searchedBug) => searchedBug.wordId == wordId);
   if (bug == null) {
     return null;
@@ -76,7 +75,7 @@ function getCorrectedBugValue(wordId: number): string | null {
   return bug.correctValue;
 }
 
-function getWordById(wordId: number): IWord | undefined {
+function getWordById(wordId: number | string): IWord | undefined {
   return props.code.words.find((word) => word.id == wordId);
 }
 
@@ -94,8 +93,8 @@ watch(
 
 <template>
   <div class="codebox">
-    <div class="code-line" v-for="line in codeLines" :key="line">
-      <div class="btn-group" v-for="word in line" :key="word">
+    <div class="code-line" v-for="line in codeLines" :key="line[0].id">
+      <div class="btn-group" v-for="word in line" :key="word.id">
         <WordBox
           :word="word"
           :codeFeedback="codeFeedback"

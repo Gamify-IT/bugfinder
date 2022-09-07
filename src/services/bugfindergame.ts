@@ -1,10 +1,6 @@
 import { ICode, ISolution, IBug } from '@/models/code';
 import { CodeFeedback, WordFeedback } from '@/services/code-feedback';
-import codesJson from '@/dummy/codes.json';
-import solutionJson from '@/dummy/solution.json';
 import { BASE_URL } from '@/app';
-const codes: ICode[] = codesJson;
-const solutions: ISolution[] = solutionJson;
 
 export class BugFinderGame {
   // list whether player successful solved a code or not. Empty on entry if not submitted yet.
@@ -37,12 +33,12 @@ export class BugFinderGame {
    *
    * @returns a list with feedback which contains detailed information what the player did wrong in the code
    */
-  public submitWrongCode(submittedSolution: ISolution): CodeFeedback {
+  public async submitWrongCode(submittedSolution: ISolution): Promise<CodeFeedback> {
     if (this.hasSubmitted()) {
       throw Error('You already submitted this code.');
     }
     const playerBugs: IBug[] = submittedSolution.bugs;
-    const realSolution: ISolution = solutions[this.currentCodeNumber];
+    const realSolution = await this.fetchSolution();
     const bugs: IBug[] = realSolution.bugs;
 
     const wordFeedbacks: WordFeedback[] = [];
@@ -100,8 +96,9 @@ export class BugFinderGame {
    *
    * @returns whether game has at least one more code to play or not
    */
-  public hasNextCode(): boolean {
-    return this.currentCodeNumber + 1 < codes.length;
+  public async hasNextCode(): Promise<boolean> {
+    const length = await this.fetchCodeLength();
+    return this.currentCodeNumber + 1 < length;
   }
 
   /**
@@ -110,7 +107,7 @@ export class BugFinderGame {
    * @throws {Error} when game has not one more code to play
    * @throws {Error} when player does not submitted current code and wants to play next
    */
-  public nextCode(): void {
+  public async nextCode(): Promise<void> {
     if (!this.hasNextCode()) {
       throw Error('There are no more codes left!');
     }
@@ -119,7 +116,7 @@ export class BugFinderGame {
       throw Error('You did not complete this code!');
     }
     this.currentCodeNumber++;
-    this.currentCode = codes[this.currentCodeNumber];
+    this.currentCode = await this.fetchCurrentCode();
   }
 
   /**
@@ -130,9 +127,44 @@ export class BugFinderGame {
     if (configuration == null) {
       throw Error('No configuration selected!');
     }
-    const res = await fetch(`${BASE_URL}/configuration/${configuration}/codes`);
-    const json = (await res.json()) as ICode[];
-    this.currentCode = json[this.currentCodeNumber];
+    this.currentCode = (await this.getCodes())[this.currentCodeNumber];
     return this.currentCode;
+  }
+
+  /**
+   * fetches the length of all codes
+   */
+  private async fetchCodeLength() {
+    const configuration = window.location.pathname.split('/').pop();
+    if (configuration == null) {
+      throw Error('No configuration selected!');
+    }
+    return (await this.getCodes()).length;
+  }
+
+  private codeCache?: ICode[];
+  private async getCodes(): Promise<ICode[]> {
+    const configuration = window.location.pathname.split('/').pop();
+    if (configuration == null) {
+      throw Error('No configuration selected!');
+    }
+    if (this.codeCache === undefined) {
+      const res = await fetch(`${BASE_URL}/configuration/${configuration}/codes`);
+      this.codeCache = (await res.json()) as ICode[];
+    }
+    return this.codeCache;
+  }
+
+  /**
+   * fetches the solution for the current code
+   */
+  private async fetchSolution() {
+    const configuration = window.location.pathname.split('/').pop();
+    if (configuration == null) {
+      throw Error('No configuration selected!');
+    }
+    const res = await fetch(`${BASE_URL}/code/${this.currentCode?.id}/solution`);
+    const json = (await res.json()) as ISolution;
+    return json;
   }
 }

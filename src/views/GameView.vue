@@ -23,9 +23,9 @@ const showNextButton = ref(false);
 chat.sendStartMessgae();
 
 async function nextCode() {
-  if (game.hasNextCode()) {
-    chat.sendNextCode();
-    game.nextCode();
+  if (await game.hasNextCode()) {
+    await chat.sendNextCode();
+    await game.nextCode();
     currentCode.value = await game.getCurrentCode();
     showNextButton.value = false;
     hasNextCode.value = game.hasNextCode();
@@ -35,8 +35,8 @@ async function nextCode() {
   }
 }
 
-function submitSolution(selectedBugs: ISolution) {
-  const feedback: CodeFeedback = game.submitWrongCode(selectedBugs);
+async function submitSolution(selectedBugs: ISolution) {
+  const feedback: CodeFeedback = await game.submitWrongCode(selectedBugs);
   chat.sendSubmitMessage(game.passedCurrentCode(), !game.hasNextCode());
   codeFeedback.value = feedback;
   setTimeout(() => {
