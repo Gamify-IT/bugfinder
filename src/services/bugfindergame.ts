@@ -149,7 +149,7 @@ export class BugFinderGame {
       throw Error('No configuration selected!');
     }
     if (this.codeCache === undefined) {
-      const res = await fetch(`${BASE_URL}/configuration/${configuration}/codes`);
+      const res = await fetch(`${BASE_URL}/configurations/${configuration}/codes`);
       this.codeCache = (await res.json()) as ICode[];
     }
     return this.codeCache;
@@ -163,7 +163,7 @@ export class BugFinderGame {
     if (configuration == null) {
       throw Error('No configuration selected!');
     }
-    const res = await fetch(`${BASE_URL}/code/${this.currentCode?.id}/solution`);
+    const res = await fetch(`${BASE_URL}/codes/${this.currentCode?.id}/solutions`);
     const json = (await res.json()) as ISolution;
     return json;
   }
