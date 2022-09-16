@@ -8,16 +8,20 @@ const emit = defineEmits<{
 
 const configurationId = window.location.pathname.split('/').pop();
 const configuration = ref<any>(undefined);
-fetch(`${BASE_URL}/configurations/${configurationId}`).then((res) =>
-  res
-    .json()
-    .then((json) => {
-      configuration.value = json;
-    })
-    .catch((err) => {
-      configuration.value = null;
-    })
-);
+fetch(`${BASE_URL}/configurations/${configurationId}`)
+  .then((res) => {
+    res
+      .json()
+      .then((json) => {
+        configuration.value = json;
+      })
+      .catch((err) => {
+        configuration.value = 'Invalid configuration id';
+      });
+  })
+  .catch((err) => {
+    configuration.value = 'Server not reachable';
+  });
 </script>
 
 <template>
@@ -26,10 +30,10 @@ fetch(`${BASE_URL}/configurations/${configurationId}`).then((res) =>
       <div v-if="configuration === undefined">
         <div class="spinner-border text-primary" role="status"></div>
       </div>
-      <div v-if="configuration === null">
-        <div class="alert alert-danger">Invalid configuration id</div>
+      <div v-if="typeof configuration === 'string'">
+        <div class="alert alert-danger">{{ configuration }}</div>
       </div>
-      <div v-if="configuration != null">
+      <div v-if="typeof configuration === 'object'">
         <button class="btn btn-primary" @click="emit('startGame')">Start</button>
       </div>
     </div>
