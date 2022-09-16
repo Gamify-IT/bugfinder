@@ -1,22 +1,40 @@
 <script setup lang="ts">
+import { BASE_URL } from '@/app';
+import { ref } from 'vue';
+
 const emit = defineEmits<{
   (e: 'startGame'): void;
 }>();
 
-const configuration = window.location.pathname.split('/').pop();
+const configurationId = window.location.pathname.split('/').pop();
+const configuration = ref<any>(undefined);
+fetch(`${BASE_URL}/configurations/${configurationId}`).then((res) =>
+  res
+    .json()
+    .then((json) => {
+      configuration.value = json;
+    })
+    .catch((err) => {
+      configuration.value = null;
+    })
+);
 </script>
 
 <template>
-  <main>
-    <h1>test</h1>
-    <h2>{{ configuration }}</h2>
-    <div v-if="configuration?.length !== 0">
-      <button class="btn btn-primary position-absolute top-50 start-50 translate-middle" @click="emit('startGame')">Start</button>
-    </div>
-    <div v-if="configuration?.length === 0">
-      <div class="position-absolute top-50 start-50 translate-middle alert alert-danger">
-        No configuration specified in the url
+  <main class="position-absolute top-50 start-50 translate-middle">
+    <div v-if="configurationId?.length !== 0">
+      <div v-if="configuration === undefined">
+        <div class="spinner-border text-primary" role="status"></div>
       </div>
+      <div v-if="configuration === null">
+        <div class="alert alert-danger">Invalid configuration id</div>
+      </div>
+      <div v-if="configuration != null">
+        <button class="btn btn-primary" @click="emit('startGame')">Start</button>
+      </div>
+    </div>
+    <div v-if="configurationId?.length === 0">
+      <div class="alert alert-danger">No configuration specified in the url</div>
     </div>
   </main>
 </template>
