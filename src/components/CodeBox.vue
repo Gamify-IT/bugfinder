@@ -30,7 +30,7 @@ const showModal = ref(false);
 function submit() {
   if (!submitted.value) {
     submitted.value = true;
-    emit('submitSolution', new Solution(1, selectedBugs.value));
+    emit('submitSolution', new Solution(undefined, selectedBugs.value));
   }
 }
 

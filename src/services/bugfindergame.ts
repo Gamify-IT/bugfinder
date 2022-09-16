@@ -1,6 +1,7 @@
 import { ICode, ISolution, IBug } from '@/models/code';
 import { CodeFeedback, WordFeedback } from '@/services/code-feedback';
 import { BASE_URL } from '@/app';
+import { Result } from '@/models/result';
 
 export class BugFinderGame {
   // list whether player successful solved a code or not. Empty on entry if not submitted yet.
@@ -9,8 +10,11 @@ export class BugFinderGame {
   private currentCodeNumber: number;
   private currentCode?: ICode;
 
-  public constructor() {
+  private result: Result;
+
+  public constructor(private configuration: string) {
     this.currentCodeNumber = 0;
+    this.result = new Result(this.configuration);
   }
 
   /**
@@ -73,6 +77,11 @@ export class BugFinderGame {
     });
     this.solved[this.currentCodeNumber] = wordFeedbacks.find((feedback) => !feedback.success) == null;
 
+    if (this.currentCode == null) {
+      throw new Error('Submitted solution without specifying code');
+    }
+    this.result.addSolution(this.currentCode.id, submittedSolution);
+
     return new CodeFeedback(wordFeedbacks);
   }
 
@@ -120,13 +129,24 @@ export class BugFinderGame {
   }
 
   /**
+   * sends the game results after finishing the game to the server
+   */
+  public async sendResults(): Promise<void> {
+    await fetch(`${BASE_URL}/results`, {
+      method: 'POST',
+      credentials: 'include',
+      headers: {
+        Accept: 'application/json, text/plain, */*',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(this.result),
+    });
+  }
+
+  /**
    * fetches the current code from the server and sets it as currentCode
    */
   private async fetchCurrentCode() {
-    const configuration = window.location.pathname.split('/').pop();
-    if (configuration == null) {
-      throw Error('No configuration selected!');
-    }
     this.currentCode = (await this.getCodes())[this.currentCodeNumber];
     return this.currentCode;
   }
@@ -135,21 +155,13 @@ export class BugFinderGame {
    * fetches the length of all codes
    */
   private async fetchCodeLength() {
-    const configuration = window.location.pathname.split('/').pop();
-    if (configuration == null) {
-      throw Error('No configuration selected!');
-    }
     return (await this.getCodes()).length;
   }
 
   private codeCache?: ICode[];
   private async getCodes(): Promise<ICode[]> {
-    const configuration = window.location.pathname.split('/').pop();
-    if (configuration == null) {
-      throw Error('No configuration selected!');
-    }
     if (this.codeCache === undefined) {
-      const res = await fetch(`${BASE_URL}/configurations/${configuration}/codes`);
+      const res = await fetch(`${BASE_URL}/configurations/${this.configuration}/codes`);
       this.codeCache = (await res.json()) as ICode[];
     }
     return this.codeCache;
@@ -159,10 +171,6 @@ export class BugFinderGame {
    * fetches the solution for the current code
    */
   private async fetchSolution() {
-    const configuration = window.location.pathname.split('/').pop();
-    if (configuration == null) {
-      throw Error('No configuration selected!');
-    }
     const res = await fetch(`${BASE_URL}/codes/${this.currentCode?.id}/solutions`);
     const json = (await res.json()) as ISolution;
     return json;

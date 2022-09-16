@@ -5,7 +5,7 @@ export enum WordType {
 }
 
 export interface ICode {
-  id: string | number;
+  id: string;
   words: IWord[];
 }
 
@@ -15,7 +15,7 @@ export interface IWord {
 }
 
 export interface ISolution {
-  id: string | number;
+  id?: string;
   bugs: IBug[];
 }
 
@@ -35,30 +35,30 @@ export interface IBug {
 }
 
 export class Word implements IWord {
-  id: number | string;
+  id: string;
   word: string | WordType;
 
-  public constructor(id: number, word: string | WordType) {
+  public constructor(id: string, word: string | WordType) {
     this.id = id;
     this.word = word;
   }
 }
 
 export class Code implements ICode {
-  id = 0;
+  id = '0';
   words: IWord[] = [];
 
-  public constructor(id: number, words: IWord[]) {
+  public constructor(id: string, words: IWord[]) {
     this.id = id;
     this.words = words;
   }
 }
 
 export class Solution implements ISolution {
-  id: number;
+  id?: string;
   bugs: IBug[];
 
-  public constructor(id: number, bugs: IBug[]) {
+  public constructor(id: string | undefined, bugs: IBug[]) {
     this.id = id;
     this.bugs = bugs;
   }

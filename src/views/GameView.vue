@@ -11,12 +11,17 @@ const emit = defineEmits<{
   (e: 'endGame'): void;
 }>();
 
-const game = new BugFinderGame();
+const configuration = window.location.pathname.split('/').pop();
+if (configuration == null) {
+  throw Error('No configuration selected!');
+}
+const game = new BugFinderGame(configuration);
 let currentCode = ref(null) as Ref<ICode | null>;
 game.getCurrentCode().then((res) => {
   currentCode.value = res;
 });
-const hasNextCode = ref(game.hasNextCode());
+const hasNextCode = ref(false);
+game.hasNextCode().then((hasNextCode_) => (hasNextCode.value = hasNextCode_));
 const codeFeedback = ref(new CodeFeedback([]));
 const showNextButton = ref(false);
 
@@ -28,9 +33,10 @@ async function nextCode() {
     await game.nextCode();
     currentCode.value = await game.getCurrentCode();
     showNextButton.value = false;
-    hasNextCode.value = game.hasNextCode();
+    hasNextCode.value = await game.hasNextCode();
     codeFeedback.value = new CodeFeedback([]);
   } else {
+    game.sendResults();
     emit('endGame');
   }
 }
