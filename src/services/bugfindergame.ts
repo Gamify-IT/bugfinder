@@ -171,7 +171,7 @@ export class BugFinderGame {
    * fetches the solution for the current code
    */
   private async fetchSolution() {
-    const res = await fetch(`${BASE_URL}/codes/${this.currentCode?.id}/solutions`);
+    const res = await fetch(`${BASE_URL}/configurations/${this.configuration}/codes/${this.currentCode?.id}/solutions`);
     const json = (await res.json()) as ISolution;
     return json;
   }
