@@ -19,9 +19,9 @@ const game = new BugFinderGame(configuration);
 let currentCode = ref(null) as Ref<ICode | null>;
 game.getCurrentCode().then((res) => {
   currentCode.value = res;
+  game.hasNextCode().then((hasNextCode_) => (hasNextCode.value = hasNextCode_));
 });
 const hasNextCode = ref(false);
-game.hasNextCode().then((hasNextCode_) => (hasNextCode.value = hasNextCode_));
 const codeFeedback = ref(new CodeFeedback([]));
 const showNextButton = ref(false);
 
