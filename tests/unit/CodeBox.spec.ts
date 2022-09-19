@@ -123,7 +123,7 @@ describe('CodeBox.vue', () => {
     expect(submitButton.exists()).toBe(true);
 
     submitButton.trigger('click');
-    expect(wrapper.emitted().submitSolution[0]).toEqual([new Solution('1', [])]);
+    expect(wrapper.emitted().submitSolution[0]).toEqual([new Solution(undefined, [])]);
 
     await wrapper.vm.$nextTick();
 
