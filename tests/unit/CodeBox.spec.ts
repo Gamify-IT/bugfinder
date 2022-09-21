@@ -6,46 +6,46 @@ import { ICode, Code, Word, WordType, Bug, ErrorType, Solution } from '@/models/
 import { CodeFeedback, WordFeedback } from '@/services/code-feedback';
 
 function exampleCode(): Code {
-  return new Code(1, [
-    new Word(1, WordType.SPACE),
-    new Word(2, 'prublic'),
-    new Word(3, WordType.SPACE),
-    new Word(4, 'void'),
-    new Word(5, WordType.SPACE),
-    new Word(6, 'sayHello()'),
-    new Word(7, WordType.SPACE),
-    new Word(8, '{'),
-    new Word(9, WordType.NEWLINE),
-    new Word(10, WordType.TAB),
-    new Word(11, WordType.SPACE),
-    new Word(12, 'System.out.println("HELLO THERE!")'),
-    new Word(13, WordType.NEWLINE),
-    new Word(14, WordType.SPACE),
-    new Word(15, '}'),
+  return new Code('1', [
+    new Word('1', WordType.SPACE),
+    new Word('2', 'prublic'),
+    new Word('3', WordType.SPACE),
+    new Word('4', 'void'),
+    new Word('5', WordType.SPACE),
+    new Word('6', 'sayHello()'),
+    new Word('7', WordType.SPACE),
+    new Word('8', '{'),
+    new Word('9', WordType.NEWLINE),
+    new Word('10', WordType.TAB),
+    new Word('11', WordType.SPACE),
+    new Word('12', 'System.out.println("HELLO THERE!")'),
+    new Word('13', WordType.NEWLINE),
+    new Word('14', WordType.SPACE),
+    new Word('15', '}'),
   ]);
 }
 
 function exampleCode2(): Code {
-  return new Code(1, [
-    new Word(1, WordType.SPACE),
-    new Word(2, 'prvte'),
-    new Word(3, WordType.SPACE),
-    new Word(4, 'void'),
-    new Word(5, WordType.SPACE),
-    new Word(6, 'sayBye()'),
-    new Word(7, WordType.SPACE),
-    new Word(8, '{'),
-    new Word(9, WordType.NEWLINE),
-    new Word(10, WordType.TAB),
-    new Word(11, WordType.SPACE),
-    new Word(12, 'System.out.println("BYE THERE!")'),
-    new Word(13, WordType.NEWLINE),
-    new Word(14, WordType.TAB),
-    new Word(15, WordType.SPACE),
-    new Word(16, 'System.out.println("REALLY BYE THERE!")'),
-    new Word(17, WordType.NEWLINE),
-    new Word(18, WordType.SPACE),
-    new Word(19, '}'),
+  return new Code('1', [
+    new Word('1', WordType.SPACE),
+    new Word('2', 'prvte'),
+    new Word('3', WordType.SPACE),
+    new Word('4', 'void'),
+    new Word('5', WordType.SPACE),
+    new Word('6', 'sayBye()'),
+    new Word('7', WordType.SPACE),
+    new Word('8', '{'),
+    new Word('9', WordType.NEWLINE),
+    new Word('10', WordType.TAB),
+    new Word('11', WordType.SPACE),
+    new Word('12', 'System.out.println("BYE THERE!")'),
+    new Word('13', WordType.NEWLINE),
+    new Word('14', WordType.TAB),
+    new Word('15', WordType.SPACE),
+    new Word('16', 'System.out.println("REALLY BYE THERE!")'),
+    new Word('17', WordType.NEWLINE),
+    new Word('18', WordType.SPACE),
+    new Word('19', '}'),
   ]);
 }
 
@@ -123,7 +123,7 @@ describe('CodeBox.vue', () => {
     expect(submitButton.exists()).toBe(true);
 
     submitButton.trigger('click');
-    expect(wrapper.emitted().submitSolution[0]).toEqual([new Solution(1, [])]);
+    expect(wrapper.emitted().submitSolution[0]).toEqual([new Solution(undefined, [])]);
 
     await wrapper.vm.$nextTick();
 

@@ -1,22 +1,29 @@
 import { ICode, ISolution, IBug } from '@/models/code';
 import { CodeFeedback, WordFeedback } from '@/services/code-feedback';
-import codesJson from '@/dummy/codes.json';
-import solutionJson from '@/dummy/solution.json';
-const codes: ICode[] = codesJson;
-const solutions: ISolution[] = solutionJson;
+import { BASE_URL } from '@/app';
+import { Result } from '@/models/result';
 
 export class BugFinderGame {
   // list whether player successful solved a code or not. Empty on entry if not submitted yet.
   private solved: Array<boolean> = [];
 
-  private currentCodeNumber = 0;
-  private currentCode = codes[0];
+  private currentCodeNumber: number;
+  private currentCode?: ICode;
+
+  private result: Result;
+
+  public constructor(private configuration: string) {
+    this.currentCodeNumber = 0;
+    this.result = new Result(this.configuration);
+  }
 
   /**
-   *
    * @returns the current code
    */
-  public getCurrentCode(): ICode {
+  public async getCurrentCode(): Promise<ICode> {
+    if (this.currentCode === undefined) {
+      return await this.fetchCurrentCode();
+    }
     return this.currentCode;
   }
 
@@ -30,12 +37,12 @@ export class BugFinderGame {
    *
    * @returns a list with feedback which contains detailed information what the player did wrong in the code
    */
-  public submitWrongCode(submittedSolution: ISolution): CodeFeedback {
+  public async submitWrongCode(submittedSolution: ISolution): Promise<CodeFeedback> {
     if (this.hasSubmitted()) {
       throw Error('You already submitted this code.');
     }
     const playerBugs: IBug[] = submittedSolution.bugs;
-    const realSolution: ISolution = solutions[this.currentCodeNumber];
+    const realSolution = await this.fetchSolution();
     const bugs: IBug[] = realSolution.bugs;
 
     const wordFeedbacks: WordFeedback[] = [];
@@ -70,6 +77,11 @@ export class BugFinderGame {
     });
     this.solved[this.currentCodeNumber] = wordFeedbacks.find((feedback) => !feedback.success) == null;
 
+    if (this.currentCode == null) {
+      throw new Error('Submitted solution without specifying code');
+    }
+    this.result.addSolution(this.currentCode.id, submittedSolution);
+
     return new CodeFeedback(wordFeedbacks);
   }
 
@@ -93,8 +105,9 @@ export class BugFinderGame {
    *
    * @returns whether game has at least one more code to play or not
    */
-  public hasNextCode(): boolean {
-    return this.currentCodeNumber + 1 < codes.length;
+  public async hasNextCode(): Promise<boolean> {
+    const length = await this.fetchCodeLength();
+    return this.currentCodeNumber + 1 < length;
   }
 
   /**
@@ -103,7 +116,7 @@ export class BugFinderGame {
    * @throws {Error} when game has not one more code to play
    * @throws {Error} when player does not submitted current code and wants to play next
    */
-  public nextCode(): void {
+  public async nextCode(): Promise<void> {
     if (!this.hasNextCode()) {
       throw Error('There are no more codes left!');
     }
@@ -112,6 +125,54 @@ export class BugFinderGame {
       throw Error('You did not complete this code!');
     }
     this.currentCodeNumber++;
-    this.currentCode = codes[this.currentCodeNumber];
+    this.currentCode = await this.fetchCurrentCode();
+  }
+
+  /**
+   * sends the game results after finishing the game to the server
+   */
+  public async sendResults(): Promise<void> {
+    await fetch(`${BASE_URL}/results`, {
+      method: 'POST',
+      credentials: 'include',
+      headers: {
+        Accept: 'application/json, text/plain, */*',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(this.result),
+    });
+  }
+
+  /**
+   * fetches the current code from the server and sets it as currentCode
+   */
+  private async fetchCurrentCode() {
+    this.currentCode = (await this.getCodes())[this.currentCodeNumber];
+    return this.currentCode;
+  }
+
+  /**
+   * fetches the length of all codes
+   */
+  private async fetchCodeLength() {
+    return (await this.getCodes()).length;
+  }
+
+  private codeCache?: ICode[];
+  private async getCodes(): Promise<ICode[]> {
+    if (this.codeCache === undefined) {
+      const res = await fetch(`${BASE_URL}/configurations/${this.configuration}/codes`);
+      this.codeCache = (await res.json()) as ICode[];
+    }
+    return this.codeCache;
+  }
+
+  /**
+   * fetches the solution for the current code
+   */
+  private async fetchSolution() {
+    const res = await fetch(`${BASE_URL}/configurations/${this.configuration}/codes/${this.currentCode?.id}/solutions`);
+    const json = (await res.json()) as ISolution;
+    return json;
   }
 }
