@@ -1,1 +1,1 @@
-export const BASE_URL = `http://localhost/minigames/bugfinder/api/v1`;
+export const BASE_URL = `/minigames/bugfinder/api/v1`;
