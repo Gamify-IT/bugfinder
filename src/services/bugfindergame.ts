@@ -2,6 +2,7 @@ import { ICode, ISolution, IBug } from '@/models/code';
 import { CodeFeedback, WordFeedback } from '@/services/code-feedback';
 import { BASE_URL } from '@/app';
 import { Result } from '@/models/result';
+import axios, { AxiosResponse } from 'axios';
 
 export class BugFinderGame {
   // list whether player successful solved a code or not. Empty on entry if not submitted yet.
@@ -132,15 +133,7 @@ export class BugFinderGame {
    * sends the game results after finishing the game to the server
    */
   public async sendResults(): Promise<void> {
-    await fetch(`${BASE_URL}/results`, {
-      method: 'POST',
-      credentials: 'include',
-      headers: {
-        Accept: 'application/json, text/plain, */*',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(this.result),
-    });
+    await axios.post(`${BASE_URL}/results`, this.result);
   }
 
   /**
@@ -161,8 +154,8 @@ export class BugFinderGame {
   private codeCache?: ICode[];
   private async getCodes(): Promise<ICode[]> {
     if (this.codeCache === undefined) {
-      const res = await fetch(`${BASE_URL}/configurations/${this.configuration}/codes`);
-      this.codeCache = (await res.json()) as ICode[];
+      const res = await axios.get(`${BASE_URL}/configurations/${this.configuration}/codes`);
+      this.codeCache = res.data as ICode[];
     }
     return this.codeCache;
   }
@@ -171,7 +164,7 @@ export class BugFinderGame {
    * fetches the solution for the current code
    */
   private async fetchSolution() {
-    const res = await fetch(`${BASE_URL}/configurations/${this.configuration}/codes/${this.currentCode?.id}/solutions`);
-    return (await res.json()) as ISolution;
+    const res = await axios.get(`${BASE_URL}/configurations/${this.configuration}/codes/${this.currentCode?.id}/solutions`);
+    return res.data as ISolution;
   }
 }
