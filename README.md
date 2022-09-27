@@ -1,6 +1,10 @@
-# bugfinder
+# Bugfinder
+
+![grafik](https://user-images.githubusercontent.com/39833217/192544825-4e0a2c61-00ad-4d6c-8141-3a42901bcc4d.png)
 
 This is a game where you have to find bugs. You have to find click on the position in the code that causes the bug and get chat-like feedback.
+
+This repository contains the frontend for the [Bugfinder minigame](https://gamifyit-docs.readthedocs.io/en/latest/user-manuals/minigames/bugfinder.html).
 
 ## Development
 
@@ -82,7 +86,3 @@ To remove the container you can use the following command:
 ```sh
 docker rm bugfinder
 ```
-
-### Screenshot
-
-![Screenshot](https://user-images.githubusercontent.com/44726248/175772024-e21bb386-5ae8-4608-8219-ca807cbfe350.png)
