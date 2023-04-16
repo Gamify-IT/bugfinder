@@ -2,7 +2,7 @@ import { ICode, ISolution, IBug } from '@/models/code';
 import { CodeFeedback, WordFeedback } from '@/services/code-feedback';
 import { BASE_URL } from '@/app';
 import { Result } from '@/models/result';
-import axios, { AxiosResponse } from 'axios';
+import axios from 'axios';
 
 export class BugFinderGame {
   // list whether player successful solved a code or not. Empty on entry if not submitted yet.
@@ -23,7 +23,7 @@ export class BugFinderGame {
    */
   public async getCurrentCode(): Promise<ICode> {
     if (this.currentCode === undefined) {
-      return await this.fetchCurrentCode();
+      return this.fetchCurrentCode();
     }
     return this.currentCode;
   }
