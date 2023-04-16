@@ -11,7 +11,7 @@ export interface ICode {
 
 export interface IWord {
   id: string | number;
-  word: string | WordType;
+  wordContent: string | WordType;
 }
 
 export interface ISolution {
@@ -36,11 +36,11 @@ export interface IBug {
 
 export class Word implements IWord {
   id: string;
-  word: string | WordType;
+  wordContent: string | WordType;
 
-  public constructor(id: string, word: string | WordType) {
+  public constructor(id: string, wordContent: string | WordType) {
     this.id = id;
-    this.word = word;
+    this.wordContent = wordContent;
   }
 }
 

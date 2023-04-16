@@ -39,7 +39,7 @@ function selectBug(word: IWord) {
     return;
   }
   if (selectedBugs.value.find((bug) => bug.wordId == word.id) == null) {
-    let wordString = word.word;
+    let wordString = word.wordContent;
     if (wordString == space) {
       wordString = '';
     }
@@ -64,7 +64,7 @@ function isSelectedBug(wordId: number | string) {
 
 function isWordSpace(wordId: number | string): boolean {
   const word = getWordById(wordId);
-  return word != null && word.word == space;
+  return word != null && word.wordContent == space;
 }
 
 function getCorrectedBugValue(wordId: number | string): string | null {

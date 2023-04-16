@@ -21,7 +21,7 @@ export class CodeVisualizer {
     const lines: Array<Array<IWord>> = [];
     let currentLineWords: Array<IWord> = [];
     for (const wordObj of this.code.words) {
-      const word = wordObj.word;
+      const word = wordObj.wordContent;
       if (word == WordType.NEWLINE) {
         lines.push(currentLineWords);
         currentLineWords = [];
@@ -45,7 +45,7 @@ export class CodeVisualizer {
     const list: Array<IWord> = [];
     let currentLine = 0;
     for (const wordObj of this.code.words) {
-      const word = wordObj.word;
+      const word = wordObj.wordContent;
       if (word == WordType.NEWLINE) {
         currentLine++;
       } else {
@@ -67,7 +67,7 @@ export class CodeVisualizer {
   public getInFormat(): string {
     let currentLine = '';
     for (const wordObj of this.code.words) {
-      const word = wordObj.word;
+      const word = wordObj.wordContent;
       if (word == WordType.NEWLINE) {
         currentLine += '\n';
       } else if (word == WordType.TAB) {
