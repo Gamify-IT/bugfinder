@@ -69,26 +69,26 @@ describe('CodeBox.vue', () => {
   });
   test('CodeBox shows code correct', () => {
     const lines = wrapper.findAll('.code-line');
-    expect(lines.length).toBe(code.words.filter((word) => word.word == WordType.NEWLINE).length + 1);
+    expect(lines.length).toBe(code.words.filter((word) => word.wordContent == WordType.NEWLINE).length + 1);
 
     const words = wrapper.findAll('.code-word');
-    expect(words.length).toBe(code.words.filter((word) => word.word != WordType.TAB && word.word != WordType.NEWLINE).length);
+    expect(words.length).toBe(code.words.filter((word) => word.wordContent != WordType.TAB && word.wordContent != WordType.NEWLINE).length);
 
     const spaces = wrapper.findAll('.code-space');
-    expect(spaces.length).toBe(code.words.filter((word) => word.word == WordType.SPACE).length);
+    expect(spaces.length).toBe(code.words.filter((word) => word.wordContent == WordType.SPACE).length);
   });
   test('CodeBox shows code correct after new props rendered', async () => {
     const newCode = exampleCode2();
     await wrapper.setProps({ code: newCode });
 
     const lines = wrapper.findAll('.code-line');
-    expect(lines.length).toBe(newCode.words.filter((word) => word.word == WordType.NEWLINE).length + 1);
+    expect(lines.length).toBe(newCode.words.filter((word) => word.wordContent == WordType.NEWLINE).length + 1);
 
     const words = wrapper.findAll('.code-word');
-    expect(words.length).toBe(newCode.words.filter((word) => word.word != WordType.TAB && word.word != WordType.NEWLINE).length);
+    expect(words.length).toBe(newCode.words.filter((word) => word.wordContent != WordType.TAB && word.wordContent != WordType.NEWLINE).length);
 
     const spaces = wrapper.findAll('.code-space');
-    expect(spaces.length).toBe(newCode.words.filter((word) => word.word == WordType.SPACE).length);
+    expect(spaces.length).toBe(newCode.words.filter((word) => word.wordContent == WordType.SPACE).length);
   });
   test('CodeBox shows no feedback when there is no feedback provided', () => {
     const rightCodes = wrapper.findAll('.right-code');

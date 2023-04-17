@@ -20,22 +20,22 @@ const space = WordType.SPACE;
   <div v-if="word.word == tab" class="tab"></div>
   <button
     :id="'word-' + word.id"
-    v-if="word.word != tab && word.word != newLine"
+    v-if="word.wordContent != tab && word.wordContent != newLine"
     @click="selectBug(word)"
     class="code-word"
     :class="{
-      'code-space': word.word == space && !selected,
-      'code-space-selected': word.word == space && selected,
+      'code-space': word.wordContent == space && !selected,
+      'code-space-selected': word.wordContent == space && selected,
       'right-code': codeFeedback.hasFeedback(word.id) && codeFeedback.getFeedback(word.id).success,
       'wrong-code': codeFeedback.hasFeedback(word.id) && !codeFeedback.getFeedback(word.id).success,
       'selected-code': !submitted && selected,
     }"
   >
-    <b-badge v-if="word.word == space && !selected" variant="success" class="code-space-badge">+</b-badge>
+    <b-badge v-if="word.wordContent == space && !selected" variant="success" class="code-space-badge">+</b-badge>
     <pre
       v-else
       v-highlightjs
-    ><code v-if="!selected" class="java">{{ word.word }}</code><code v-else>{{ correctedBugValue }}</code></pre>
+    ><code v-if="!selected" class="java">{{ word.wordContent }}</code><code v-else>{{ correctedBugValue }}</code></pre>
   </button>
   <b-popover
     v-if="codeFeedback.hasFeedback(word.id)"

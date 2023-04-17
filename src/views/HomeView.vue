@@ -15,11 +15,11 @@ fetch(`${BASE_URL}/configurations/${configurationId}`)
       .then((json) => {
         configuration.value = json;
       })
-      .catch((err) => {
+      .catch(() => {
         configuration.value = 'Invalid configuration id';
       });
   })
-  .catch((err) => {
+  .catch(() => {
     configuration.value = 'Server not reachable';
   });
 </script>
