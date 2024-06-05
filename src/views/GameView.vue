@@ -28,6 +28,7 @@ const showNextButton = ref(false);
 chat.sendStartMessgae();
 
 async function nextCode() {
+  playClickSound();
   if (await game.hasNextCode()) {
     await chat.sendNextCode();
     await game.nextCode();
@@ -48,6 +49,11 @@ async function submitSolution(selectedBugs: ISolution) {
   setTimeout(() => {
     showNextButton.value = true;
   }, 2000);
+}
+
+function playClickSound(){
+  const clickSound = new Audio("@/assets/music/click_sound.mp3");
+  clickSound.play();
 }
 </script>
 

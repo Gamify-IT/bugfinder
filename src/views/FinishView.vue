@@ -1,6 +1,12 @@
 <script setup lang="ts">
 function closeGame() {
+  playClickSound();
   window.parent.postMessage('CLOSE ME');
+}
+
+function playClickSound(){
+  const clickSound = new Audio("@/assets/music/click_sound.mp3");
+  clickSound.play();
 }
 </script>
 

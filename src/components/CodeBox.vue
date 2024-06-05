@@ -27,7 +27,10 @@ const emptyBug = new Bug(-1, ErrorType.UNDEFINED, '');
 const currentEditingBug = ref(emptyBug);
 const showModal = ref(false);
 
+const clickSound = new Audio("@/assets/music/click_sound.mp3");
+
 function submit() {
+  playClickSound();
   if (!submitted.value) {
     submitted.value = true;
     emit('submitSolution', new Solution(undefined, selectedBugs.value));
@@ -38,6 +41,7 @@ function selectBug(word: IWord) {
   if (submitted.value) {
     return;
   }
+  playClickSound();
   if (selectedBugs.value.find((bug) => bug.wordId == word.id) == null) {
     let wordString = word.wordContent;
     if (wordString == space) {
@@ -77,6 +81,10 @@ function getCorrectedBugValue(wordId: number | string): string | null {
 
 function getWordById(wordId: number | string): IWord | undefined {
   return props.code.words.find((word) => word.id == wordId);
+}
+
+function playClickSound(){
+  clickSound.play();
 }
 
 watch(

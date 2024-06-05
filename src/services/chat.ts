@@ -20,12 +20,14 @@ export async function sendSubmitMessage(success: boolean, gameFinished: boolean)
     color: ChatColor.INFO,
   });
   if (success) {
+    playSound("@/assets/music/success_sound.mp3");
     await sendDelayedMessage({
       from: ChatParticipant.OTHER,
       message: 'Yes it works! Thank you very much',
       color: ChatColor.SUCCESS,
     });
   } else {
+    playSound("@/assets/music/error_sound.mp3");
     await sendDelayedMessage({
       from: ChatParticipant.OTHER,
       message: 'No sadly not.',
@@ -33,12 +35,14 @@ export async function sendSubmitMessage(success: boolean, gameFinished: boolean)
     });
   }
   if (!gameFinished) {
+    playSound("@/assets/music/notification_sound.mp3");
     await sendDelayedMessage({
       from: ChatParticipant.OTHER,
       message: 'Can you help me again with another bug?',
       color: ChatColor.LIGHT,
     });
   } else {
+    playSound("@/assets/music/notification_sound.mp3");
     await sendDelayedMessage({
       from: ChatParticipant.OTHER,
       message: 'Thank you a lot. You helped me fixing my code!',
@@ -50,6 +54,7 @@ export async function sendSubmitMessage(success: boolean, gameFinished: boolean)
 export async function sendNextCode() {
   sendMessage({ from: ChatParticipant.ME, message: "Yes, I'm happy to help you", color: ChatColor.INFO });
   await sendDelayedMessage({ from: ChatParticipant.OTHER, message: 'That is very kind of you!', color: ChatColor.LIGHT });
+  playSound("@/assets/music/notification_sound.mp3");
 }
 
 function sendMessage(chatElement: ChatElement) {
@@ -69,4 +74,9 @@ async function sendDelayedMessage(chatElement: ChatElement) {
 
 function delay(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+function playSound(pathToAudioSource: string){
+  const sound = new Audio(pathToAudioSource);
+  sound.play();
 }

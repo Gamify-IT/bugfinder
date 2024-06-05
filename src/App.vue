@@ -1,8 +1,19 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, onMounted, onUnmounted } from 'vue';
 import HomeView from '@/views/HomeView.vue';
 import GameView from '@/views/GameView.vue';
 import FinishView from '@/views/FinishView.vue';
+const backgroundMusic = new Audio("@/assets/music/background_music.mp3");
+
+onMounted(() => {
+  backgroundMusic.loop = true;
+  backgroundMusic.play();
+});
+
+onUnmounted(() => {
+  backgroundMusic.pause();
+  backgroundMusic.currentTime = 0;
+});
 
 enum views {
   home,
@@ -15,7 +26,12 @@ function changeView(newView: views) {
   actualView.value = newView;
 }
 function closeGame() {
+  playClickSound();
   window.parent.postMessage('CLOSE ME');
+}
+function playClickSound(){
+  const clickSound = new Audio("@/assets/music/click_sound.mp3");
+  clickSound.play();
 }
 </script>
 

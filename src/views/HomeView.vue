@@ -22,6 +22,10 @@ fetch(`${BASE_URL}/configurations/${configurationId}`)
   .catch(() => {
     configuration.value = 'Server not reachable';
   });
+  function playClickSound(){
+    const clickSound = new Audio("@/assets/music/click_sound.mp3");
+    clickSound.play();
+  }
 </script>
 
 <template>
@@ -34,7 +38,7 @@ fetch(`${BASE_URL}/configurations/${configurationId}`)
         <div class="alert alert-danger">{{ configuration }}</div>
       </div>
       <div v-if="typeof configuration === 'object'">
-        <button class="btn btn-primary" @click="emit('startGame')">Start</button>
+        <button class="btn btn-primary" @click="playClickSound(); emit('startGame')">Start</button>
       </div>
     </div>
     <div v-if="configurationId?.length === 0">
