@@ -7,7 +7,7 @@ This is a game where you have to find bugs. You have to find click on the positi
 This repository contains the frontend for the [Bugfinder minigame](https://gamifyit-docs.readthedocs.io/en/latest/user-manuals/minigames/bugfinder.html).
 
 ## Development
-
+> Beginning of additions (that work)
 ### Getting started
 
 Clone the repository  
@@ -42,6 +42,8 @@ You can remove the container with:
 ```sh
 docker compose down
 ```
+
+> End of additions
 
 ### Test
 
