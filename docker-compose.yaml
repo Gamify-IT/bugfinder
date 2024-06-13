@@ -118,9 +118,8 @@ services:
 
   bugfinder:
     container_name: bugfinder
-    image: ghcr.io/gamify-it/bugfinder:main
+    build: .
     restart: always
-    pull_policy: always
     expose:
       - '80'
 

@@ -20,20 +20,27 @@ Install the dependencies
 npm install
 ```
 
-#### Run with Docker-compose
-
-Start all dependencies with our docker-compose files.
-Check the [manual for docker-compose](https://github.com/Gamify-IT/docs/blob/main/dev-manuals/languages/docker/docker-compose.md).
-
-To run the main branch with minimal dependencies use the `docker-compose.yaml` file.\
-To run the latest changes on any other branch than `main` use the `docker-compose-dev.yaml` file.
-
-
-
 ### Compile and Hot-Reload for Development
-
+To run the project locally with your IDE feature and have all necessary dependencies running,
+start the dependencies via docker:
+```sh
+docker compose -f docker-compose-dev.yaml up
+```
+Then start the frontend with:
 ```sh
 npm run serve
+```
+You can now access the game at [localhost](http://localhost).
+
+### Build your local changes as a docker container
+To build and run your local changes as a docker container use:
+```sh
+docker compose up --build
+```
+You can remove the container with:
+
+```sh
+docker compose down
 ```
 
 ### Test
