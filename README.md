@@ -7,7 +7,7 @@ This is a game where you have to find bugs. You have to find click on the positi
 This repository contains the frontend for the [Bugfinder minigame](https://gamifyit-docs.readthedocs.io/en/latest/user-manuals/minigames/bugfinder.html).
 
 ## Development
-
+> Beginning of additions (that work)
 ### Getting started
 
 Clone the repository  
@@ -20,16 +20,30 @@ Install the dependencies
 npm install
 ```
 
-#### Run with Docker-compose
-
-Start all dependencies with our docker-compose files.
-Check the [manual for docker-compose](https://github.com/Gamify-IT/docs/blob/main/dev-manuals/languages/docker/docker-compose.md).
-
 ### Compile and Hot-Reload for Development
-
+To run the project locally with your IDE feature and have all necessary dependencies running,
+start the dependencies via docker:
+```sh
+docker compose -f docker-compose-dev.yaml up
+```
+Then start the frontend with:
 ```sh
 npm run serve
 ```
+You can now access the game at [localhost](http://localhost).
+
+### Build your local changes as a docker container
+To build and run your local changes as a docker container use:
+```sh
+docker compose up --build
+```
+You can remove the container with:
+
+```sh
+docker compose down
+```
+
+> End of additions
 
 ### Test
 
