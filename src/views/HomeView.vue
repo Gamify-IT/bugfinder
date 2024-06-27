@@ -1,7 +1,9 @@
 <script setup lang="ts">
 import { BASE_URL } from '@/app';
 import { ref } from 'vue';
+import clickSoundSource from '/src/assets/music/click_sound.mp3';
 
+const clickSound = new Audio(clickSoundSource);
 const emit = defineEmits<{
   (e: 'startGame'): void;
 }>();
@@ -22,6 +24,9 @@ fetch(`${BASE_URL}/configurations/${configurationId}`)
   .catch(() => {
     configuration.value = 'Server not reachable';
   });
+  function playClickSound(){
+    clickSound.play();
+  }
 </script>
 
 <template>
@@ -34,7 +39,7 @@ fetch(`${BASE_URL}/configurations/${configurationId}`)
         <div class="alert alert-danger">{{ configuration }}</div>
       </div>
       <div v-if="typeof configuration === 'object'">
-        <button class="btn btn-primary" @click="emit('startGame')">Start</button>
+        <button class="btn btn-primary" @click="playClickSound(); emit('startGame')">Start</button>
       </div>
     </div>
     <div v-if="configurationId?.length === 0">
