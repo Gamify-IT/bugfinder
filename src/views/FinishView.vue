@@ -31,9 +31,7 @@ onMounted(async () => {
 <template>
   <main>
     <div class="text-center position-absolute top-50 start-50 translate-middle">
-      <h2>You finished the Game!</h2>
-      <p>Your Score: {{ score }}</p>
-      <p>Your Rewards: {{ rewards }}</p>
+      <h2>You finished the Game!Your Score: {{ score }}! Your Rewards: {{ rewards }}!</h2>
       <b-button variant="danger" id="close-button" v-on:click="closeGame"> Back to game </b-button>
     </div>
   </main>
