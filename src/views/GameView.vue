@@ -6,6 +6,10 @@ import { ICode, ISolution } from '@/models/code';
 import * as chat from '@/services/chat';
 import { CodeFeedback } from '@/services/code-feedback';
 import { Ref, ref } from 'vue';
+import mitt from 'mitt'
+
+const emitter = mitt()
+
 
 const score = ref(0);
 const rewards = ref(0);
@@ -44,6 +48,7 @@ async function nextCode() {
       score.value = game.getScore();
     rewards.value = game.getRewards();
     console.log("WUUHUU, score: " + score.value +"rewards: " + rewards.value)
+      emitter.emit('RewardsAndScores', { score: score.value});
     });
     emit('endGame');
   }
