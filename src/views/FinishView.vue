@@ -6,11 +6,12 @@ const emitter = mitt();
 let score = ref(0);
 let rewards = ref(0);
 
-emitter.on('RewardsAndScores', score => console.log('RewardsAndScores' + score) )
 
 
 function closeGame() {
   window.parent.postMessage('CLOSE ME');
+  emitter.on('RewardsAndScores', score => console.log('RewardsAndScores' , score) )
+
 }
 </script>
 
