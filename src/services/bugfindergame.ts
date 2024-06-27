@@ -141,9 +141,18 @@ export class BugFinderGame {
    * sends the game results after finishing the game to the server
    */
   public async sendResults(): Promise<void> {
+
+    let resolveRef;
+    let rejectRef;
+    const requestPromise: Promise<void> = new Promise((resolve, reject) => {
+    resolveRef = resolve;
+    rejectRef = reject;
+  });
+
+
+
     try {
       const response = await axios.post(`${BASE_URL}/results`, this.result);
-
       const returnedResult = Result.fromDTO(response.data);
       this.result = returnedResult;
 
@@ -156,6 +165,8 @@ export class BugFinderGame {
       console.error('Error sending results:', error);
       throw error;
     }
+
+    return requestPromise;
   }
 
 

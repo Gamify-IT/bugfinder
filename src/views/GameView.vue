@@ -7,6 +7,10 @@ import * as chat from '@/services/chat';
 import { CodeFeedback } from '@/services/code-feedback';
 import { Ref, ref } from 'vue';
 
+const score = ref(0);
+const rewards = ref(0);
+
+
 const emit = defineEmits<{
   (e: 'endGame'): void;
 }>();
@@ -36,7 +40,11 @@ async function nextCode() {
     hasNextCode.value = await game.hasNextCode();
     codeFeedback.value = new CodeFeedback([]);
   } else {
-    game.sendResults();
+    game.sendResults().then(() =>{
+      score.value = game.getScore();
+    rewards.value = game.getRewards();
+    console.log("WUUHUU, score: " + score.value +"rewards: " + rewards.value)
+    });
     emit('endGame');
   }
 }
@@ -49,6 +57,8 @@ async function submitSolution(selectedBugs: ISolution) {
     showNextButton.value = true;
   }, 2000);
 }
+
+
 </script>
 
 <template>
