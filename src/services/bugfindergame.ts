@@ -190,4 +190,13 @@ export class BugFinderGame {
     const res = await axios.get(`${BASE_URL}/configurations/${this.configuration}/codes/${this.currentCode?.id}/solutions`);
     return res.data as ISolution;
   }
+
+  public getScore(): number {
+    return this.score;
+  }
+
+  public getRewards(): number {
+    return this.rewards;
+  }
+
 }
