@@ -1,7 +1,9 @@
 <script setup lang="ts">
 import { BASE_URL } from '@/app';
 import { ref } from 'vue';
+import clickSoundSource from '/src/assets/music/click_sound.mp3';
 
+const clickSound = new Audio(clickSoundSource);
 const emit = defineEmits<{
   (e: 'startGame'): void;
 }>();
@@ -23,7 +25,6 @@ fetch(`${BASE_URL}/configurations/${configurationId}`)
     configuration.value = 'Server not reachable';
   });
   function playClickSound(){
-    const clickSound = new Audio("@/assets/music/click_sound.mp3");
     clickSound.play();
   }
 </script>

@@ -5,7 +5,9 @@ import { CodeVisualizer } from '@/services/code-visualizer';
 import WordBox from '@/components/WordBox.vue';
 import SelectBugModal from '@/components/SelectBugModal.vue';
 import { ref, watch } from 'vue';
+import clickSoundSource from '/src/assets/music/click_sound.mp3';
 
+const clickSound = new Audio(clickSoundSource);
 const props = defineProps<{
   code: ICode;
   codeFeedback: CodeFeedback;
@@ -27,7 +29,6 @@ const emptyBug = new Bug(-1, ErrorType.UNDEFINED, '');
 const currentEditingBug = ref(emptyBug);
 const showModal = ref(false);
 
-const clickSound = new Audio("@/assets/music/click_sound.mp3");
 
 function submit() {
   playClickSound();
