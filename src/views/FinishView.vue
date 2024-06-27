@@ -1,16 +1,24 @@
 <script setup lang="ts">
-import mitt from 'mitt';
+import mitt, { Emitter } from 'mitt';
 import { ref } from 'vue';
 
-const emitter = mitt();
-let score = ref(0);
+
 let rewards = ref(0);
 
+type Events = {
+  RewardsAndScores: { score: number };
+  // Weitere Ereignisse hier...
+};
 
+const emitter: Emitter<Events> = mitt<Events>();
+const score = ref(0);
 
+emitter.on('RewardsAndScores', (data: { score: number }) => {
+  console.log('RewardsAndScores', data.score);
+  score.value = data.score;
+});
 function closeGame() {
   window.parent.postMessage('CLOSE ME');
-  emitter.on('RewardsAndScores', score => console.log('RewardsAndScores' , score) )
 
 }
 </script>
