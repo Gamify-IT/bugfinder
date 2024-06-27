@@ -161,8 +161,10 @@ export class BugFinderGame {
 
       console.log('Score:', this.score);
       console.log('Rewards:', this.rewards);
+      resolveRef(null);
     } catch (error) {
       console.error('Error sending results:', error);
+      rejectRef(null);
       throw error;
     }
 

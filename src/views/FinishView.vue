@@ -16,7 +16,7 @@ function closeGame() {
 onMounted(async () => {
   try {
 
-    gameInstance = new BugFinderGame('configurationId'); // Passe die Konfigurations-ID entsprechend an
+    gameInstance = new BugFinderGame('configurationId');
 
     score.value = gameInstance.getScore();
     rewards.value = gameInstance.getRewards();
