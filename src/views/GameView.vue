@@ -46,8 +46,8 @@ async function nextCode() {
       store.state.score =  game.getScore();
       store.state.rewards = game.getRewards();
       console.log(store.state);
+      emit('endGame');
     });
-    emit('endGame');
   }
 }
 
