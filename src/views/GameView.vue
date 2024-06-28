@@ -7,6 +7,9 @@ import * as chat from '@/services/chat';
 import { CodeFeedback } from '@/services/code-feedback';
 import { Ref, ref } from 'vue';
 import mitt from 'mitt'
+import { useStore } from 'vuex';
+
+const store = useStore();
 
 const emitter = mitt()
 
@@ -48,7 +51,10 @@ async function nextCode() {
       score.value = game.getScore();
     rewards.value = game.getRewards();
     console.log("WUUHUU, score: " + score.value +"rewards: " + rewards.value)
-      emitter.emit('RewardsAndScores', { score: score.value});
+      store.commit('setScore',score.value)
+      store.commit('setRewards', rewards.value)
+      console.log(store.state.score) // -> 1
+
     });
     emit('endGame');
   }

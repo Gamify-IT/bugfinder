@@ -149,8 +149,6 @@ export class BugFinderGame {
     rejectRef = reject;
   });
 
-
-
     try {
       const response = await axios.post(`${BASE_URL}/results`, this.result);
       const returnedResult = Result.fromDTO(response.data);
