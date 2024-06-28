@@ -6,17 +6,9 @@ import { ICode, ISolution } from '@/models/code';
 import * as chat from '@/services/chat';
 import { CodeFeedback } from '@/services/code-feedback';
 import { Ref, ref } from 'vue';
-import mitt from 'mitt'
 import { useStore } from 'vuex';
 
 const store = useStore();
-
-const emitter = mitt()
-
-
-const score = ref(0);
-const rewards = ref(0);
-
 
 const emit = defineEmits<{
   (e: 'endGame'): void;
@@ -26,12 +18,15 @@ const configuration = window.location.pathname.split('/').pop();
 if (configuration == null) {
   throw Error('No configuration selected!');
 }
+
 const game = new BugFinderGame(configuration);
 let currentCode = ref(null) as Ref<ICode | null>;
+
 game.getCurrentCode().then((res) => {
   currentCode.value = res;
   game.hasNextCode().then((hasNextCode_) => (hasNextCode.value = hasNextCode_));
 });
+
 const hasNextCode = ref(false);
 const codeFeedback = ref(new CodeFeedback([]));
 const showNextButton = ref(false);
@@ -48,13 +43,9 @@ async function nextCode() {
     codeFeedback.value = new CodeFeedback([]);
   } else {
     game.sendResults().then(() =>{
-      score.value = game.getScore();
-    rewards.value = game.getRewards();
-    console.log("WUUHUU, score: " + score.value +"rewards: " + rewards.value)
-      store.commit('setScore',score.value)
-      store.commit('setRewards', rewards.value)
-      console.log(store.state.score) // -> 1
-
+      store.state.score =  game.getScore();
+      store.state.rewards = game.getRewards();
+      console.log(store.state);
     });
     emit('endGame');
   }
