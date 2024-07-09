@@ -1,8 +1,23 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, onMounted, onUnmounted } from 'vue';
 import HomeView from '@/views/HomeView.vue';
 import GameView from '@/views/GameView.vue';
 import FinishView from '@/views/FinishView.vue';
+import backgroundMusicSource from '/src/assets/music/background_music.mp3';
+import clickSoundSource from '/src/assets/music/click_sound.mp3';
+
+const backgroundMusic = new Audio(backgroundMusicSource);
+const clickSound = new Audio(clickSoundSource);
+
+onMounted(() => {
+  backgroundMusic.loop = true;
+  backgroundMusic.play();
+});
+
+onUnmounted(() => {
+  backgroundMusic.pause();
+  backgroundMusic.currentTime = 0;
+});
 
 enum views {
   home,
@@ -17,6 +32,17 @@ function changeView(newView: views) {
 function closeGame() {
   window.parent.postMessage('CLOSE ME');
 }
+
+function playClickSound(){
+  clickSound.play();
+}
+
+async function handleCloseGame() {
+  await playClickSound();
+    setTimeout(() => {
+      closeGame();
+    }, 500);
+}
 </script>
 
 <template>
@@ -26,7 +52,7 @@ function closeGame() {
         <span class="navbar-brand mb-0 h1">Bugfinder</span>
       </div>
       <div class="mr-1">
-        <b-button variant="danger" class="nav-buttons close-button" id="close-button" v-on:click="closeGame">
+        <b-button variant="danger" class="nav-buttons close-button" id="close-button" v-on:click="handleCloseGame">
           <em class="bi-x"></em>
         </b-button>
       </div>

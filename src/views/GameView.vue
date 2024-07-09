@@ -6,6 +6,9 @@ import { ICode, ISolution } from '@/models/code';
 import * as chat from '@/services/chat';
 import { CodeFeedback } from '@/services/code-feedback';
 import { Ref, ref } from 'vue';
+import clickSoundSource from '/src/assets/music/click_sound.mp3';
+
+const clickSound = new Audio(clickSoundSource);
 
 const emit = defineEmits<{
   (e: 'endGame'): void;
@@ -28,6 +31,7 @@ const showNextButton = ref(false);
 chat.sendStartMessgae();
 
 async function nextCode() {
+  playClickSound();
   if (await game.hasNextCode()) {
     await chat.sendNextCode();
     await game.nextCode();
@@ -48,6 +52,10 @@ async function submitSolution(selectedBugs: ISolution) {
   setTimeout(() => {
     showNextButton.value = true;
   }, 2000);
+}
+
+function playClickSound(){
+  clickSound.play();
 }
 </script>
 
