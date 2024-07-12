@@ -43,7 +43,7 @@ const message = computed(() => {
 <style scoped>
 .background-image {
   background-image: url('@/assets/background.webp');
-  background-size: cover; 
+  background-size: cover;
   background-repeat: no-repeat;
   background-position: center center;
   height: 100vh;
