@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { useStore } from 'vuex';
-import { computed } from 'vue';
+import { computed, onMounted } from 'vue';
+import triumphSound from '/src/assets/trumpets.mp3';
+import negativeSound from '/src/assets/negativeSound.mp3';
 const store = useStore();
 
 function closeGame() {
@@ -20,6 +22,17 @@ const message = computed(() => {
   }
 });
 
+function playSound(pathToAudioFile: string, duration: number){
+  const sound = new Audio(pathToAudioFile);
+  sound.play();
+  setTimeout(() => sound.pause(), duration);
+}
+
+onMounted(() => {
+  const score = store.state.score;
+  const soundFile = score >= 80 ? triumphSound : negativeSound;
+  playSound(soundFile, 2000);
+});
 
 </script>
 
