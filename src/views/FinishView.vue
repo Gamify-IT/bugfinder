@@ -30,7 +30,7 @@ function playSound(pathToAudioFile: string, duration: number){
 
 onMounted(() => {
   const score = store.state.score;
-  const soundFile = score >= 80 ? triumphSound : negativeSound;
+  const soundFile = score >= 50 ? triumphSound : negativeSound;
   playSound(soundFile, 2000);
 });
 
