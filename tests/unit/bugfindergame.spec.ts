@@ -1,6 +1,7 @@
 import { Bug, Code, ErrorType, IBug, ICode, ISolution, Solution, Word } from '@/models/code';
 import { BugFinderGame } from '@/services/bugfindergame';
 import mockAxios from 'jest-mock-axios';
+import clickSoundSource from '@/assets/music/click_sound.mp3'
 
 jest.mock('axios');
 

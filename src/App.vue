@@ -3,8 +3,8 @@ import { ref, onMounted, onUnmounted } from 'vue';
 import HomeView from '@/views/HomeView.vue';
 import GameView from '@/views/GameView.vue';
 import FinishView from '@/views/FinishView.vue';
-import backgroundMusicSource from '/src/assets/music/background_music.mp3';
-import clickSoundSource from '/src/assets/music/click_sound.mp3';
+import backgroundMusicSource from '@/assets/music/background_music.mp3';
+import clickSoundSource from '@/assets/music/click_sound.mp3';
 
 const backgroundMusic = new Audio(backgroundMusicSource);
 const clickSound = new Audio(clickSoundSource);
