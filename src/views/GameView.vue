@@ -6,7 +6,7 @@ import { ICode, ISolution } from '@/models/code';
 import * as chat from '@/services/chat';
 import { CodeFeedback } from '@/services/code-feedback';
 import { Ref, ref } from 'vue';
-import clickSoundSource from '/src/assets/music/click_sound.mp3';
+import clickSoundSource from '@/assets/music/click_sound.mp3';
 
 const clickSound = new Audio(clickSoundSource);
 

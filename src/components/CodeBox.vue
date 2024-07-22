@@ -5,7 +5,7 @@ import { CodeVisualizer } from '@/services/code-visualizer';
 import WordBox from '@/components/WordBox.vue';
 import SelectBugModal from '@/components/SelectBugModal.vue';
 import { ref, watch } from 'vue';
-import clickSoundSource from '/src/assets/music/click_sound.mp3';
+import clickSoundSource from '@/assets/music/click_sound.mp3';
 
 const clickSound = new Audio(clickSoundSource);
 const props = defineProps<{

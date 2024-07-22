@@ -2,9 +2,9 @@
 import { ChatColor, ChatParticipant } from '@/models/chat';
 import { watch } from 'vue';
 import { chatHistory } from '@/services/chat';
-import notificationSoundSource from '/src/assets/music/notification_sound.mp3';
-import successSoundSource from '/src/assets/music/success_sound.mp3';
-import errorSoundSource from '/src/assets/music/error_sound.mp3';
+import notificationSoundSource from '@/assets/music/notification_sound.mp3';
+import successSoundSource from '@/assets/music/success_sound.mp3';
+import errorSoundSource from '@/assets/music/error_sound.mp3';
 
 const notificationSound = new Audio(notificationSoundSource);
 const successSound = new Audio(successSoundSource);

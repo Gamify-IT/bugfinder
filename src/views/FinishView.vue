@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import clickSoundSource from '/src/assets/music/click_sound.mp3';
+import clickSoundSource from '@/assets/music/click_sound.mp3';
 
 const clickSound = new Audio(clickSoundSource);
 function closeGame() {
