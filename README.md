@@ -100,3 +100,21 @@ To remove the container you can use the following command:
 ```sh
 docker rm bugfinder
 ```
+
+## Audio sources
+
+1.	Background music
+https://pixabay.com/de/music/optimistisch-walking-while-looking-at-the-moon-187621/
+
+2.	Click 
+https://pixabay.com/de/sound-effects/interface-button-154180/
+
+3.	Error notification
+https://pixabay.com/de/sound-effects/error-126627/
+
+4.	Classic notifications from the chat
+https://pixabay.com/de/sound-effects/notifications-sound-127856/
+
+5.	Success notification
+https://pixabay.com/de/sound-effects/short-success-sound-glockenspiel-treasure-video-game-6346/
+

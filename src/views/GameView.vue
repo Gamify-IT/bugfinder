@@ -9,6 +9,9 @@ import { Ref, ref } from 'vue';
 import { useStore } from 'vuex';
 
 const store = useStore();
+import clickSoundSource from '@/assets/music/click_sound.mp3';
+
+const clickSound = new Audio(clickSoundSource);
 
 const emit = defineEmits<{
   (e: 'endGame'): void;
@@ -34,6 +37,7 @@ const showNextButton = ref(false);
 chat.sendStartMessgae();
 
 async function nextCode() {
+  playClickSound();
   if (await game.hasNextCode()) {
     await chat.sendNextCode();
     await game.nextCode();
@@ -60,7 +64,9 @@ async function submitSolution(selectedBugs: ISolution) {
   }, 2000);
 }
 
-
+function playClickSound(){
+  clickSound.play();
+}
 </script>
 
 <template>

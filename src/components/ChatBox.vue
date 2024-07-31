@@ -1,14 +1,32 @@
 <script setup lang="ts">
-import { ChatParticipant } from '@/models/chat';
+import { ChatColor, ChatParticipant } from '@/models/chat';
 import { watch } from 'vue';
 import { chatHistory } from '@/services/chat';
+import notificationSoundSource from '@/assets/music/notification_sound.mp3';
+import successSoundSource from '@/assets/music/success_sound.mp3';
+import errorSoundSource from '@/assets/music/error_sound.mp3';
+
+const notificationSound = new Audio(notificationSoundSource);
+const successSound = new Audio(successSoundSource);
+const errorSound = new Audio(errorSoundSource);
 
 watch(
-  () => chatHistory,
-  () => {
+  () => chatHistory.value,
+  (newChatHistory) => {
     const chatBox = document.getElementById('chat-box');
     if (chatBox) {
       chatBox.lastElementChild?.scrollIntoView();
+    }
+    
+    const lastMessage = newChatHistory[newChatHistory.length - 1];
+    if (lastMessage && lastMessage.from === ChatParticipant.OTHER) {
+      if (lastMessage.color === ChatColor.LIGHT || lastMessage.color === ChatColor.PRIMARY) {
+        notificationSound.play();
+      } else if (lastMessage.color === ChatColor.WARNING) {
+        errorSound.play();
+      } else if (lastMessage.color === ChatColor.SUCCESS) {
+        successSound.play();
+      }
     }
   },
   { deep: true }

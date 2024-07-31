@@ -1,9 +1,14 @@
 <script setup lang="ts">
+
 import { useStore } from 'vuex';
 import { computed, onMounted } from 'vue';
 import triumphSound from '/src/assets/trumpets.mp3';
 import negativeSound from '/src/assets/negativeSound.mp3';
 const store = useStore();
+
+import clickSoundSource from '@/assets/music/click_sound.mp3';
+
+const clickSound = new Audio(clickSoundSource);
 
 function closeGame() {
   window.parent.postMessage('CLOSE ME');
@@ -33,6 +38,17 @@ onMounted(() => {
   const soundFile = score >= 50 ? triumphSound : negativeSound;
   playSound(soundFile, 2000);
 });
+
+async function handleCloseGame() {
+  await playClickSound();
+    setTimeout(() => {
+      closeGame();
+    }, 500);
+}
+
+function playClickSound(){
+  clickSound.play();
+}
 
 </script>
 
