@@ -13,9 +13,15 @@ export class BugFinderGame {
 
   private result: Result;
 
+  //score und number mit 0 initialisiert
+  private score = 0;
+  private rewards = 0;
+
+
+  //score und rewards im Konstruktor hier hinzugefügt
   public constructor(private configuration: string) {
     this.currentCodeNumber = 0;
-    this.result = new Result(this.configuration);
+    this.result = new Result(this.configuration, this.score, this.rewards);
   }
 
   /**
@@ -129,12 +135,40 @@ export class BugFinderGame {
     this.currentCode = await this.fetchCurrentCode();
   }
 
+
+  // zurückgegebenes DTO objekt aus dem Backend in Result Objekt umwandeln und score und reward Werte setzen (versuchen die in FinishView zu benutzen)
   /**
    * sends the game results after finishing the game to the server
    */
   public async sendResults(): Promise<void> {
-    await axios.post(`${BASE_URL}/results`, this.result);
+
+    let resolveRef;
+    let rejectRef;
+    const requestPromise: Promise<void> = new Promise((resolve, reject) => {
+    resolveRef = resolve;
+    rejectRef = reject;
+  });
+
+    try {
+      const response = await axios.post(`${BASE_URL}/results`, this.result);
+      const returnedResult = Result.fromDTO(response.data);
+      this.result = returnedResult;
+
+      this.score = returnedResult.score;
+      this.rewards = returnedResult.rewards;
+
+      console.log('Score:', this.score);
+      console.log('Rewards:', this.rewards);
+      resolveRef(null);
+    } catch (error) {
+      console.error('Error sending results:', error);
+      rejectRef(null);
+      throw error;
+    }
+
+    return requestPromise;
   }
+
 
   /**
    * fetches the current code from the server and sets it as currentCode
@@ -167,4 +201,13 @@ export class BugFinderGame {
     const res = await axios.get(`${BASE_URL}/configurations/${this.configuration}/codes/${this.currentCode?.id}/solutions`);
     return res.data as ISolution;
   }
+
+  public getScore(): number {
+    return this.score;
+  }
+
+  public getRewards(): number {
+    return this.rewards;
+  }
+
 }

@@ -6,6 +6,9 @@ import { ICode, ISolution } from '@/models/code';
 import * as chat from '@/services/chat';
 import { CodeFeedback } from '@/services/code-feedback';
 import { Ref, ref } from 'vue';
+import { useStore } from 'vuex';
+
+const store = useStore();
 import clickSoundSource from '@/assets/music/click_sound.mp3';
 
 const clickSound = new Audio(clickSoundSource);
@@ -18,12 +21,15 @@ const configuration = window.location.pathname.split('/').pop();
 if (configuration == null) {
   throw Error('No configuration selected!');
 }
+
 const game = new BugFinderGame(configuration);
 let currentCode = ref(null) as Ref<ICode | null>;
+
 game.getCurrentCode().then((res) => {
   currentCode.value = res;
   game.hasNextCode().then((hasNextCode_) => (hasNextCode.value = hasNextCode_));
 });
+
 const hasNextCode = ref(false);
 const codeFeedback = ref(new CodeFeedback([]));
 const showNextButton = ref(false);
@@ -40,8 +46,12 @@ async function nextCode() {
     hasNextCode.value = await game.hasNextCode();
     codeFeedback.value = new CodeFeedback([]);
   } else {
-    game.sendResults();
-    emit('endGame');
+    game.sendResults().then(() =>{
+      store.state.score =  game.getScore();
+      store.state.rewards = game.getRewards();
+      console.log(store.state);
+      emit('endGame');
+    });
   }
 }
 
