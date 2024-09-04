@@ -3,7 +3,4 @@ module.exports = {
   moduleNameMapper: {
     '^@/(.*)$': '<rootDir>/src/$1',
   },
-  setupFiles: [
-    '<rootDir>/jest.setup.js',  // Додайте цей рядок, якщо у вас є файл налаштувань
-  ],
 };
