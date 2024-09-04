@@ -7,11 +7,13 @@ import backgroundMusicSource from '@/assets/music/background_music.mp3';
 import clickSoundSource from '@/assets/music/click_sound.mp3';
 import { fetchAndChangeVolumeLevel } from '@/services/changeVolumeLevel';
 
-const backgroundMusic = fetchAndChangeVolumeLevel(backgroundMusicSource);
+let backgroundMusic = new Audio(backgroundMusicSource);
 const clickSound = fetchAndChangeVolumeLevel(clickSoundSource);
 
 
 onMounted(() => {
+  backgroundMusic.volume = 0;
+  backgroundMusic = fetchAndChangeVolumeLevel(backgroundMusicSource);
   backgroundMusic.loop = true;
   backgroundMusic.play();
 });

@@ -2,8 +2,7 @@
 import { BASE_URL } from '@/app';
 import { ref } from 'vue';
 import clickSoundSource from '@/assets/music/click_sound.mp3'
-import { fetchAndChangeVolumeLevel } from '@/services/changeVolumeLevel';
-const clickSound = fetchAndChangeVolumeLevel(clickSoundSource);
+const clickSound = new Audio(clickSoundSource);
 const emit = defineEmits<{
   (e: 'startGame'): void;
 }>();
@@ -19,6 +18,13 @@ const configuration = ref<any>(undefined);
     .then((json) => {
       configuration.value = json;
       volumeLevel = configuration.value.volumeLevel;
+      if (volumeLevel == 2 || volumeLevel == 3)
+            {
+                volumeLevel = 1;
+            } else if (volumeLevel == 1)
+            {
+                volumeLevel = 0.5;
+            }
       clickSound.volume = volumeLevel !== null ? volumeLevel : 1;
     })
     .catch(() => {
