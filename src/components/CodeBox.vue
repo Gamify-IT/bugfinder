@@ -7,7 +7,9 @@ import SelectBugModal from '@/components/SelectBugModal.vue';
 import { ref, watch } from 'vue';
 import clickSoundSource from '@/assets/music/click_sound.mp3';
 
-const clickSound = new Audio(clickSoundSource);
+import { fetchAndChangeVolumeLevel } from '@/services/changeVolumeLevel';
+
+const clickSound = fetchAndChangeVolumeLevel(clickSoundSource);
 const props = defineProps<{
   code: ICode;
   codeFeedback: CodeFeedback;

@@ -1,14 +1,11 @@
 <script setup lang="ts">
-
 import { useStore } from 'vuex';
 import { computed, onMounted } from 'vue';
-import triumphSound from '/src/assets/trumpets.mp3';
-import negativeSound from '/src/assets/negativeSound.mp3';
-const store = useStore();
-
+import triumphSound from  '@/assets/music/trumpets.mp3';
+import negativeSound from  '@/assets/music/negativeSound.mp3';
 import clickSoundSource from '@/assets/music/click_sound.mp3';
-
-const clickSound = new Audio(clickSoundSource);
+import { fetchAndChangeVolumeLevel } from '@/services/changeVolumeLevel';
+const store = useStore();
 
 function closeGame() {
   window.parent.postMessage('CLOSE ME');
@@ -27,27 +24,22 @@ const message = computed(() => {
   }
 });
 
-function playSound(pathToAudioFile: string, duration: number){
-  const sound = new Audio(pathToAudioFile);
+function playSound(pathToAudioFile: string){
+  const sound = fetchAndChangeVolumeLevel(pathToAudioFile);
   sound.play();
-  setTimeout(() => sound.pause(), duration);
 }
 
 onMounted(() => {
   const score = store.state.score;
   const soundFile = score >= 50 ? triumphSound : negativeSound;
-  playSound(soundFile, 2000);
+  playSound(soundFile);
 });
 
 async function handleCloseGame() {
-  await playClickSound();
+  await playSound(clickSoundSource);
     setTimeout(() => {
       closeGame();
     }, 500);
-}
-
-function playClickSound(){
-  clickSound.play();
 }
 
 </script>
@@ -62,7 +54,7 @@ function playClickSound(){
         <span class="gold-outlined-text">{{ store.state.rewards }}</span> <span class="gold-outlined-text">coins</span> !!
       </h2>
       <p class="message">{{ message }}</p>
-      <b-button variant="danger" id="close-button" v-on:click="closeGame"> Back to game </b-button>
+      <b-button variant="danger" id="close-button" v-on:click="handleCloseGame"> Back to game </b-button>
     </div>
   </main>
 </template>

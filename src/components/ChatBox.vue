@@ -5,10 +5,13 @@ import { chatHistory } from '@/services/chat';
 import notificationSoundSource from '@/assets/music/notification_sound.mp3';
 import successSoundSource from '@/assets/music/success_sound.mp3';
 import errorSoundSource from '@/assets/music/error_sound.mp3';
+import { fetchAndChangeVolumeLevel } from '@/services/changeVolumeLevel';
 
-const notificationSound = new Audio(notificationSoundSource);
-const successSound = new Audio(successSoundSource);
-const errorSound = new Audio(errorSoundSource);
+const notificationSound = fetchAndChangeVolumeLevel(notificationSoundSource);
+const successSound = fetchAndChangeVolumeLevel(successSoundSource);
+const errorSound = fetchAndChangeVolumeLevel(errorSoundSource);
+
+
 
 watch(
   () => chatHistory.value,

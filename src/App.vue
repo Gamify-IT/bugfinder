@@ -5,9 +5,11 @@ import GameView from '@/views/GameView.vue';
 import FinishView from '@/views/FinishView.vue';
 import backgroundMusicSource from '@/assets/music/background_music.mp3';
 import clickSoundSource from '@/assets/music/click_sound.mp3';
+import { fetchAndChangeVolumeLevel } from '@/services/changeVolumeLevel';
 
-const backgroundMusic = new Audio(backgroundMusicSource);
-const clickSound = new Audio(clickSoundSource);
+const backgroundMusic = fetchAndChangeVolumeLevel(backgroundMusicSource);
+const clickSound = fetchAndChangeVolumeLevel(clickSoundSource);
+
 
 onMounted(() => {
   backgroundMusic.loop = true;
