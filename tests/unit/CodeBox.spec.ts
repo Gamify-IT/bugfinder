@@ -4,6 +4,7 @@ import BootstrapVue3, { BButton, BModal } from 'bootstrap-vue-3';
 import VueHighlightJS from 'vue3-highlightjs';
 import { ICode, Code, Word, WordType, Bug, ErrorType, Solution } from '@/models/code';
 import { CodeFeedback, WordFeedback } from '@/services/code-feedback';
+import { fetchAndChangeVolumeLevel } from '@/services/changeVolumeLevel';
 
 function exampleCode(): Code {
   return new Code('1', [
@@ -49,6 +50,21 @@ function exampleCode2(): Code {
   ]);
 }
 
+describe('fetchAndChangeVolumeLevel', () => {
+  beforeEach(() => {
+      global.fetch = jest.fn(() =>
+          Promise.resolve({
+              json: () => Promise.resolve({ volumeLevel: 3 }),
+          })
+      ) as jest.Mock;
+  });
+
+  it('should set the correct volume', async () => {
+      const audio = fetchAndChangeVolumeLevel('path/to/audio');
+      expect(audio.volume).toBe(1);
+  });
+});
+
 describe('CodeBox.vue', () => {
   let wrapper: VueWrapper;
   let code: ICode;
@@ -64,6 +80,11 @@ describe('CodeBox.vue', () => {
       },
       global: {
         plugins: [BootstrapVue3, VueHighlightJS],
+        mocks: {
+          clickSound: {
+            play: jest.fn(),
+          },
+        },
       },
     });
   });
