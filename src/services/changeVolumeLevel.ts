@@ -11,7 +11,7 @@ export function fetchAndChangeVolumeLevel(pathToAudioFile: string) : HTMLAudioEl
 {
     const audio = new Audio(pathToAudioFile);
     fetch(`${BASE_URL}/configurations/${configurationId}/volume`)
-    .then((res) => {
+.then((res) => {
         res
         .json()
         .then((json) => {

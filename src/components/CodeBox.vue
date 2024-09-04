@@ -6,7 +6,6 @@ import WordBox from '@/components/WordBox.vue';
 import SelectBugModal from '@/components/SelectBugModal.vue';
 import { ref, watch } from 'vue';
 import clickSoundSource from '@/assets/music/click_sound.mp3';
-
 import { fetchAndChangeVolumeLevel } from '@/services/changeVolumeLevel';
 
 const clickSound = fetchAndChangeVolumeLevel(clickSoundSource);
