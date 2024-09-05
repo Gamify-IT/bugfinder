@@ -118,3 +118,8 @@ https://pixabay.com/de/sound-effects/notifications-sound-127856/
 5.	Success notification
 https://pixabay.com/de/sound-effects/short-success-sound-glockenspiel-treasure-video-game-6346/
 
+6.	Trumpets end sound
+https://pixabay.com/sound-effects/success-fanfare-trumpets-6185/
+
+7.	Negative end sound
+https://pixabay.com/sound-effects/negative-beeps-6008/

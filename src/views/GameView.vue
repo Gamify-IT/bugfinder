@@ -7,11 +7,12 @@ import * as chat from '@/services/chat';
 import { CodeFeedback } from '@/services/code-feedback';
 import { Ref, ref } from 'vue';
 import { useStore } from 'vuex';
+import clickSoundSource from '@/assets/music/click_sound.mp3';
+import { fetchAndChangeVolumeLevel } from '@/services/changeVolumeLevel';
 
 const store = useStore();
-import clickSoundSource from '@/assets/music/click_sound.mp3';
 
-const clickSound = new Audio(clickSoundSource);
+const clickSound = fetchAndChangeVolumeLevel(clickSoundSource);
 
 const emit = defineEmits<{
   (e: 'endGame'): void;
