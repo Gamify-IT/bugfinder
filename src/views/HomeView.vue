@@ -1,6 +1,8 @@
 <script setup lang="ts">
-/*Handles the configuration fetching based on the URL, adjusts the volume level of the click sound,
-and manages the game start process by emitting a 'startGame' event when the user clicks the start button.*/
+/**
+ * Handles the configuration fetching based on the URL, adjusts the volume level of the click sound,
+ * and manages the game start process by emitting a 'startGame' event when the user clicks the start button.
+ */
 
 import { BASE_URL } from '@/app';
 import { ref } from 'vue';

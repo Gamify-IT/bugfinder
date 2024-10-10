@@ -1,4 +1,6 @@
-/* Fetches volume configuration from the server and applies it to an audio element. */
+/**
+ * Fetches volume configuration from the server and applies it to an audio element.
+ */
 
 import { BASE_URL } from '@/app';
 import { ref } from 'vue';

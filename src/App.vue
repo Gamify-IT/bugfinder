@@ -1,5 +1,7 @@
 <script setup lang="ts">
-/* Manages game views (home, game, finish) and controls background music and sound effects.*/
+/**
+ * Manages game views (home, game, finish) and controls background music and sound effects.
+ */
 
 import { ref, onMounted, onUnmounted } from 'vue';
 import HomeView from '@/views/HomeView.vue';
