@@ -1,3 +1,5 @@
+/* Represents a chat message with sender, content, and color. */
+
 export enum ChatParticipant {
   ME,
   OTHER,

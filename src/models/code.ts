@@ -1,3 +1,5 @@
+/* Defines models for code, words, solutions, and bugs with related types. */
+
 export enum WordType {
   TAB = '<tab>',
   SPACE = ' ',

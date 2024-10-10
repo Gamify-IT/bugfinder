@@ -12,7 +12,11 @@ const successSound = fetchAndChangeVolumeLevel(successSoundSource);
 const errorSound = fetchAndChangeVolumeLevel(errorSoundSource);
 
 
-
+/**
+ * Watcher to observe changes in chat history.
+ * - Automatically scrolls to the newest chat message.
+ * - Plays appropriate sounds based on the sender and message color (notification, success, or error sound).
+ */
 watch(
   () => chatHistory.value,
   (newChatHistory) => {
@@ -38,14 +42,16 @@ watch(
 
 <template>
   <div id="chat-box" ref="chat-box" class="overflow-auto">
+    <!-- Loop through each chat message in chatHistory -->
     <div v-for="chatElement in chatHistory" :key="chatElement.message">
+      <!-- Message from the current user (ME) -->
       <div v-if="chatElement.from == ChatParticipant.ME" class="d-flex flex-row justify-content-start mb-4">
         <img src="../assets/avatar.svg" alt="Me" style="width: 45px; height: 100%" />
         <div class="p-3 ms-3" :class="chatElement.color" style="border-radius: 15px">
           <p class="small mb-0">{{ chatElement.message }}</p>
         </div>
       </div>
-
+      <!-- Message from another user (OTHER) -->
       <div v-else-if="chatElement.from == ChatParticipant.OTHER" class="d-flex flex-row justify-content-end mb-4">
         <div class="p-3 me-3 border" :class="chatElement.color" style="border-radius: 15px">
           <p class="small mb-0">{{ chatElement.message }}</p>

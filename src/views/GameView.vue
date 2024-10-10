@@ -1,4 +1,7 @@
 <script setup lang="ts">
+/*Manages the logic of the BugFinder game, including fetching and progressing through codes,
+ submitting solutions, providing feedback, and handling sound effects and chat messages.*/
+
 import ChatBox from '@/components/ChatBox.vue';
 import CodeBox from '@/components/CodeBox.vue';
 import { BugFinderGame } from '@/services/bugfindergame';
@@ -71,8 +74,9 @@ function playClickSound(){
 </script>
 
 <template>
+  <!-- Main heading for the game -->
   <h2 class="text-center">Find the Bug</h2>
-
+  <!-- Main container for layout -->
   <div class="container">
     <div class="row">
       <div class="col-9">
@@ -84,7 +88,7 @@ function playClickSound(){
           </button>
         </div>
       </div>
-
+      <!-- Right side: ChatBox for interacting with the game -->
       <div class="col-3">
         <ChatBox />
       </div>
