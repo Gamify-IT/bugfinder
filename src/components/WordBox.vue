@@ -17,7 +17,9 @@ const space = WordType.SPACE;
 </script>
 
 <template>
+  <!-- Render a tab space if the word is a tab -->
   <div v-if="word.word == tab" class="tab"></div>
+  <!-- Render the word as a button if it's not a tab or newline -->
   <button
     :id="'word-' + word.id"
     v-if="word.wordContent != tab && word.wordContent != newLine"
@@ -31,12 +33,15 @@ const space = WordType.SPACE;
       'selected-code': !submitted && selected,
     }"
   >
+    <!-- Show a badge for spaces that haven't been selected -->
     <b-badge v-if="word.wordContent == space && !selected" variant="success" class="code-space-badge">+</b-badge>
+    <!-- Show the word content, or the corrected bug value if the word is selected -->
     <pre
       v-else
       v-highlightjs
     ><code v-if="!selected" class="java">{{ word.wordContent }}</code><code v-else>{{ correctedBugValue }}</code></pre>
   </button>
+  <!-- Show a popover with feedback information if feedback exists for the word -->
   <b-popover
     v-if="codeFeedback.hasFeedback(word.id)"
     :target="'word-' + word.id"
@@ -55,6 +60,7 @@ const space = WordType.SPACE;
 </template>
 
 <style lang="css" scoped>
+/* Style for code words and spaces, including feedback-related styling */
 button.code-word {
   background: transparent;
   border: none !important;

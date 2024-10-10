@@ -30,7 +30,9 @@ const emptyBug = new Bug(-1, ErrorType.UNDEFINED, '');
 const currentEditingBug = ref(emptyBug);
 const showModal = ref(false);
 
-
+/**
+ * Submit the selected bugs as a solution and mark the solution as submitted.
+ */
 function submit() {
   playClickSound();
   if (!submitted.value) {
@@ -39,6 +41,9 @@ function submit() {
   }
 }
 
+/**
+ * Select a bug for a word. If a bug is already selected for the word, it will be removed.
+ */
 function selectBug(word: IWord) {
   if (submitted.value) {
     return;
@@ -56,23 +61,43 @@ function selectBug(word: IWord) {
   }
 }
 
+/**
+ * Submit a bug to the selectedBugs list.
+ * @param bug
+ */
 function submitBug(bug: IBug) {
   selectedBugs.value.push(bug);
 }
 
+/**
+ * Remove a bug from the selectedBugs list by word ID.
+ * @param wordId
+ */
 function removeBug(wordId: number | string) {
   selectedBugs.value = selectedBugs.value.filter((bug) => bug.wordId != wordId);
 }
 
+/**
+ * Check if a word has been marked with a bug.
+ * @param wordId
+ */
 function isSelectedBug(wordId: number | string) {
   return selectedBugs.value.find((bug) => bug.wordId == wordId) != null;
 }
 
+/**
+ * Check if a word is a space (non-editable).
+ * @param wordId
+ */
 function isWordSpace(wordId: number | string): boolean {
   const word = getWordById(wordId);
   return word != null && word.wordContent == space;
 }
 
+/**
+ * Get the corrected value for a word if a bug has been selected for it.
+ * @param wordId
+ */
 function getCorrectedBugValue(wordId: number | string): string | null {
   const bug = selectedBugs.value.find((searchedBug) => searchedBug.wordId == wordId);
   if (bug == null) {
@@ -81,6 +106,10 @@ function getCorrectedBugValue(wordId: number | string): string | null {
   return bug.correctValue;
 }
 
+/**
+ * Retrieve a word by its ID from the code props.
+ * @param wordId
+ */
 function getWordById(wordId: number | string): IWord | undefined {
   return props.code.words.find((word) => word.id == wordId);
 }
@@ -102,7 +131,9 @@ watch(
 </script>
 
 <template>
+  <!-- Code box that displays code lines -->
   <div class="codebox">
+    <!-- Loop through each line of code and display the words with buttons for selecting bugs -->
     <div class="code-line" v-for="line in codeLines" :key="line[0].id">
       <div class="btn-group" v-for="word in line" :key="word.id">
         <WordBox
@@ -116,8 +147,9 @@ watch(
       </div>
     </div>
   </div>
+  <!-- Submit button for submitting the selected bugs -->
   <button v-if="!submitted" class="btn btn-success float-end mx-3 my-4" @click="submit()">Submit</button>
-
+  <!-- Modal for selecting a bug for the current word -->
   <SelectBugModal
     v-model="showModal"
     :bug="currentEditingBug"

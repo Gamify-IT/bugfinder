@@ -1,4 +1,9 @@
 <script setup lang="ts">
+/**
+ * Manages the logic of the BugFinder game, including fetching and progressing through codes,
+ * submitting solutions, providing feedback, and handling sound effects and chat messages.
+ */
+
 import ChatBox from '@/components/ChatBox.vue';
 import CodeBox from '@/components/CodeBox.vue';
 import { BugFinderGame } from '@/services/bugfindergame';
@@ -37,6 +42,11 @@ const showNextButton = ref(false);
 
 chat.sendStartMessgae();
 
+/**
+ * Handles the logic to proceed to the next code in the game.
+ * Plays a click sound, checks if there's a next code, and updates the game state.
+ * If there are no more codes, it sends the results and ends the game.
+ */
 async function nextCode() {
   playClickSound();
   if (await game.hasNextCode()) {
@@ -56,6 +66,12 @@ async function nextCode() {
   }
 }
 
+/**
+ * Submits the selected bugs (solution) and provides feedback on the correctness.
+ * Sends a message to the chat about the submission and waits for feedback.
+ * After a short delay, enables the button to proceed to the next code.
+ * @param selectedBugs - The solution containing the selected bugs.
+ */
 async function submitSolution(selectedBugs: ISolution) {
   const feedback: CodeFeedback = await game.submitWrongCode(selectedBugs);
   chat.sendSubmitMessage(game.passedCurrentCode(), !game.hasNextCode());
@@ -71,8 +87,9 @@ function playClickSound(){
 </script>
 
 <template>
+  <!-- Main heading for the game -->
   <h2 class="text-center">Find the Bug</h2>
-
+  <!-- Main container for layout -->
   <div class="container">
     <div class="row">
       <div class="col-9">
@@ -84,7 +101,7 @@ function playClickSound(){
           </button>
         </div>
       </div>
-
+      <!-- Right side: ChatBox for interacting with the game -->
       <div class="col-3">
         <ChatBox />
       </div>

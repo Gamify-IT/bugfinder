@@ -5,7 +5,7 @@ import { Result } from '@/models/result';
 import axios from 'axios';
 
 export class BugFinderGame {
-  // list whether player successful solved a code or not. Empty on entry if not submitted yet.
+
   private solved: Array<boolean> = [];
 
   private currentCodeNumber: number;
@@ -13,12 +13,10 @@ export class BugFinderGame {
 
   private result: Result;
 
-  //score und number mit 0 initialisiert
   private score = 0;
   private rewards = 0;
 
 
-  //score und rewards im Konstruktor hier hinzugefügt
   public constructor(private configuration: string) {
     this.currentCodeNumber = 0;
     this.result = new Result(this.configuration, this.score, this.rewards);
@@ -136,7 +134,6 @@ export class BugFinderGame {
   }
 
 
-  // zurückgegebenes DTO objekt aus dem Backend in Result Objekt umwandeln und score und reward Werte setzen (versuchen die in FinishView zu benutzen)
   /**
    * sends the game results after finishing the game to the server
    */

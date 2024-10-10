@@ -1,10 +1,11 @@
+/* Represents the result of a game with submitted solutions and score details. */
+
 import { ISolution } from './code';
 
 export class Result {
   submittedSolutions: ISubmittedSolution[] = [];
 
 
-  // besteht jetzt auch score und rewards
   constructor(public configurationId: string, public score: number,
               public rewards: number) {}
 
