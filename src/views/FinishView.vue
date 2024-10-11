@@ -7,6 +7,10 @@ import clickSoundSource from '@/assets/music/click_sound.mp3';
 import { fetchAndChangeVolumeLevel } from '@/services/changeVolumeLevel';
 const store = useStore();
 
+/**
+ * Function to close the game.
+ * Sends a message to the parent window to close the game.
+ */
 function closeGame() {
   window.parent.postMessage('CLOSE ME');
 }
@@ -24,6 +28,12 @@ const message = computed(() => {
   }
 });
 
+/**
+ * Function to play an audio sound.
+ * - Loads and plays the audio file.
+ *
+ * @param pathToAudioFile - Path to the audio file.
+ */
 function playSound(pathToAudioFile: string){
   const sound = fetchAndChangeVolumeLevel(pathToAudioFile);
   sound.play();
@@ -35,6 +45,10 @@ onMounted(() => {
   playSound(soundFile);
 });
 
+/**
+ * Handles the closing of the game.
+ * - Plays the click sound first and then closes the game after a short delay.
+ */
 async function handleCloseGame() {
   await playSound(clickSoundSource);
     setTimeout(() => {
@@ -46,6 +60,7 @@ async function handleCloseGame() {
 
 
 <template>
+  <!-- Main background container for the entire screen -->
   <main class="background-image">
     <div class="text-center position-absolute top-50 start-50 translate-middle">
       <h2 class="score-coins">
@@ -62,6 +77,7 @@ async function handleCloseGame() {
 
 
 <style scoped>
+/* Sets the background image properties */
 .background-image {
   background-image: url('@/assets/background.webp');
   background-size: cover;
@@ -72,12 +88,13 @@ async function handleCloseGame() {
   overflow: hidden;
 }
 
+/* Styles for the score and coins display */
 .score-coins {
   color: white;
   text-align: center;
   font-size: 60px;
 }
-
+/* Gold outline effect for the text */
 .gold-outlined-text {
   color: gold;
   text-shadow:
@@ -86,13 +103,13 @@ async function handleCloseGame() {
     -1px 1px 0 gold,
     1px 1px 0 gold;
 }
-
+/* Styles for the main message */
 .message {
   font-size: 53px;
   color: white;
   text-align: center;
 }
-
+/* Gold outline effect for the message text */
 .gold-outlined-text.message {
   color: gold;
   text-shadow:
@@ -101,7 +118,7 @@ async function handleCloseGame() {
     -1px 1px 0 gold,
     1px 1px 0 gold;
 }
-
+/* Styles for the close button */
 #close-button {
   color: white;
   margin-top: 20px;
